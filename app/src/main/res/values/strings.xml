@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">Find Bank</string>
+    <string name="e_mail">E-mail:</string>
+    <string name="password">Password</string>
+    <string name="ingresar">Ingresar</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="no_tiene_una_cuenta">¿No tiene una cuenta?  </string>
+    <string name="registrarse">Registrarse</string>
+    <string name="register">Registro</string>
+    <string name="nameRegister">Nombre:(Requerido)</string>
+    <string name="emailRegister">Email: (Requerido)</string>
+    <string name="passwordRegister">Contraseña:(Requerido)</string>
+    <string name="passwordRegisterAgain">Verificar contraseña:</string>
+    <string name="finalRegister">Finalizar Registro</string>
+    <string name="requerido">Campo requerido</string>
+
+</resources>
