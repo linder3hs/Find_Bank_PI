@@ -1,5 +1,6 @@
 package com.linder.find_bank.activities;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
@@ -20,6 +21,7 @@ import java.util.Scanner;
 public class LoginActivity extends AppCompatActivity {
     private EditText txtcorreo, txtcontra;
     private Button btningresar, btnregister;
+    private ProgressDialog progressDialog;
 
 
     @Override
@@ -59,6 +61,11 @@ public class LoginActivity extends AppCompatActivity {
 
                                     int r = objJSON(res);
                                     if (r > 0) {
+                                        progressDialog = new ProgressDialog(LoginActivity.this);
+                                        progressDialog.setMax(100);
+                                        progressDialog.setMessage("Cargando");
+                                        progressDialog.setTitle("Find Bank");
+                                        progressDialog.show();
                                         Intent i = new Intent(getApplicationContext(), HomeActivity.class);//Prueba del servicio
                                         i.putExtra("correo", txtcorreo.getText().toString());
                                         startActivity(i);
@@ -88,7 +95,7 @@ public class LoginActivity extends AppCompatActivity {
         String respuesta = "";
         try {
             //Se va a la Web y se envia los datos
-            URL url = new URL("https://find-bank-roque363.c9users.io/WebService/valida.php");//Cambiar el ip - ya que no es estable por que es local
+            URL url = new URL("https://find-bank-roque363.c9users.io/WebService/valida.php");
             conection = (HttpURLConnection) url.openConnection();
             conection.setRequestMethod("POST");
             conection.setRequestProperty("Content-Length", "" + Integer.toString(urlparametros.getBytes().length));
