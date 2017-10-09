@@ -42,25 +42,30 @@ public class RegisterActivity extends AppCompatActivity {
                 if (name.getText().toString().isEmpty() || mail.getText().toString().isEmpty() || contra.getText().toString().isEmpty()  || contaAgian.getText().toString().isEmpty()) {
                     Toast.makeText(RegisterActivity.this, "Rellene los datos", Toast.LENGTH_SHORT).show();
                 } else {
-                    Thread tr = new Thread() {
-                        @Override
-                        public void run() {
-                            //Enviar los datos hacia el Web Service y
-                            //Recibir los datos que me envia el Web Service
-                            enviarPost(nombre, email, pass);
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
+                    if (pass.equals(pasa)){
+                        Thread tr = new Thread() {
+                            @Override
+                            public void run() {
+                                //Enviar los datos hacia el Web Service y
+                                //Recibir los datos que me envia el Web Service
+                                enviarPost(nombre, email, pass);
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
 
-                                    Intent i = new Intent(getApplicationContext(), LoginActivity.class);//Prueba del servicio
-                                    startActivity(i);
-                                    finish();
+                                        Intent i = new Intent(getApplicationContext(), LoginActivity.class);//Prueba del servicio
+                                        startActivity(i);
+                                        finish();
 
-                                }
-                            });
-                        }
-                    };
-                    tr.start();
+                                    }
+                                });
+                            }
+                        };
+                        tr.start();
+                    }else{
+                        Toast.makeText(RegisterActivity.this, "Las contraseña deben coincidir", Toast.LENGTH_SHORT).show();
+                    }
+
                 }
             }
         });
