@@ -8,6 +8,8 @@ import android.os.Bundle;
 import com.linder.find_bank.R;
 
 public class SplashActivity extends AppCompatActivity {
+
+    //Tiempo de splash
     public static final int TIME = 3000;
 
 
