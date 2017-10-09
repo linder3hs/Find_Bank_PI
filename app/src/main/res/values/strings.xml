@@ -5,13 +5,21 @@
     <string name="ingresar">Ingresar</string>
     <string name="title_activity_maps">Map</string>
     <string name="no_tiene_una_cuenta">¿No tiene una cuenta?  </string>
-    <string name="registrarse">Registrarse</string>
+    <string name="registrarse">Registrate</string>
     <string name="register">Registro</string>
-    <string name="nameRegister">Nombre:(Requerido)</string>
-    <string name="emailRegister">Email: (Requerido)</string>
-    <string name="passwordRegister">Contraseña:(Requerido)</string>
-    <string name="passwordRegisterAgain">Verificar contraseña:</string>
+    <string name="nameRegister">Nombre:</string>
+    <string name="emailRegister">Email:</string>
+    <string name="passwordRegister">Contraseña:</string>
+    <string name="passwordRegisterAgain">Repetir contraseña:</string>
     <string name="finalRegister">Finalizar Registro</string>
     <string name="requerido">Campo requerido</string>
+    <string name="title_activity_home">Find Bank Maps</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Nosotros</string>
+    <string name="nosotros">Somo una un grupo de jovenes programadores, somo estudiantes de la carrera de Diseño
+    de software en Tecup. \nEste proyecto esta orientado para todas las personas \nIntegrantes: \n- Linder Hassinger \n- Seichi Honda \n- Roque Alarcon</string>
 
 </resources>

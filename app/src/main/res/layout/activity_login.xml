@@ -17,7 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="52dp"
-            android:layout_marginTop="40dp">
+            android:layout_marginTop="30dp">
 
             <ImageView
                 android:layout_width="match_parent"
@@ -52,7 +52,8 @@
                 android:layout_alignParentStart="true"
                 android:layout_margin="25dp"
                 android:ems="10"
-                android:padding="12dp"
+                android:drawablePadding="8dp"
+                android:drawableLeft="@drawable/ic_mail"
                 android:theme="@style/EditTextWhite"
                 android:hint="@string/e_mail"
                 android:inputType="textEmailAddress"
@@ -74,9 +75,10 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
                 android:layout_below="@+id/txtCorreo"
-                android:padding="12dp"
+                android:drawableLeft="@drawable/ic_lock"
                 android:layout_margin="25dp"
                 android:ems="10"
+                android:drawablePadding="8dp"
                 android:textColorHint="@color/colorAccent"
                 android:theme="@style/EditTextWhite"
                 android:hint="@string/password"

@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bg_fondo"
-    tools:context="com.linder.find_bank.SplashActivity">
+    tools:context="com.linder.find_bank.activities.SplashActivity">
 
    <ImageView
        android:layout_width="match_parent"

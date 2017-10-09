@@ -15,6 +15,7 @@
         <LinearLayout
             android:orientation="horizontal"
             android:id="@+id/titleRegister"
+            android:padding="25dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -22,20 +23,23 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/register"
+                android:fontFamily="monospace"
                 android:gravity="center"
                 android:textColor="#fff"
                 android:textStyle="bold"
                 android:textSize="35sp"
-                android:layout_margin="12dp"/>
+                android:layout_margin="6dp"/>
         </LinearLayout>
         <LinearLayout
-            android:layout_marginTop="40dp"
-            android:gravity="center"
+            android:layout_marginTop="16dp"
             android:id="@+id/campos"
+            android:background="@drawable/bg_edit_text"
             android:orientation="vertical"
             android:layout_below="@id/titleRegister"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp">
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -43,8 +47,11 @@
                     android:id="@+id/nameRegister"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="12dp"
+                    android:drawableLeft="@drawable/ic_person"
                     android:inputType="text"
+                    android:drawablePadding="8dp"
+                    android:paddingTop="21dp"
+                    android:padding="18dp"
                     android:theme="@style/EditTextWhite"
                     android:textSize="19dp"
                     android:hint="@string/nameRegister"/>
@@ -57,7 +64,9 @@
                     android:id="@+id/emailRegister"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="12dp"
+                    android:padding="18dp"
+                    android:drawablePadding="8dp"
+                    android:drawableLeft="@drawable/ic_mail"
                     android:theme="@style/EditTextWhite"
                     android:inputType="textEmailAddress"
                     android:hint="@string/emailRegister"/>
@@ -70,8 +79,10 @@
                     android:id="@+id/passwordRegister"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="12dp"
+                    android:drawableLeft="@drawable/ic_lock_open"
                     android:theme="@style/EditTextWhite"
+                    android:padding="18dp"
+                    android:drawablePadding="8dp"
                     android:inputType="textPassword"
                     android:hint="@string/passwordRegister"/>
             </android.support.design.widget.TextInputLayout>
@@ -83,9 +94,11 @@
                     android:id="@+id/passwordRegisteragain"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="12dp"
+                    android:drawableLeft="@drawable/ic_lock"
                     android:theme="@style/EditTextWhite"
                     android:inputType="textPassword"
+                    android:padding="18dp"
+                    android:drawablePadding="8dp"
                     android:hint="@string/passwordRegisterAgain"/>
             </android.support.design.widget.TextInputLayout>
         </LinearLayout>
