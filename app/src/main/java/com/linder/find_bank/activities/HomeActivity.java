@@ -5,13 +5,16 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -42,7 +45,10 @@ import com.linder.find_bank.R;
 
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback {
+    private static final String TAG = HomeActivity.class.getSimpleName();
 
+    // SharedPreferences
+    private SharedPreferences sharedPreferences;
     private GoogleMap mMap;
 
 
@@ -78,6 +84,7 @@ public class HomeActivity extends AppCompatActivity
             }
 
         }
+
     }
 
     @Override
@@ -85,13 +92,16 @@ public class HomeActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         accsserPermison();
-
+        // init SharedPreferences
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        // get username from SharedPreferences
+        String corroUser = getIntent().getExtras().getString("correo");
+        String username = sharedPreferences.getString("username", null);
+        Log.d(TAG, "username: " + username);
+        Log.d(TAG, "correo: " + corroUser);
         NavigationView navigationView2 = (NavigationView) findViewById(R.id.nav_view);
         TextView correo = (TextView) navigationView2.getHeaderView(0).findViewById(R.id.correoUser);
-        String corroUser = getIntent().getExtras().getString("correo");
         correo.setText(corroUser);
-
-
 
 
         int status = GooglePlayServicesUtil.isGooglePlayServicesAvailable(getApplicationContext());
@@ -109,7 +119,6 @@ public class HomeActivity extends AppCompatActivity
             dialog.show();
 
         }
-
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -169,27 +178,22 @@ public class HomeActivity extends AppCompatActivity
 
         if (id == R.id.nav_perfil) {
         } else if (id == R.id.nav_favoritos) {
-           // Intent intent = new Intent(HomeActivity.this, DetalleBancoActivity.class);
-           // startActivity(intent);
+            // Intent intent = new Intent(HomeActivity.this, DetalleBancoActivity.class);
+            // startActivity(intent);
 
         } else if (id == R.id.nav_nosotros) {
             //Dialog dialogs = new Dialog(this);
             //dialogs.setContentView(R.layout.activity_nosotros);
-          //  dialogs.setTitle("Nosotros");
+            //  dialogs.setTitle("Nosotros");
             //dialogs.show();
         } else if (id == R.id.salir) {
-            new AlertDialog.Builder(this)
-                    .setMessage("Seguro que desea salir")
-                    .setCancelable(false)
-                    .setPositiveButton("Si", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            Intent intent = new Intent(HomeActivity.this,LoginActivity.class);
-                            startActivity(intent);
-                        }
-                    })
-                    .setNegativeButton("No",null)
-                    .show();
+
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            boolean success = editor.putBoolean("islogged", false).commit();
+            // boolean success = editor.clear().commit(); // not recommended
+            Intent intent1 = new Intent(HomeActivity.this, LoginActivity.class);
+            startActivity(intent1);
+            finish();
 
 
         }

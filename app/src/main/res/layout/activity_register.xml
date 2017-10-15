@@ -1,136 +1,127 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView android:layout_height="match_parent"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/bg_fondo">
-
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@drawable/bg_fondo"
+    xmlns:android="http://schemas.android.com/apk/res/android" >
+    <RelativeLayout
+        android:gravity="center"
+        xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center"
         tools:context="com.linderhassinger.proyecto_integrador.RegisterActivity">
 
         <LinearLayout
-            android:id="@+id/titleRegister"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:padding="25dp">
+            android:id="@+id/titleRegister"
+            android:padding="25dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="6dp"
+                android:text="@string/register"
                 android:fontFamily="monospace"
                 android:gravity="center"
-                android:text="@string/register"
                 android:textColor="#fff"
+                android:textStyle="bold"
                 android:textSize="35sp"
-                android:textStyle="bold" />
+                android:layout_margin="6dp"/>
         </LinearLayout>
-
         <LinearLayout
+            android:layout_marginTop="16dp"
             android:id="@+id/campos"
+            android:orientation="vertical"
+            android:layout_below="@id/titleRegister"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/titleRegister"
             android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginTop="16dp"
-            android:background="@drawable/bg_edit_text"
-            android:orientation="vertical">
-
+            android:layout_marginRight="16dp">
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:theme="@style/EditTextWhite">
-
+                style="@style/EditTextWhite"
+                android:layout_height="wrap_content">
                 <EditText
                     android:id="@+id/nameRegister"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:drawableLeft="@drawable/ic_person"
-                    android:drawablePadding="8dp"
-                    android:hint="@string/nameRegister"
                     android:inputType="text"
-                    android:padding="18dp"
+                    android:drawablePadding="8dp"
                     android:paddingTop="21dp"
+                    android:padding="18dp"
+                    android:theme="@style/EditTextWhite"
                     android:textSize="19dp"
-                    android:theme="@style/EditTextWhite" />
+                    android:hint="@string/nameRegister"/>
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:theme="@style/EditTextWhite">
-
+                style="@style/EditTextWhite"
+                android:layout_height="wrap_content">
                 <EditText
                     android:id="@+id/emailRegister"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:drawableLeft="@drawable/ic_mail"
-                    android:drawablePadding="8dp"
-                    android:hint="@string/emailRegister"
-                    android:inputType="textEmailAddress"
                     android:padding="18dp"
-                    android:theme="@style/EditTextWhite" />
+                    android:drawablePadding="8dp"
+                    android:drawableLeft="@drawable/ic_mail"
+                    android:theme="@style/EditTextWhite"
+                    android:inputType="textEmailAddress"
+                    android:hint="@string/emailRegister"/>
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:theme="@style/EditTextWhite">
-
+                style="@style/EditTextWhite"
+                android:layout_height="wrap_content">
                 <EditText
                     android:id="@+id/passwordRegister"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:drawableLeft="@drawable/ic_lock_open"
-                    android:drawablePadding="8dp"
-                    android:hint="@string/passwordRegister"
-                    android:inputType="textPassword"
+                    android:theme="@style/EditTextWhite"
                     android:padding="18dp"
-                    android:theme="@style/EditTextWhite" />
+                    android:drawablePadding="8dp"
+                    android:inputType="textPassword"
+                    android:hint="@string/passwordRegister"/>
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:theme="@style/EditTextWhite">
-
+                style="@style/EditTextWhite">
                 <EditText
                     android:id="@+id/passwordRegisteragain"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:drawableLeft="@drawable/ic_lock"
-                    android:drawablePadding="8dp"
-                    android:hint="@string/passwordRegisterAgain"
+                    android:theme="@style/EditTextWhite"
                     android:inputType="textPassword"
                     android:padding="18dp"
-                    android:theme="@style/EditTextWhite" />
+                    android:drawablePadding="8dp"
+                    android:hint="@string/passwordRegisterAgain"/>
             </android.support.design.widget.TextInputLayout>
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/campos"
             android:layout_marginTop="52dp"
-            android:gravity="center">
-
+            android:gravity="center"
+            android:layout_below="@id/campos"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
             <Button
                 android:id="@+id/finalRegister"
                 android:layout_width="250dp"
-                android:layout_height="wrap_content"
                 android:layout_margin="12dp"
+                android:layout_height="wrap_content"
                 android:background="@drawable/bg_button_sig_in"
                 android:text="@string/finalRegister"
-                android:textAllCaps="false"
                 android:textColor="#fff"
-                android:textSize="18sp" />
-
+                android:textAllCaps="false"
+                android:textSize="18sp"/>
         </LinearLayout>
 
     </RelativeLayout>
