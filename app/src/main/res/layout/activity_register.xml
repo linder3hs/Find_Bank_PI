@@ -33,7 +33,6 @@
         <LinearLayout
             android:layout_marginTop="16dp"
             android:id="@+id/campos"
-            android:background="@drawable/bg_edit_text"
             android:orientation="vertical"
             android:layout_below="@id/titleRegister"
             android:layout_width="match_parent"
@@ -42,6 +41,7 @@
             android:layout_marginRight="16dp">
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
+                style="@style/EditTextWhite"
                 android:layout_height="wrap_content">
                 <EditText
                     android:id="@+id/nameRegister"
@@ -59,6 +59,7 @@
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
+                style="@style/EditTextWhite"
                 android:layout_height="wrap_content">
                 <EditText
                     android:id="@+id/emailRegister"
@@ -74,6 +75,7 @@
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
+                style="@style/EditTextWhite"
                 android:layout_height="wrap_content">
                 <EditText
                     android:id="@+id/passwordRegister"
@@ -89,7 +91,8 @@
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                style="@style/EditTextWhite">
                 <EditText
                     android:id="@+id/passwordRegisteragain"
                     android:layout_width="match_parent"
@@ -109,7 +112,6 @@
             android:layout_below="@id/campos"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-
             <Button
                 android:id="@+id/finalRegister"
                 android:layout_width="250dp"
@@ -120,7 +122,6 @@
                 android:textColor="#fff"
                 android:textAllCaps="false"
                 android:textSize="18sp"/>
-
         </LinearLayout>
 
     </RelativeLayout>

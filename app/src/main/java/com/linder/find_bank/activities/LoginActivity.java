@@ -2,7 +2,9 @@ package com.linder.find_bank.activities;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -19,6 +21,8 @@ import java.net.URL;
 import java.util.Scanner;
 
 public class LoginActivity extends AppCompatActivity {
+    // SharedPreferences
+    private SharedPreferences sharedPreferences;
     private EditText txtcorreo, txtcontra;
     private Button btningresar, btnregister;
     private ProgressDialog progressDialog;
@@ -34,6 +38,22 @@ public class LoginActivity extends AppCompatActivity {
         btningresar = (Button) findViewById(R.id.btnIngresar);
         btnregister = (Button) findViewById(R.id.btnregister);
 
+        // init SharedPreferences
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+
+
+        // username remember
+        final String username = sharedPreferences.getString("username", null);
+        if(username != null){
+            txtcorreo.setText(username);
+            txtcontra.requestFocus();
+        }
+
+        // islogged remember
+        if(sharedPreferences.getBoolean("islogged", false)){
+            // Go to Dashboard
+            goDashboard();
+        }
         txtcorreo.setHintTextColor(Color.WHITE);
         btnregister.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -67,10 +87,17 @@ public class LoginActivity extends AppCompatActivity {
                                         progressDialog.setMessage("Cargando");
                                         progressDialog.setTitle("Find Bank");
                                         progressDialog.show();
-                                        Intent i = new Intent(getApplicationContext(), HomeActivity.class);//Prueba del servicio
-                                        i.putExtra("correo", txtcorreo.getText().toString());
-                                        startActivity(i);
-                                        finish();
+
+                                        // Save to SharedPreferences
+                                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                                        boolean success = editor
+                                                .putString("username", username)
+                                                .putBoolean("islogged", true)
+                                                .commit();
+
+                                        // Go to Dashboard
+                                        goDashboard();
+
                                     } else {
 
                                         Toast.makeText(getApplicationContext(), "Correo o Contraseña incorrectos", Toast.LENGTH_SHORT).show();
@@ -87,6 +114,14 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void goDashboard() {
+        Intent intent = new Intent(this, HomeActivity.class);
+        intent.putExtra("correo",txtcorreo.getText().toString());
+        startActivity(intent);
+
+        finish();
     }
 
     //Metodo para consumir el WEB SERVICE

@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
@@ -30,7 +31,9 @@ import com.linder.find_bank.R;
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
-
+    private static final String TAG = MapsActivity.class.getSimpleName();
+    // SharedPreferences
+    private SharedPreferences sharedPreferences;
     //Variales de permiso
     final private int REQUEST_CODE_ASK_PERMISON = 124;
     int hasUbicationPermision;
