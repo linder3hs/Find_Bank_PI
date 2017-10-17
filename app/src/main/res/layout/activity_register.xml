@@ -23,7 +23,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/register"
-                android:fontFamily="monospace"
                 android:gravity="center"
                 android:textColor="#fff"
                 android:textStyle="bold"
@@ -84,6 +83,7 @@
                     android:drawableLeft="@drawable/ic_lock_open"
                     android:theme="@style/EditTextWhite"
                     android:padding="18dp"
+                    android:textColorHint="@color/white"
                     android:drawablePadding="8dp"
                     android:inputType="textPassword"
                     android:hint="@string/passwordRegister"/>

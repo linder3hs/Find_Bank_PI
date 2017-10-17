@@ -47,7 +47,9 @@ public class LoginActivity extends AppCompatActivity {
         if(username != null){
             txtcorreo.setText(username);
             txtcontra.requestFocus();
+
         }
+
 
         // islogged remember
         if(sharedPreferences.getBoolean("islogged", false)){
@@ -94,7 +96,6 @@ public class LoginActivity extends AppCompatActivity {
                                                 .putString("username", username)
                                                 .putBoolean("islogged", true)
                                                 .commit();
-
                                         // Go to Dashboard
                                         goDashboard();
 
@@ -102,6 +103,7 @@ public class LoginActivity extends AppCompatActivity {
 
                                         Toast.makeText(getApplicationContext(), "Correo o Contraseña incorrectos", Toast.LENGTH_SHORT).show();
                                     }
+
 
 
                                 }

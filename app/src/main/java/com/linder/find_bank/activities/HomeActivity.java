@@ -7,8 +7,13 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -29,6 +34,8 @@ import android.widget.Toast;
 
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
@@ -46,11 +53,15 @@ import com.linder.find_bank.R;
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback {
     private static final String TAG = HomeActivity.class.getSimpleName();
-
+    int PLACE_PICKER_REQUEST = 1;
     // SharedPreferences
     private SharedPreferences sharedPreferences;
     private GoogleMap mMap;
-
+    private String nameSend;
+    Location location;
+    LocationManager locationManager;
+    LocationListener locationListener;
+    AlertDialog alertDialog = null;
 
     //Variales de permiso
     final private int REQUEST_CODE_ASK_PERMISON = 124;
@@ -95,6 +106,7 @@ public class HomeActivity extends AppCompatActivity
         // init SharedPreferences
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         // get username from SharedPreferences
+        // String username = sharedPreferences.getString("username", null);
         String corroUser = getIntent().getExtras().getString("correo");
         String username = sharedPreferences.getString("username", null);
         Log.d(TAG, "username: " + username);
@@ -103,7 +115,15 @@ public class HomeActivity extends AppCompatActivity
         TextView correo = (TextView) navigationView2.getHeaderView(0).findViewById(R.id.correoUser);
         correo.setText(corroUser);
 
+        //Mejora para prender el gps
+        locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+        if ( !locationManager.isProviderEnabled( LocationManager.GPS_PROVIDER ) ) {
+            AlertNoGps();
+        }
 
+
+
+        //locationManager
         int status = GooglePlayServicesUtil.isGooglePlayServicesAvailable(getApplicationContext());
 
         if (status == ConnectionResult.SUCCESS) {
@@ -182,10 +202,10 @@ public class HomeActivity extends AppCompatActivity
             // startActivity(intent);
 
         } else if (id == R.id.nav_nosotros) {
-            //Dialog dialogs = new Dialog(this);
-            //dialogs.setContentView(R.layout.activity_nosotros);
-            //  dialogs.setTitle("Nosotros");
-            //dialogs.show();
+            Dialog dialogs = new Dialog(this);
+            dialogs.setContentView(R.layout.activity_nosotros);
+            dialogs.setTitle("Nosotros");
+            dialogs.show();
         } else if (id == R.id.salir) {
 
             SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -245,6 +265,73 @@ public class HomeActivity extends AppCompatActivity
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(cosmo, zoon));
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(agenre, zoon));
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(cosmo, zoon));
+
+    }
+
+    public void AlertNoGps() {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("El GPS esta desactivado, ¿Desea activarlo?")
+                .setCancelable(false)
+                .setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.cancel();
+                    }
+                });
+
+        alertDialog = builder.create();
+        alertDialog.show();
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (alertDialog != null) {
+            alertDialog.dismiss();
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                    checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION)
+                            != PackageManager.PERMISSION_GRANTED) {
+
+                return;
+            } else {
+                //locationManager.removeUpdates(locationListener);
+            }
+
+        } else {
+            locationManager.removeUpdates(locationListener);
+        }
+
+    }
+
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+
+            if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+                return;
+            } else {
+                //locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+            }
+        } else {
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+        }
+
 
     }
 }
