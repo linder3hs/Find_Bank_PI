@@ -9,6 +9,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.linder.find_bank.R;
+import com.linder.find_bank.model.Hash;
 
 import org.json.JSONArray;
 
@@ -71,10 +72,13 @@ public class RegisterActivity extends AppCompatActivity {
         });
 
     }
+    alter table usuarios modify column pass varchar(100) not null;
+
 
     //Metodo para consumir el WEB SERVICE
     public String enviarPost(String nombre, String correo, String pass) {
-        String urlparametros = "nombre=" + nombre + "&correo=" + correo + "&pass=" + pass;
+        String hpass = Hash.sha1(pass);
+        String urlparametros = "nombre=" + nombre + "&correo=" + correo + "&pass=" + hpass;
         HttpURLConnection conection = null;
         String respuesta = "";
         try {

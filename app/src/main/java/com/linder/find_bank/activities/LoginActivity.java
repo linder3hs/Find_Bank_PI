@@ -12,13 +12,18 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 import com.linder.find_bank.R;
+import com.linder.find_bank.model.Hash;
+import com.linder.find_bank.model.User;
 
 import org.json.JSONArray;
 
 import java.io.DataOutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.Charset;
 import java.util.Scanner;
+
+import okio.HashingSink;
 
 public class LoginActivity extends AppCompatActivity {
     // SharedPreferences
@@ -26,6 +31,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText txtcorreo, txtcontra;
     private Button btningresar, btnregister;
     private ProgressDialog progressDialog;
+    String nameuser;
 
 
     @Override
@@ -125,7 +131,8 @@ public class LoginActivity extends AppCompatActivity {
 
     //Metodo para consumir el WEB SERVICE
     public String enviarPost(String correo, String pass) {
-        String urlparametros = "correo=" + correo + "&pass=" + pass;
+        String hpass = Hash.sha1(pass);
+        String urlparametros = "correo=" + correo + "&pass=" + hpass;
         HttpURLConnection conection = null;
         String respuesta = "";
         try {

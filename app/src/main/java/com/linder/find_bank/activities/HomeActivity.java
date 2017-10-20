@@ -107,13 +107,13 @@ public class HomeActivity extends AppCompatActivity
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         // get username from SharedPreferences
         // String username = sharedPreferences.getString("username", null);
-        String corroUser = getIntent().getExtras().getString("correo");
+        //String corroUser = getIntent().getExtras().getString("correo");
         String username = sharedPreferences.getString("username", null);
         Log.d(TAG, "username: " + username);
-        Log.d(TAG, "correo: " + corroUser);
+        //Log.d(TAG, "correo: " + corroUser);
         NavigationView navigationView2 = (NavigationView) findViewById(R.id.nav_view);
         TextView correo = (TextView) navigationView2.getHeaderView(0).findViewById(R.id.correoUser);
-        correo.setText(corroUser);
+       // correo.setText(corroUser);
 
         //Mejora para prender el gps
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
@@ -195,8 +195,9 @@ public class HomeActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_perfil) {
-            Intent intent3 = new Intent(this, PerfilActivity.class);
+            Intent intent3 = new Intent(HomeActivity.this, PerfilActivity.class);
             startActivity(intent3);
+            Log.d("Intent", String.valueOf(intent3));
         } else if (id == R.id.nav_favoritos) {
             // Intent intent = new Intent(HomeActivity.this, DetalleBancoActivity.class);
             // startActivity(intent);
@@ -214,8 +215,6 @@ public class HomeActivity extends AppCompatActivity
             Intent intent1 = new Intent(HomeActivity.this, LoginActivity.class);
             startActivity(intent1);
             finish();
-
-
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

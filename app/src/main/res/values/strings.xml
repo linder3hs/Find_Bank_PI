@@ -23,5 +23,6 @@
         \n- Linder Hassinger \n- Seichi Honda \n- Roque Alarcon</string>
     <string name="nombre_de_usuario">Nombre de usuario</string>
     <string name="email_of_user">Email of user</string>
+    <string name="title_activity_display_message">Back</string>
 
 </resources>

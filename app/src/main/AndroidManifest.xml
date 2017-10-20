@@ -27,6 +27,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+
             android:name=".activities.SplashActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -49,6 +50,9 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
+        <meta-data
+            android:name="android.support.PARENT_ACTIVITY"
+            android:value="com.linder.find_bank.activities.HomeActivity" />
 
         <activity
             android:name=".activities.MapsActivity"
@@ -62,7 +66,10 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".activities.NosotrosActivity" />
         <activity android:name=".activities.DetalleBancoActivity" />
-        <activity android:name=".activities.PerfilActivity"></activity>
+        <activity android:name=".activities.PerfilActivity"
+            android:parentActivityName=".activities.HomeActivity"></activity>
+        <!-- The main/home activity (it has no parent activity) -->
+
     </application>
 
 </manifest>
