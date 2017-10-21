@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <item name="nav_perfil" type="id">perfil</item>
-    <item name="nav_favoritos" type="id">favoritos</item>
-    <item name="nav_nosotros" type="id">nosotros</item>
-</resources>

@@ -23,7 +23,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/register"
-                android:fontFamily="monospace"
                 android:gravity="center"
                 android:textColor="#fff"
                 android:textStyle="bold"
@@ -42,6 +41,7 @@
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 style="@style/EditTextWhite"
+                android:theme="@style/EditTextWhite"
                 android:layout_height="wrap_content">
                 <EditText
                     android:id="@+id/nameRegister"
@@ -49,6 +49,7 @@
                     android:layout_height="wrap_content"
                     android:drawableLeft="@drawable/ic_person"
                     android:inputType="text"
+                    android:textColorHint="@color/white"
                     android:drawablePadding="8dp"
                     android:paddingTop="21dp"
                     android:padding="18dp"
@@ -60,6 +61,7 @@
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 style="@style/EditTextWhite"
+                android:theme="@style/EditTextWhite"
                 android:layout_height="wrap_content">
                 <EditText
                     android:id="@+id/emailRegister"
@@ -76,6 +78,7 @@
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 style="@style/EditTextWhite"
+                android:theme="@style/EditTextWhite"
                 android:layout_height="wrap_content">
                 <EditText
                     android:id="@+id/passwordRegister"
@@ -84,6 +87,7 @@
                     android:drawableLeft="@drawable/ic_lock_open"
                     android:theme="@style/EditTextWhite"
                     android:padding="18dp"
+                    android:textColorHint="@color/white"
                     android:drawablePadding="8dp"
                     android:inputType="textPassword"
                     android:hint="@string/passwordRegister"/>
@@ -92,6 +96,7 @@
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:theme="@style/EditTextWhite"
                 style="@style/EditTextWhite">
                 <EditText
                     android:id="@+id/passwordRegisteragain"

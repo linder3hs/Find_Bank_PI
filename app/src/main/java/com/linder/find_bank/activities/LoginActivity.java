@@ -12,13 +12,18 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 import com.linder.find_bank.R;
+import com.linder.find_bank.model.Hash;
+import com.linder.find_bank.model.User;
 
 import org.json.JSONArray;
 
 import java.io.DataOutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.Charset;
 import java.util.Scanner;
+
+import okio.HashingSink;
 
 public class LoginActivity extends AppCompatActivity {
     // SharedPreferences
@@ -26,6 +31,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText txtcorreo, txtcontra;
     private Button btningresar, btnregister;
     private ProgressDialog progressDialog;
+    String nameuser;
 
 
     @Override
@@ -47,7 +53,9 @@ public class LoginActivity extends AppCompatActivity {
         if(username != null){
             txtcorreo.setText(username);
             txtcontra.requestFocus();
+
         }
+
 
         // islogged remember
         if(sharedPreferences.getBoolean("islogged", false)){
@@ -69,9 +77,11 @@ public class LoginActivity extends AppCompatActivity {
                 if (txtcorreo.getText().toString().isEmpty() || txtcontra.getText().toString().isEmpty()) {
                     Toast.makeText(LoginActivity.this, "Rellene los campos", Toast.LENGTH_SHORT).show();
                 } else {
+                    progressDialog();
                     Thread tr = new Thread() {
                         @Override
                         public void run() {
+
                             //Enviar los datos hacia el Web Service y
                             //Recibir los datos que me envia el Web Service
                             final String res = enviarPost(txtcorreo.getText().toString(), txtcontra.getText().toString());
@@ -79,14 +89,9 @@ public class LoginActivity extends AppCompatActivity {
                                 @Override
                                 public void run() {
 
+
                                     int r = objJSON(res);
                                     if (r > 0) {
-                                        progressDialog = new ProgressDialog(LoginActivity.this);
-                                        progressDialog.setMax(100);
-                                        progressDialog.setIcon(R.drawable.ic_lock);
-                                        progressDialog.setMessage("Cargando");
-                                        progressDialog.setTitle("Find Bank");
-                                        progressDialog.show();
 
                                         // Save to SharedPreferences
                                         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -94,14 +99,14 @@ public class LoginActivity extends AppCompatActivity {
                                                 .putString("username", username)
                                                 .putBoolean("islogged", true)
                                                 .commit();
-
                                         // Go to Dashboard
                                         goDashboard();
 
                                     } else {
-
+                                        progressDialog.dismiss();
                                         Toast.makeText(getApplicationContext(), "Correo o Contraseña incorrectos", Toast.LENGTH_SHORT).show();
                                     }
+
 
 
                                 }
@@ -126,7 +131,8 @@ public class LoginActivity extends AppCompatActivity {
 
     //Metodo para consumir el WEB SERVICE
     public String enviarPost(String correo, String pass) {
-        String urlparametros = "correo=" + correo + "&pass=" + pass;
+        String hpass = Hash.sha1(pass);
+        String urlparametros = "correo=" + correo + "&pass=" + hpass;
         HttpURLConnection conection = null;
         String respuesta = "";
         try {
@@ -167,5 +173,15 @@ public class LoginActivity extends AppCompatActivity {
 
         }
         return res;
+    }
+
+    public void progressDialog() {
+        progressDialog = new ProgressDialog(LoginActivity.this);
+        progressDialog.setMax(100);
+        progressDialog.setCancelable(false);
+        progressDialog.setIcon(R.drawable.ic_lock_black);
+        progressDialog.setMessage("Validando Datos");
+        progressDialog.setTitle("Find Bank");
+        progressDialog.show();
     }
 }

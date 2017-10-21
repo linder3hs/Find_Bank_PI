@@ -6,7 +6,7 @@
     <string name="title_activity_maps">Map</string>
     <string name="no_tiene_una_cuenta">¿No tienes una cuenta?  </string>
     <string name="registrarse"><u>Registrate</u> </string>
-    <string name="register">Registro</string>
+    <string name="register">Solicita tu registro</string>
     <string name="nameRegister">Nombre:</string>
     <string name="emailRegister">Email:</string>
     <string name="passwordRegister">Contraseña:</string>
@@ -19,6 +19,10 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Nosotros</string>
-    <string name="nosotros">Somos un un grupo de jovenes programadores: \n- Linder Hassinger \n- Seichi Honda \n- Roque Alarcon</string>
+    <string name="nosotros">Somos un un grupo de jovenes programadores:
+        \n- Linder Hassinger \n- Seichi Honda \n- Roque Alarcon</string>
+    <string name="nombre_de_usuario">Nombre de usuario</string>
+    <string name="email_of_user">Email of user</string>
+    <string name="title_activity_display_message">Back</string>
 
 </resources>

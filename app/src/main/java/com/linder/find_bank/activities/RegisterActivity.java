@@ -9,6 +9,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.linder.find_bank.R;
+import com.linder.find_bank.model.Hash;
 
 import org.json.JSONArray;
 
@@ -42,34 +43,41 @@ public class RegisterActivity extends AppCompatActivity {
                 if (name.getText().toString().isEmpty() || mail.getText().toString().isEmpty() || contra.getText().toString().isEmpty()  || contaAgian.getText().toString().isEmpty()) {
                     Toast.makeText(RegisterActivity.this, "Rellene los datos", Toast.LENGTH_SHORT).show();
                 } else {
-                    Thread tr = new Thread() {
-                        @Override
-                        public void run() {
-                            //Enviar los datos hacia el Web Service y
-                            //Recibir los datos que me envia el Web Service
-                            enviarPost(nombre, email, pass);
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
+                    if (pass.equals(pasa)){
+                        Thread tr = new Thread() {
+                            @Override
+                            public void run() {
+                                //Enviar los datos hacia el Web Service y
+                                //Recibir los datos que me envia el Web Service
+                                enviarPost(nombre, email, pass);
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
 
-                                    Intent i = new Intent(getApplicationContext(), LoginActivity.class);//Prueba del servicio
-                                    startActivity(i);
-                                    finish();
+                                        Intent i = new Intent(getApplicationContext(), LoginActivity.class);//Prueba del servicio
+                                        startActivity(i);
+                                        finish();
 
-                                }
-                            });
-                        }
-                    };
-                    tr.start();
+                                    }
+                                });
+                            }
+                        };
+                        tr.start();
+                    }else{
+                        Toast.makeText(RegisterActivity.this, "Las contraseña deben coincidir", Toast.LENGTH_SHORT).show();
+                    }
+
                 }
             }
         });
 
     }
 
+
     //Metodo para consumir el WEB SERVICE
     public String enviarPost(String nombre, String correo, String pass) {
-        String urlparametros = "nombre=" + nombre + "&correo=" + correo + "&pass=" + pass;
+        String hpass = Hash.sha1(pass);
+        String urlparametros = "nombre=" + nombre + "&correo=" + correo + "&pass=" + hpass;
         HttpURLConnection conection = null;
         String respuesta = "";
         try {

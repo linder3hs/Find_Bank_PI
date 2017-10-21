@@ -2,8 +2,9 @@
 <ScrollView xmlns:tools="http://schemas.android.com/tools"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/bg_fondo"
-    xmlns:android="http://schemas.android.com/apk/res/android" >
+    xmlns:android="http://schemas.android.com/apk/res/android">
     <RelativeLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
@@ -43,6 +44,7 @@
             style="@style/EditTextWhite"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:theme="@style/EditTextWhite"
             android:layout_alignParentStart="true"
             android:layout_below="@+id/logobcp">
 
@@ -53,9 +55,9 @@
                 android:layout_alignParentStart="true"
                 android:layout_margin="25dp"
                 android:ems="10"
+                android:textColorHint="@color/white"
                 android:drawablePadding="8dp"
                 android:drawableLeft="@drawable/ic_mail"
-                android:theme="@style/EditTextWhite"
                 android:hint="@string/e_mail"
                 android:inputType="textEmailAddress"
                 android:textColor="@color/white"
@@ -67,6 +69,7 @@
             android:id="@+id/textInputLayout2"
             style="@style/EditTextWhite"
             android:layout_width="match_parent"
+            android:theme="@style/EditTextWhite"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_below="@+id/textInputLayout1">
@@ -80,8 +83,9 @@
                 android:drawableLeft="@drawable/ic_lock"
                 android:layout_margin="25dp"
                 android:ems="10"
+                app:theme="@style/EditTextWhite"
                 android:drawablePadding="8dp"
-                android:textColorHint="@color/colorAccent"
+                android:textColorHint="@color/white"
                 android:theme="@style/EditTextWhite"
                 android:hint="@string/password"
                 android:inputType="textPassword"
