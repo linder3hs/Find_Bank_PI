@@ -72,7 +72,6 @@ public class RegisterActivity extends AppCompatActivity {
         });
 
     }
-    alter table usuarios modify column pass varchar(100) not null;
 
 
     //Metodo para consumir el WEB SERVICE

@@ -6,12 +6,30 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bg_fondo"
+    android:layout_gravity="center"
     tools:context="com.linder.find_bank.activities.SplashActivity">
 
-   <ImageView
+   <LinearLayout
        android:layout_width="match_parent"
-       android:layout_height="100dp"
-       android:src="@drawable/find"
-       android:layout_gravity="center"/>
+       android:layout_height="wrap_content"
+       android:layout_gravity="center"
+       android:orientation="vertical"
+       android:gravity="center">
+
+      <ImageView
+          android:layout_width="match_parent"
+          android:layout_height="100dp"
+          android:src="@drawable/find"
+          android:layout_gravity="center"/>
+      <ProgressBar
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_margin="12dp"
+          android:backgroundTint="@color/white"
+          style="@style/EditTextWhite"
+          android:theme="@style/EditTextWhite"/>
+   </LinearLayout>
+
+
 
 </LinearLayout>

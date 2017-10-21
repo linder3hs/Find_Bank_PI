@@ -1,7 +1,9 @@
 package com.linder.find_bank.activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
@@ -11,6 +13,7 @@ public class SplashActivity extends AppCompatActivity {
 
     //Tiempo de splash
     public static final int TIME = 3000;
+    private SharedPreferences sharedPreferences;
 
 
     @Override
@@ -26,5 +29,20 @@ public class SplashActivity extends AppCompatActivity {
             }
         }, TIME);
 
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        // islogged remember
+        if(sharedPreferences.getBoolean("islogged", false)){
+            // Go to Dashboard
+            goDashboard();
+        }
+
+
+    }
+
+    private void goDashboard() {
+        Intent intent = new Intent(this, HomeActivity.class);
+        //startActivity(intent);
+
+        //finish();
     }
 }

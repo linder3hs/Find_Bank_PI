@@ -45,6 +45,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -249,7 +250,9 @@ public class HomeActivity extends AppCompatActivity
         Marker cosmos = mMap.addMarker(new MarkerOptions()
                 .position(cosmo)
                 .title("Mi casa")
-                .snippet("Mensajito: Aca vivo"));
+                .snippet("Mensajito: Aca vivo")
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.compass)));
+        googleMap.moveCamera(CameraUpdateFactory.newLatLng(cosmo));
 
         mMap.addMarker(new MarkerOptions().position(agenteSanta).title("Alondras").snippet("Agente BCP"));
         mMap.addMarker(new MarkerOptions().position(agenre).title("Lugar2").snippet("Mensaje nº2"));
