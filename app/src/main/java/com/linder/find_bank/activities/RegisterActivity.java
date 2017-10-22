@@ -1,5 +1,6 @@
 package com.linder.find_bank.activities;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -21,11 +22,17 @@ import java.util.Scanner;
 public class RegisterActivity extends AppCompatActivity {
     EditText name, mail, contra, contaAgian;
     Button finaRegister;
+    private ProgressDialog progressDialog;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         name = (EditText) findViewById(R.id.nameRegister);
         mail = (EditText) findViewById(R.id.emailRegister);
         contra = (EditText) findViewById(R.id.passwordRegister);
@@ -43,6 +50,7 @@ public class RegisterActivity extends AppCompatActivity {
                 if (name.getText().toString().isEmpty() || mail.getText().toString().isEmpty() || contra.getText().toString().isEmpty()  || contaAgian.getText().toString().isEmpty()) {
                     Toast.makeText(RegisterActivity.this, "Rellene los datos", Toast.LENGTH_SHORT).show();
                 } else {
+                    progressDialog();
                     if (pass.equals(pasa)){
                         Thread tr = new Thread() {
                             @Override
@@ -64,6 +72,7 @@ public class RegisterActivity extends AppCompatActivity {
                         };
                         tr.start();
                     }else{
+                        progressDialog.dismiss();
                         Toast.makeText(RegisterActivity.this, "Las contraseña deben coincidir", Toast.LENGTH_SHORT).show();
                     }
 
@@ -119,5 +128,14 @@ public class RegisterActivity extends AppCompatActivity {
 
         }
         return res;
+    }
+    public void progressDialog() {
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMax(100);
+        progressDialog.setCancelable(false);
+        progressDialog.setIcon(R.drawable.ic_lock_black);
+        progressDialog.setMessage("Validando Datos");
+        progressDialog.setTitle("Find Bank");
+        progressDialog.show();
     }
 }

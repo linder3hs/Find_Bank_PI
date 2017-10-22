@@ -29,6 +29,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -51,10 +53,13 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.linder.find_bank.R;
 
-public class HomeActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback {
+public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback, GoogleMap.OnMarkerClickListener, GoogleMap.OnInfoWindowClickListener {
+
     private static final String TAG = HomeActivity.class.getSimpleName();
     int PLACE_PICKER_REQUEST = 1;
+
+    private Marker markerAgente;
+    private Marker markerInfo;
     // SharedPreferences
     private SharedPreferences sharedPreferences;
     private GoogleMap mMap;
@@ -196,12 +201,12 @@ public class HomeActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_perfil) {
-            Intent intent3 = new Intent(HomeActivity.this, PerfilActivity.class);
+            Intent intent3 = new Intent(this, PerfilActivity.class);
             startActivity(intent3);
             Log.d("Intent", String.valueOf(intent3));
         } else if (id == R.id.nav_favoritos) {
-            // Intent intent = new Intent(HomeActivity.this, DetalleBancoActivity.class);
-            // startActivity(intent);
+            Intent intent = new Intent(this, DetalleBancoActivity.class);
+            startActivity(intent);
 
         } else if (id == R.id.nav_nosotros) {
             Dialog dialogs = new Dialog(this);
@@ -213,7 +218,7 @@ public class HomeActivity extends AppCompatActivity
             SharedPreferences.Editor editor = sharedPreferences.edit();
             boolean success = editor.putBoolean("islogged", false).commit();
             // boolean success = editor.clear().commit(); // not recommended
-            Intent intent1 = new Intent(HomeActivity.this, LoginActivity.class);
+            Intent intent1 = new Intent(this, LoginActivity.class);
             startActivity(intent1);
             finish();
         }
@@ -245,16 +250,28 @@ public class HomeActivity extends AppCompatActivity
         // Add a place for me
         LatLng agenre = new LatLng(-12.0443305, -76.952573);
         LatLng agenteSanta = new LatLng(-12.0387409, -76.999248);
+        markerInfo = googleMap.addMarker(new MarkerOptions()
+            .position(agenteSanta)
+            .title("Luagr Info")
+            .snippet("Informacion add")
+            .icon(BitmapDescriptorFactory.fromResource(R.drawable.compass)));
+        //Eventos
+            googleMap.setOnMarkerClickListener(this);
+            //googleMap.setOnMarkerDragListener((GoogleMap.OnMarkerDragListener) this);
+            googleMap.setOnInfoWindowClickListener(this);
+
         //Add a place with description
         LatLng cosmo = new LatLng(-12.0443305, -76.999248);
-        Marker cosmos = mMap.addMarker(new MarkerOptions()
+         markerAgente = googleMap.addMarker(new MarkerOptions()
                 .position(cosmo)
                 .title("Mi casa")
                 .snippet("Mensajito: Aca vivo")
                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.compass)));
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(cosmo));
+        googleMap.setOnMarkerClickListener(this);
 
-        mMap.addMarker(new MarkerOptions().position(agenteSanta).title("Alondras").snippet("Agente BCP"));
+
+      //  mMap.addMarker(new MarkerOptions().position(agenteSanta).title("Alondras").snippet("Agente BCP"));
         mMap.addMarker(new MarkerOptions().position(agenre).title("Lugar2").snippet("Mensaje nº2"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(agenre));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(agenteSanta));
@@ -335,5 +352,34 @@ public class HomeActivity extends AppCompatActivity
         }
 
 
+    }
+
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+        if (marker.equals(markerAgente)){
+            final Dialog dialogs = new Dialog(this);
+            dialogs.setContentView(R.layout.activity_detalle_banco);
+            dialogs.setTitle("Agente");
+            dialogs.closeOptionsMenu();
+            dialogs.setCancelable(false);
+            dialogs.show();
+
+            ImageView btnClose = (ImageView) dialogs.findViewById(R.id.btnClose);
+            btnClose.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    dialogs.dismiss();
+                }
+            });
+
+        }
+        return false;
+    }
+
+    @Override
+    public void onInfoWindowClick(Marker marker) {
+        if (marker.equals(markerInfo)){
+
+        }
     }
 }

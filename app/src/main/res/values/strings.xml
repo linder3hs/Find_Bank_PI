@@ -19,10 +19,17 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Nosotros</string>
-    <string name="nosotros">Somos un un grupo de jovenes programadores:
+    <string name="nosotros">Somos un grupo de jovenes programadores:
         \n- Linder Hassinger \n- Seichi Honda \n- Roque Alarcon</string>
     <string name="nombre_de_usuario">Nombre de usuario</string>
     <string name="email_of_user">Email of user</string>
     <string name="title_activity_display_message">Back</string>
+    <string name="nombre_de_agente">Nombre de agente</string>
+    <string name="direccion_de_agente">Direccion de agente</string>
+    <string name="sistema">Sistema:</string>
+    <string name="no_disponible">No disponible</string>
+    <string name="seguridad">Seguridad: </string>
+    <string name="horario">Horario:</string>
+    <string name="_8_00am_6_00pm">8:00am - 6:00pm</string>
 
 </resources>

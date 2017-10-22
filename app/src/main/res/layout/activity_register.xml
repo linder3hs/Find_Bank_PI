@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView android:layout_height="match_parent"
     android:layout_width="match_parent"
-    android:background="@drawable/bg_fondo"
+    android:background="@color/white"
     xmlns:android="http://schemas.android.com/apk/res/android" >
     <RelativeLayout
         android:gravity="center"
@@ -10,6 +10,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/white"
         tools:context="com.linderhassinger.proyecto_integrador.RegisterActivity">
 
         <LinearLayout
@@ -18,16 +19,6 @@
             android:padding="25dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/register"
-                android:gravity="center"
-                android:textColor="#fff"
-                android:textStyle="bold"
-                android:textSize="35sp"
-                android:layout_margin="6dp"/>
         </LinearLayout>
         <LinearLayout
             android:layout_marginTop="16dp"
@@ -40,8 +31,8 @@
             android:layout_marginRight="16dp">
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
-                style="@style/EditTextWhite"
-                android:theme="@style/EditTextWhite"
+                style="@style/EditTextBlack"
+                android:theme="@style/EditTextBlack"
                 android:layout_height="wrap_content">
                 <EditText
                     android:id="@+id/nameRegister"
@@ -49,19 +40,19 @@
                     android:layout_height="wrap_content"
                     android:drawableLeft="@drawable/ic_person"
                     android:inputType="text"
-                    android:textColorHint="@color/white"
+                    android:textColorHint="@color/black"
                     android:drawablePadding="8dp"
                     android:paddingTop="21dp"
                     android:padding="18dp"
-                    android:theme="@style/EditTextWhite"
+                    android:theme="@style/EditTextBlack"
                     android:textSize="19dp"
                     android:hint="@string/nameRegister"/>
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
-                style="@style/EditTextWhite"
-                android:theme="@style/EditTextWhite"
+                style="@style/EditTextBlack"
+                android:theme="@style/EditTextBlack"
                 android:layout_height="wrap_content">
                 <EditText
                     android:id="@+id/emailRegister"
@@ -69,25 +60,25 @@
                     android:layout_height="wrap_content"
                     android:padding="18dp"
                     android:drawablePadding="8dp"
-                    android:drawableLeft="@drawable/ic_mail"
-                    android:theme="@style/EditTextWhite"
+                    android:drawableLeft="@drawable/ic_email_black"
+                    android:theme="@style/EditTextBlack"
                     android:inputType="textEmailAddress"
                     android:hint="@string/emailRegister"/>
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
-                style="@style/EditTextWhite"
-                android:theme="@style/EditTextWhite"
+                style="@style/EditTextBlack"
+                android:theme="@style/EditTextBlack"
                 android:layout_height="wrap_content">
                 <EditText
                     android:id="@+id/passwordRegister"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:drawableLeft="@drawable/ic_lock_open"
-                    android:theme="@style/EditTextWhite"
+                    android:theme="@style/EditTextBlack"
                     android:padding="18dp"
-                    android:textColorHint="@color/white"
+                    android:textColorHint="@color/black"
                     android:drawablePadding="8dp"
                     android:inputType="textPassword"
                     android:hint="@string/passwordRegister"/>
@@ -96,14 +87,14 @@
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:theme="@style/EditTextWhite"
-                style="@style/EditTextWhite">
+                android:theme="@style/EditTextBlack"
+                style="@style/EditTextBlack">
                 <EditText
                     android:id="@+id/passwordRegisteragain"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:drawableLeft="@drawable/ic_lock"
-                    android:theme="@style/EditTextWhite"
+                    android:drawableLeft="@drawable/ic_lock_black"
+                    android:theme="@style/EditTextBlack"
                     android:inputType="textPassword"
                     android:padding="18dp"
                     android:drawablePadding="8dp"
@@ -122,7 +113,7 @@
                 android:layout_width="250dp"
                 android:layout_margin="12dp"
                 android:layout_height="wrap_content"
-                android:background="@drawable/bg_button_sig_in"
+                android:background="@drawable/bg_button_register"
                 android:text="@string/finalRegister"
                 android:textColor="#fff"
                 android:textAllCaps="false"
