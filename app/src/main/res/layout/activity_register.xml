@@ -78,6 +78,7 @@
                     android:drawableLeft="@drawable/ic_lock_open"
                     android:theme="@style/EditTextBlack"
                     android:padding="18dp"
+                    android:ellipsize="start"
                     android:textColorHint="@color/black"
                     android:drawablePadding="8dp"
                     android:inputType="textPassword"
@@ -88,6 +89,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:theme="@style/EditTextBlack"
+                app:passwordToggleEnabled="true"
+                app:passwordToggleTint="@color/colorPrimary"
                 style="@style/EditTextBlack">
                 <EditText
                     android:id="@+id/passwordRegisteragain"
@@ -119,6 +122,5 @@
                 android:textAllCaps="false"
                 android:textSize="18sp"/>
         </LinearLayout>
-
     </RelativeLayout>
 </ScrollView>
