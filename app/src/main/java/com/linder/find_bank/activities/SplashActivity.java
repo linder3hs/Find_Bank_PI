@@ -20,20 +20,22 @@ public class SplashActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
-                startActivity(intent);
-                finish();
-            }
-        }, TIME);
+
 
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         // islogged remember
         if(sharedPreferences.getBoolean("islogged", false)){
             // Go to Dashboard
             goDashboard();
+        }else{
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    Intent intent = new Intent(SplashActivity.this, HomeActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+            }, TIME);
         }
 
 
@@ -41,8 +43,7 @@ public class SplashActivity extends AppCompatActivity {
 
     private void goDashboard() {
         Intent intent = new Intent(this, HomeActivity.class);
-        //startActivity(intent);
-
-        //finish();
+        startActivity(intent);
+        finish();
     }
 }

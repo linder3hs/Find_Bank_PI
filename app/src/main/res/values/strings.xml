@@ -7,7 +7,7 @@
     <string name="no_tiene_una_cuenta">¿No tienes una cuenta?  </string>
     <string name="registrarse"><u>Registrate</u> </string>
     <string name="register">Solicita tu registro</string>
-    <string name="nameRegister">Nombre:</string>
+    <string name="nameRegister">Nombre completo:</string>
     <string name="emailRegister">Email:</string>
     <string name="passwordRegister">Contraseña:</string>
     <string name="passwordRegisterAgain">Confirmar contraseña:</string>

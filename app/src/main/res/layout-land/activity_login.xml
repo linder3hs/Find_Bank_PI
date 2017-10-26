@@ -23,7 +23,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
                 android:layout_margin="16dp"
-                android:onClick="SignIn"
                 android:src="@drawable/find"
                 tools:ignore="ContentDescription" />
 
@@ -51,7 +50,6 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
                     android:layout_margin="25dp"
-                    android:ems="10"
                     android:drawablePadding="8dp"
                     android:drawableLeft="@drawable/ic_mail"
                     android:theme="@style/EditTextWhite"

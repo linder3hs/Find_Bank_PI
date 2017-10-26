@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.preference.PreferenceManager;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -43,6 +45,7 @@ public class LoginActivity extends AppCompatActivity {
         txtcontra = (EditText) findViewById(R.id.txtPass);
         btningresar = (Button) findViewById(R.id.btnIngresar);
         btnregister = (Button) findViewById(R.id.btnregister);
+        //rootLayout = (CoordinatorLayout) findViewById(R.id.coordinatorLayout);
 
         // init SharedPreferences
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
@@ -73,9 +76,14 @@ public class LoginActivity extends AppCompatActivity {
 
         btningresar.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(final View view) {
                 if (txtcorreo.getText().toString().isEmpty() || txtcontra.getText().toString().isEmpty()) {
-                    Toast.makeText(LoginActivity.this, "Rellene los campos", Toast.LENGTH_SHORT).show();
+                    Snackbar snackbar = Snackbar.make(view, "Completar todos los campos!", Snackbar.LENGTH_LONG);// Snackbar message
+                    snackbar.setActionTextColor(getResources().getColor(R.color.white));
+                    View snaView1 = snackbar.getView();
+                    snaView1.setBackgroundColor(getResources().getColor(R.color.bgsnack));
+                    snackbar.show();
+                    //Toast.makeText(LoginActivity.this, "Rellene los campos", Toast.LENGTH_SHORT).show();
                 } else {
                     progressDialog();
                     Thread tr = new Thread() {
@@ -104,7 +112,12 @@ public class LoginActivity extends AppCompatActivity {
 
                                     } else {
                                         progressDialog.dismiss();
-                                        Toast.makeText(getApplicationContext(), "Correo o Contraseña incorrectos", Toast.LENGTH_SHORT).show();
+                                        Snackbar snackbar = Snackbar.make(view, "Correo o contraseña incorrectos!", Snackbar.LENGTH_LONG);// Snackbar message
+                                        snackbar.setActionTextColor(getResources().getColor(R.color.white));
+                                        View snaView1 = snackbar.getView();
+                                        snaView1.setBackgroundColor(getResources().getColor(R.color.bgsnack));
+                                        snackbar.show();
+                                        //Toast.makeText(getApplicationContext(), "Correo o Contraseña incorrectos", Toast.LENGTH_SHORT).show();
                                     }
 
 

@@ -2,6 +2,7 @@ package com.linder.find_bank.activities;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.InputType;
@@ -50,7 +51,12 @@ public class RegisterActivity extends AppCompatActivity {
                 final String pasa = contaAgian.getText().toString();
 
                 if (name.getText().toString().isEmpty() || mail.getText().toString().isEmpty() || contra.getText().toString().isEmpty()  || contaAgian.getText().toString().isEmpty()) {
-                    Toast.makeText(RegisterActivity.this, "Rellene los datos", Toast.LENGTH_SHORT).show();
+                    Snackbar snackbar = Snackbar.make(view, "Completar todos los campos!", Snackbar.LENGTH_LONG);// Snackbar message
+                    snackbar.setActionTextColor(getResources().getColor(R.color.white));
+                    View snaView1 = snackbar.getView();
+                    snaView1.setBackgroundColor(getResources().getColor(R.color.bgsnack));
+                    snackbar.show();
+                    //Toast.makeText(RegisterActivity.this, "Rellene los datos", Toast.LENGTH_SHORT).show();
                 } else {
                     progressDialog();
                     if (pass.equals(pasa)){
@@ -75,7 +81,12 @@ public class RegisterActivity extends AppCompatActivity {
                         tr.start();
                     }else{
                         progressDialog.dismiss();
-                        Toast.makeText(RegisterActivity.this, "Las contraseña deben coincidir", Toast.LENGTH_SHORT).show();
+                        Snackbar snackbar = Snackbar.make(view, "Las contraseña deben ser iguales!", Snackbar.LENGTH_LONG);// Snackbar message
+                        snackbar.setActionTextColor(getResources().getColor(R.color.white));
+                        View snaView1 = snackbar.getView();
+                        snaView1.setBackgroundColor(getResources().getColor(R.color.bgsnack));
+                        snackbar.show();
+                        //Toast.makeText(RegisterActivity.this, "Las contraseña deben coincidir", Toast.LENGTH_SHORT).show();
                     }
 
                 }

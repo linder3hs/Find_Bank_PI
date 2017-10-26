@@ -3,6 +3,8 @@ package com.linder.find_bank.activities;
 import android.Manifest;
 import android.app.Activity;
 import android.app.Dialog;
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -19,6 +21,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -31,6 +34,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,6 +46,7 @@ import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -51,13 +56,17 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.linder.find_bank.R;
+import android.support.v7.widget.SearchView; // not the default !
+
 
 public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback, GoogleMap.OnMarkerClickListener, GoogleMap.OnInfoWindowClickListener {
 
     private static final String TAG = HomeActivity.class.getSimpleName();
     int PLACE_PICKER_REQUEST = 1;
-
+    //FloatingActionButton btnMyUbication;
     private Marker markerAgente;
     private Marker markerInfo;
     // SharedPreferences
@@ -68,6 +77,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     LocationManager locationManager;
     LocationListener locationListener;
     AlertDialog alertDialog = null;
+    double speed;
 
     //Variales de permiso
     final private int REQUEST_CODE_ASK_PERMISON = 124;
@@ -110,6 +120,18 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_home);
         accsserPermison();
         // init SharedPreferences
+        //btnMyUbication = (FloatingActionButton) findViewById(R.id.btnMyUbication);
+
+        /*btnMyUbication.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //speed = location.getSpeed();
+                //getMyLocation();
+                Toast.makeText(HomeActivity.this,"My Ubication ^ ", Toast.LENGTH_SHORT).show();
+
+            }
+        });*/
+
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         // get username from SharedPreferences
         // String username = sharedPreferences.getString("username", null);
@@ -119,11 +141,11 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         //Log.d(TAG, "correo: " + corroUser);
         NavigationView navigationView2 = (NavigationView) findViewById(R.id.nav_view);
         TextView correo = (TextView) navigationView2.getHeaderView(0).findViewById(R.id.correoUser);
-       // correo.setText(corroUser);
+        // correo.setText(corroUser);
 
         //Mejora para prender el gps
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-        if ( !locationManager.isProviderEnabled( LocationManager.GPS_PROVIDER ) ) {
+        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             AlertNoGps();
         }
 
@@ -177,17 +199,20 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             Dialog dialogs = new Dialog(this);
             dialogs.setContentView(R.layout.activity_nosotros);
             dialogs.setTitle("Nosotros");
             dialogs.show();
+            Button btnosotros = (Button) dialogs.findViewById(R.id.nosotros);
+            btnosotros.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Toast.makeText(HomeActivity.this, "Muy pronto se habilitara esta opcion", Toast.LENGTH_SHORT).show();
+                }
+            });
             return true;
         }
 
@@ -213,6 +238,14 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             dialogs.setContentView(R.layout.activity_nosotros);
             dialogs.setTitle("Nosotros");
             dialogs.show();
+            Button btnosotros = (Button) dialogs.findViewById(R.id.nosotros);
+            btnosotros.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Toast.makeText(HomeActivity.this, "Muy pronto se habilitara esta opcion", Toast.LENGTH_SHORT).show();
+
+                }
+            });
         } else if (id == R.id.salir) {
 
             SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -241,6 +274,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             // for ActivityCompat#requestPermissions for more details.
             return;
         }
+
+
         mMap.setMyLocationEnabled(true);
         mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         UiSettings uiSettings = mMap.getUiSettings();
@@ -251,27 +286,25 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         LatLng agenre = new LatLng(-12.0443305, -76.952573);
         LatLng agenteSanta = new LatLng(-12.0387409, -76.999248);
         markerInfo = googleMap.addMarker(new MarkerOptions()
-            .position(agenteSanta)
-            .title("Luagr Info")
-            .snippet("Informacion add")
-            .icon(BitmapDescriptorFactory.fromResource(R.drawable.compass)));
+                .position(agenteSanta)
+                .title("Luagr Info")
+                .snippet("Informacion add")
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.compass)));
         //Eventos
-            googleMap.setOnMarkerClickListener(this);
-            //googleMap.setOnMarkerDragListener((GoogleMap.OnMarkerDragListener) this);
-            googleMap.setOnInfoWindowClickListener(this);
+        googleMap.setOnMarkerClickListener(this);
+        //googleMap.setOnMarkerDragListener((GoogleMap.OnMarkerDragListener) this);
+        googleMap.setOnInfoWindowClickListener(this);
 
         //Add a place with description
         LatLng cosmo = new LatLng(-12.0443305, -76.999248);
-         markerAgente = googleMap.addMarker(new MarkerOptions()
+        markerAgente = googleMap.addMarker(new MarkerOptions()
                 .position(cosmo)
-                .title("Mi casa")
-                .snippet("Mensajito: Aca vivo")
                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.compass)));
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(cosmo));
         googleMap.setOnMarkerClickListener(this);
 
 
-      //  mMap.addMarker(new MarkerOptions().position(agenteSanta).title("Alondras").snippet("Agente BCP"));
+        //  mMap.addMarker(new MarkerOptions().position(agenteSanta).title("Alondras").snippet("Agente BCP"));
         mMap.addMarker(new MarkerOptions().position(agenre).title("Lugar2").snippet("Mensaje nº2"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(agenre));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(agenteSanta));
@@ -356,13 +389,16 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onMarkerClick(Marker marker) {
-        if (marker.equals(markerAgente)){
+        if (marker.equals(markerAgente)) {
             final Dialog dialogs = new Dialog(this);
             dialogs.setContentView(R.layout.activity_detalle_banco);
             dialogs.setTitle("Agente");
             dialogs.closeOptionsMenu();
             dialogs.setCancelable(false);
             dialogs.show();
+            Switch aSwitch = (Switch) dialogs.findViewById(R.id.estadoB);
+            aSwitch.setEnabled(false);
+            aSwitch.setClickable(false);
 
             ImageView btnClose = (ImageView) dialogs.findViewById(R.id.btnClose);
             btnClose.setOnClickListener(new View.OnClickListener() {
@@ -378,8 +414,17 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void onInfoWindowClick(Marker marker) {
-        if (marker.equals(markerInfo)){
+        if (marker.equals(markerInfo)) {
 
         }
+    }
+
+    private void getDeviceLocation() {
+
+    }
+    private void getMyLocation() {
+       /* if(mMap.getMyLocation() != null) { // Check to ensure coordinates aren't null, probably a better way of doing this...
+            mapView.setCenterCoordinate(new LatLngZoom(mapView.getMyLocation().getLatitude(), mapView.getMyLocation().getLongitude(), 20), true);
+        }*/
     }
 }

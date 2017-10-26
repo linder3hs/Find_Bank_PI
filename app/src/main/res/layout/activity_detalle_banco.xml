@@ -16,14 +16,20 @@
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:background="@drawable/bg_agente">
-        <ImageView
-            android:id="@+id/btnClose"
-            android:layout_width="wrap_content"
-            android:layout_height="50dp"
-            android:src="@drawable/ic_close"
-            android:background="#53292929"
-            android:layout_marginBottom="0dp"
-            android:layout_marginEnd="0dp"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right">
+            <ImageView
+                android:id="@+id/btnClose"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/ic_close"
+                android:background="#53292929"
+                android:layout_marginBottom="0dp"
+                android:layout_marginEnd="0dp"/>
+        </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -102,16 +108,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
-                <TextView
+                <Switch
+                    android:id="@+id/estadoB"
+                    android:layout_margin="12dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/no_disponible"
-                    android:textColor="@color/white"
-                    android:background="#2e9fd7"
-                    android:textStyle="bold"
-                    android:textSize="18sp"
-                    android:padding="6dp"
-                    android:layout_margin="9dp"/>
+                    android:theme="@style/RatingBar"
+                    android:shadowColor="@color/bar"/>
                 <RatingBar
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -164,7 +167,6 @@
                     android:layout_gravity="center"
                     android:textSize="18sp"
                     android:layout_margin="12dp" />
-
         </LinearLayout>
     </LinearLayout>
 </RelativeLayout>
