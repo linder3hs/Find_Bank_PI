@@ -2,10 +2,12 @@ package com.linder.find_bank.activities;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.InputType;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -13,6 +15,9 @@ import android.widget.Toast;
 
 import com.linder.find_bank.R;
 import com.linder.find_bank.model.Hash;
+import com.linder.find_bank.network.ApiService;
+import com.linder.find_bank.network.ApiServiceGenerator;
+import com.linder.find_bank.network.ResponseMessage;
 
 import org.json.JSONArray;
 
@@ -21,36 +26,41 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Scanner;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class RegisterActivity extends AppCompatActivity {
-    EditText name, mail, contra, contaAgian;
+
+    EditText txtnombre, txtemail, txtpassword, txtpasswordAgain;
     Button finaRegister;
     private ProgressDialog progressDialog;
 
+    private static final String TAG = RegisterActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        name = (EditText) findViewById(R.id.nameRegister);
-        mail = (EditText) findViewById(R.id.emailRegister);
-        contra = (EditText) findViewById(R.id.passwordRegister);
-        contaAgian = (EditText) findViewById(R.id.passwordRegisteragain);
-
+        txtnombre = (EditText) findViewById(R.id.nameRegister);
+        txtemail = (EditText) findViewById(R.id.emailRegister);
+        txtpassword = (EditText) findViewById(R.id.passwordRegister);
+        txtpasswordAgain = (EditText) findViewById(R.id.passwordRegisteragain);
 
         finaRegister = (Button) findViewById(R.id.finalRegister);
         finaRegister.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                final String nombre = name.getText().toString();
-                final String email = mail.getText().toString();
-                final String pass = contra.getText().toString();
-                final String pasa = contaAgian.getText().toString();
+            public void onClick(final View view) {
+                final String nombre = txtnombre.getText().toString();
+                final String email = txtemail.getText().toString();
+                final String password = txtpassword.getText().toString();
+                final String passwordAgain = txtpasswordAgain.getText().toString();
+                final String tipo = "cliente";
 
-                if (name.getText().toString().isEmpty() || mail.getText().toString().isEmpty() || contra.getText().toString().isEmpty()  || contaAgian.getText().toString().isEmpty()) {
+                if (nombre.isEmpty() || email.isEmpty() || password.isEmpty()  || passwordAgain.isEmpty()) {
                     Snackbar snackbar = Snackbar.make(view, "Completar todos los campos!", Snackbar.LENGTH_LONG);// Snackbar message
                     snackbar.setActionTextColor(getResources().getColor(R.color.white));
                     View snaView1 = snackbar.getView();
@@ -59,26 +69,52 @@ public class RegisterActivity extends AppCompatActivity {
                     //Toast.makeText(RegisterActivity.this, "Rellene los datos", Toast.LENGTH_SHORT).show();
                 } else {
                     progressDialog();
-                    if (pass.equals(pasa)){
-                        Thread tr = new Thread() {
+                    if (password.equals(passwordAgain)){
+                        ApiService service = ApiServiceGenerator.createService(ApiService.class);
+
+                        Call<ResponseMessage> call = null;
+                        call = service.registrarUsuario(nombre, email, password, tipo);
+
+                        call.enqueue(new Callback<ResponseMessage>() {
                             @Override
-                            public void run() {
-                                //Enviar los datos hacia el Web Service y
-                                //Recibir los datos que me envia el Web Service
-                                enviarPost(nombre, email, pass);
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-
-                                        Intent i = new Intent(getApplicationContext(), LoginActivity.class);//Prueba del servicio
-                                        startActivity(i);
-                                        finish();
-
+                            public void onResponse(Call<ResponseMessage> call, Response<ResponseMessage> response) {
+                                try {
+                                    int statusCode = response.code();
+                                    Log.d(TAG, "HTTP status code: " + statusCode);
+                                    if (response.isSuccessful()) {
+                                        ResponseMessage responseMessage = response.body();
+                                        Log.d(TAG, "responseMessage: " + responseMessage);
+                                        Toast.makeText(RegisterActivity.this, responseMessage.getMessage(), Toast.LENGTH_LONG).show();
+                                        // Go to Login
+                                        goLogin();
+                                    } else {
+                                        progressDialog.dismiss();
+                                        Log.e(TAG, "onError: " + response.errorBody().string());
+                                        Snackbar snackbar = Snackbar.make(view, "Error!", Snackbar.LENGTH_LONG);// Snackbar message
+                                        snackbar.setActionTextColor(getResources().getColor(R.color.white));
+                                        View snaView1 = snackbar.getView();
+                                        snaView1.setBackgroundColor(getResources().getColor(R.color.bgsnack));
+                                        snackbar.show();
+                                        //throw new Exception();
                                     }
-                                });
+
+                                } catch (Throwable t) {
+                                    try {
+                                        Log.e(TAG, "onThrowable: " + t.toString(), t);
+                                        Toast.makeText(RegisterActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
+                                    } catch (Throwable x) {
+                                    }
+                                }
                             }
-                        };
-                        tr.start();
+
+                            @Override
+                            public void onFailure(Call<ResponseMessage> call, Throwable t) {
+                                Log.e(TAG, "onFailure: " + t.toString());
+                                Toast.makeText(RegisterActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
+                            }
+
+                        });
+
                     }else{
                         progressDialog.dismiss();
                         Snackbar snackbar = Snackbar.make(view, "Las contraseña deben ser iguales!", Snackbar.LENGTH_LONG);// Snackbar message
@@ -95,53 +131,14 @@ public class RegisterActivity extends AppCompatActivity {
 
     }
 
-
-    //Metodo para consumir el WEB SERVICE
-    public String enviarPost(String nombre, String correo, String pass) {
-        String hpass = Hash.sha1(pass);
-        String urlparametros = "nombre=" + nombre + "&correo=" + correo + "&pass=" + hpass;
-        HttpURLConnection conection = null;
-        String respuesta = "";
-        try {
-            //Se va a la Web y se envia los datos
-            //URL url=new URL("https://find-bank-roque363.c9users.io/WebService/valida.php");//Cambiar el ip - ya que no es estable por que es local
-            URL url = new URL("https://find-bank-roque363.c9users.io/WebService/registra.php");
-            conection = (HttpURLConnection) url.openConnection();
-            conection.setRequestMethod("POST");
-            conection.setRequestProperty("Content-Length", "" + Integer.toString(urlparametros.getBytes().length));
-
-            conection.setDoOutput(true);
-            DataOutputStream wr = new DataOutputStream(conection.getOutputStream());
-            wr.writeBytes(urlparametros);
-            wr.close();
-
-            //Leer el dato que nos devuelve el Web Service
-            Scanner inStream = new Scanner(conection.getInputStream());
-
-            //Recorrer el dato que nos devolvio
-            while (inStream.hasNextLine()) {
-                respuesta += (inStream.nextLine());
-            }
-
-        } catch (Exception e) {
-
-        }
-        return respuesta.toString();
+    private void goLogin() {
+        Intent intent = new Intent(this, LoginActivity.class);
+        //Intent intent = new Intent(this, PerfilActivity.class);
+        intent.putExtra("correo",txtemail.getText().toString());
+        startActivity(intent);
+        finish();
     }
 
-    //Contar cuantos registros hay en la respuesta
-    public int objJSON(String rspta) {
-        int res = 1;//Si el usuario es incorrecto retorna 0
-        try {
-            JSONArray json = new JSONArray(rspta);
-            if (json.length() > 0) {
-                res = 1;//Si el usuario es correcto retorna 1
-            }
-        } catch (Exception e) {
-
-        }
-        return res;
-    }
     public void progressDialog() {
         progressDialog = new ProgressDialog(this);
         progressDialog.setMax(100);

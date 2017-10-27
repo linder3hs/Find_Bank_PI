@@ -9,7 +9,7 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:background="@color/white"
         tools:context="com.linderhassinger.proyecto_integrador.RegisterActivity">
 
@@ -45,7 +45,7 @@
                     android:paddingTop="21dp"
                     android:padding="18dp"
                     android:theme="@style/EditTextBlack"
-                    android:textSize="19dp"
+                    android:textSize="19sp"
                     android:hint="@string/nameRegister"/>
             </android.support.design.widget.TextInputLayout>
 

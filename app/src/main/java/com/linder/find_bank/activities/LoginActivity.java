@@ -9,6 +9,7 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,6 +17,9 @@ import android.widget.Toast;
 import com.linder.find_bank.R;
 import com.linder.find_bank.model.Hash;
 import com.linder.find_bank.model.User;
+import com.linder.find_bank.network.ApiService;
+import com.linder.find_bank.network.ApiServiceGenerator;
+import com.linder.find_bank.network.ResponseMessage;
 
 import org.json.JSONArray;
 
@@ -26,23 +30,27 @@ import java.nio.charset.Charset;
 import java.util.Scanner;
 
 import okio.HashingSink;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class LoginActivity extends AppCompatActivity {
     // SharedPreferences
     private SharedPreferences sharedPreferences;
-    private EditText txtcorreo, txtcontra;
+    private EditText txtemail, txtpassword;
     private Button btningresar, btnregister;
     private ProgressDialog progressDialog;
     String nameuser;
 
+    private static final String TAG = LoginActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        txtcorreo = (EditText) findViewById(R.id.txtCorreo);
-        txtcontra = (EditText) findViewById(R.id.txtPass);
+        txtemail = (EditText) findViewById(R.id.txtCorreo);
+        txtpassword = (EditText) findViewById(R.id.txtPass);
         btningresar = (Button) findViewById(R.id.btnIngresar);
         btnregister = (Button) findViewById(R.id.btnregister);
         //rootLayout = (CoordinatorLayout) findViewById(R.id.coordinatorLayout);
@@ -50,22 +58,19 @@ public class LoginActivity extends AppCompatActivity {
         // init SharedPreferences
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
-
         // username remember
-        final String username = sharedPreferences.getString("username", null);
-        if(username != null){
-            txtcorreo.setText(username);
-            txtcontra.requestFocus();
-
+        final String email = sharedPreferences.getString("email", null);
+        if(email != null){
+            txtemail.setText(email);
+            txtpassword.requestFocus();
         }
-
 
         // islogged remember
         if(sharedPreferences.getBoolean("islogged", false)){
             // Go to Dashboard
             goDashboard();
         }
-        txtcorreo.setHintTextColor(Color.WHITE);
+        txtemail.setHintTextColor(Color.WHITE);
         btnregister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -77,58 +82,70 @@ public class LoginActivity extends AppCompatActivity {
         btningresar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View view) {
-                if (txtcorreo.getText().toString().isEmpty() || txtcontra.getText().toString().isEmpty()) {
+                final String email = txtemail.getText().toString();
+                final String password = txtpassword.getText().toString();
+                final String tipo = "cliente";
+                if (email.isEmpty() || password.isEmpty()) {
                     Snackbar snackbar = Snackbar.make(view, "Completar todos los campos!", Snackbar.LENGTH_LONG);// Snackbar message
                     snackbar.setActionTextColor(getResources().getColor(R.color.white));
                     View snaView1 = snackbar.getView();
                     snaView1.setBackgroundColor(getResources().getColor(R.color.bgsnack));
                     snackbar.show();
                     //Toast.makeText(LoginActivity.this, "Rellene los campos", Toast.LENGTH_SHORT).show();
-                } else {
+                    //return;
+                }else {
                     progressDialog();
-                    Thread tr = new Thread() {
+                    ApiService service = ApiServiceGenerator.createService(ApiService.class);
+                    Call<ResponseMessage> call = null;
+                    call = service.loginUsuario(email, password, tipo);
+
+                    call.enqueue(new Callback<ResponseMessage>() {
                         @Override
-                        public void run() {
-
-                            //Enviar los datos hacia el Web Service y
-                            //Recibir los datos que me envia el Web Service
-                            final String res = enviarPost(txtcorreo.getText().toString(), txtcontra.getText().toString());
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-
-
-                                    int r = objJSON(res);
-                                    if (r > 0) {
-
-                                        // Save to SharedPreferences
-                                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                                        boolean success = editor
-                                                .putString("username", username)
-                                                .putBoolean("islogged", true)
-                                                .commit();
-                                        // Go to Dashboard
-                                        goDashboard();
-
-                                    } else {
-                                        progressDialog.dismiss();
-                                        Snackbar snackbar = Snackbar.make(view, "Correo o contraseña incorrectos!", Snackbar.LENGTH_LONG);// Snackbar message
-                                        snackbar.setActionTextColor(getResources().getColor(R.color.white));
-                                        View snaView1 = snackbar.getView();
-                                        snaView1.setBackgroundColor(getResources().getColor(R.color.bgsnack));
-                                        snackbar.show();
-                                        //Toast.makeText(getApplicationContext(), "Correo o Contraseña incorrectos", Toast.LENGTH_SHORT).show();
-                                    }
-
-
-
+                        public void onResponse(Call<ResponseMessage> call, Response<ResponseMessage> response) {
+                            try {
+                                int statusCode = response.code();
+                                Log.d(TAG, "HTTP status code: " + statusCode);
+                                if (response.isSuccessful()) {
+                                    ResponseMessage responseMessage = response.body();
+                                    Log.d(TAG, "responseMessage: " + responseMessage);
+                                    Toast.makeText(LoginActivity.this, responseMessage.getMessage(), Toast.LENGTH_LONG).show();
+                                    // Save to SharedPreferences
+                                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                                    boolean success = editor
+                                            .putString("email", email)
+                                            .putBoolean("islogged", true)
+                                            .commit();
+                                    // Go to Dashboard
+                                    goDashboard();
+                                } else {
+                                    progressDialog.dismiss();
+                                    Log.e(TAG, "onError: " + response.errorBody().string());
+                                    Snackbar snackbar = Snackbar.make(view, "Correo o contraseña incorrectos!", Snackbar.LENGTH_LONG);// Snackbar message
+                                    snackbar.setActionTextColor(getResources().getColor(R.color.white));
+                                    View snaView1 = snackbar.getView();
+                                    snaView1.setBackgroundColor(getResources().getColor(R.color.bgsnack));
+                                    snackbar.show();
+                                    //throw new Exception();
                                 }
-                            });
-                        }
-                    };
-                    tr.start();
-                }
 
+                            } catch (Throwable t) {
+                                try {
+                                    Log.e(TAG, "onThrowable: " + t.toString(), t);
+                                    Toast.makeText(LoginActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
+                                } catch (Throwable x) {
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<ResponseMessage> call, Throwable t) {
+                            Log.e(TAG, "onFailure: " + t.toString());
+                            Toast.makeText(LoginActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
+                        }
+
+                    });
+
+                }
             }
         });
 
@@ -136,56 +153,10 @@ public class LoginActivity extends AppCompatActivity {
 
     private void goDashboard() {
         Intent intent = new Intent(this, HomeActivity.class);
-        intent.putExtra("correo",txtcorreo.getText().toString());
+        //Intent intent = new Intent(this, PerfilActivity.class);
+        intent.putExtra("correo",txtemail.getText().toString());
         startActivity(intent);
-
         finish();
-    }
-
-    //Metodo para consumir el WEB SERVICE
-    public String enviarPost(String correo, String pass) {
-        String hpass = Hash.sha1(pass);
-        String urlparametros = "correo=" + correo + "&pass=" + hpass;
-        HttpURLConnection conection = null;
-        String respuesta = "";
-        try {
-            //Se va a la Web y se envia los datos
-            URL url = new URL("https://find-bank-roque363.c9users.io/WebService/valida.php");//Cambiar el ip - ya que no es estable por que es local
-            conection = (HttpURLConnection) url.openConnection();
-            conection.setRequestMethod("POST");
-            conection.setRequestProperty("Content-Length", "" + Integer.toString(urlparametros.getBytes().length));
-
-            conection.setDoOutput(true);
-            DataOutputStream wr = new DataOutputStream(conection.getOutputStream());
-            wr.writeBytes(urlparametros);
-            wr.close();
-
-            //Leer el dato que nos devuelve el Web Service
-            Scanner inStream = new Scanner(conection.getInputStream());
-
-            //Recorrer el dato que nos devolvio
-            while (inStream.hasNextLine()) {
-                respuesta += (inStream.nextLine());
-            }
-
-        } catch (Exception e) {
-
-        }
-        return respuesta.toString();
-    }
-
-    //Contar cuantos registros hay en la respuesta
-    public int objJSON(String rspta) {
-        int res = 0;//Si el usuario es incorrecto retorna 0
-        try {
-            JSONArray json = new JSONArray(rspta);
-            if (json.length() > 0) {
-                res = 1;//Si el usuario es correcto retorna 1
-            }
-        } catch (Exception e) {
-
-        }
-        return res;
     }
 
     public void progressDialog() {

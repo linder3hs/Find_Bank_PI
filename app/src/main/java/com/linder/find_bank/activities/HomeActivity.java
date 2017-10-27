@@ -96,22 +96,17 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         switch (requestCode) {
 
             case REQUEST_CODE_ASK_PERMISON: {
-
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
                     Toast.makeText(this, "Permiso de ubicacion concedido", Toast.LENGTH_SHORT).show();
-
                 } else {
-
                     Toast.makeText(this, "Permiso denegado", Toast.LENGTH_SHORT).show();
                 }
                 return;
             }
 
         }
-
     }
 
     @Override
@@ -140,8 +135,10 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         Log.d(TAG, "username: " + username);
         //Log.d(TAG, "correo: " + corroUser);
         NavigationView navigationView2 = (NavigationView) findViewById(R.id.nav_view);
-        TextView correo = (TextView) navigationView2.getHeaderView(0).findViewById(R.id.correoUser);
+        //TextView correo = (TextView) navigationView2.getHeaderView(0).findViewById(R.id.correoUser);
         // correo.setText(corroUser);
+        TextView emailText = (TextView) navigationView2.getHeaderView(0).findViewById(R.id.correoUser);
+        emailText.setText(sharedPreferences.getString("email", null));
 
         //Mejora para prender el gps
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
