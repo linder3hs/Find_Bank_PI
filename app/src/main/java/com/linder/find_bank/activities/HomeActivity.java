@@ -131,12 +131,9 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         // get username from SharedPreferences
         // String username = sharedPreferences.getString("username", null);
         //String corroUser = getIntent().getExtras().getString("correo");
-        String username = sharedPreferences.getString("username", null);
-        Log.d(TAG, "username: " + username);
-        //Log.d(TAG, "correo: " + corroUser);
+        String email = sharedPreferences.getString("email", null);
+        Log.d(TAG, "email: " + email);
         NavigationView navigationView2 = (NavigationView) findViewById(R.id.nav_view);
-        //TextView correo = (TextView) navigationView2.getHeaderView(0).findViewById(R.id.correoUser);
-        // correo.setText(corroUser);
         TextView emailText = (TextView) navigationView2.getHeaderView(0).findViewById(R.id.correoUser);
         emailText.setText(sharedPreferences.getString("email", null));
 
@@ -244,13 +241,9 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 }
             });
         } else if (id == R.id.salir) {
-
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            boolean success = editor.putBoolean("islogged", false).commit();
-            // boolean success = editor.clear().commit(); // not recommended
             Intent intent1 = new Intent(this, LoginActivity.class);
             startActivity(intent1);
-            finish();
+            callLogout();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -424,4 +417,13 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             mapView.setCenterCoordinate(new LatLngZoom(mapView.getMyLocation().getLatitude(), mapView.getMyLocation().getLongitude(), 20), true);
         }*/
     }
+
+    public void callLogout(){
+        // remove from SharedPreferences
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        boolean success = editor.putBoolean("islogged", false).commit();
+        //boolean success = editor.clear().commit(); // not recommended
+        finish();
+    }
+
 }
