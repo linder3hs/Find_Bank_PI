@@ -58,6 +58,7 @@ public class RegisterActivity extends AppCompatActivity {
                 final String email = txtemail.getText().toString();
                 final String password = txtpassword.getText().toString();
                 final String passwordAgain = txtpasswordAgain.getText().toString();
+                final String hpassword = Hash.sha1(password);
                 final String tipo = "cliente";
 
                 if (nombre.isEmpty() || email.isEmpty() || password.isEmpty()  || passwordAgain.isEmpty()) {
@@ -73,7 +74,7 @@ public class RegisterActivity extends AppCompatActivity {
                         ApiService service = ApiServiceGenerator.createService(ApiService.class);
 
                         Call<ResponseMessage> call = null;
-                        call = service.registrarUsuario(nombre, email, password, tipo);
+                        call = service.registrarUsuario(nombre, email, hpassword, tipo);
 
                         call.enqueue(new Callback<ResponseMessage>() {
                             @Override

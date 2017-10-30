@@ -84,8 +84,9 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(final View view) {
                 final String email = txtemail.getText().toString();
                 final String password = txtpassword.getText().toString();
+                final String hpassword = Hash.sha1(password);
                 final String tipo = "cliente";
-                if (email.isEmpty() || password.isEmpty()) {
+                if (email.isEmpty() || hpassword.isEmpty()) {
                     Snackbar snackbar = Snackbar.make(view, "Completar todos los campos!", Snackbar.LENGTH_LONG);// Snackbar message
                     snackbar.setActionTextColor(getResources().getColor(R.color.white));
                     View snaView1 = snackbar.getView();
@@ -97,7 +98,7 @@ public class LoginActivity extends AppCompatActivity {
                     progressDialog();
                     ApiService service = ApiServiceGenerator.createService(ApiService.class);
                     Call<ResponseMessage> call = null;
-                    call = service.loginUsuario(email, password, tipo);
+                    call = service.loginUsuario(email, hpassword, tipo);
 
                     call.enqueue(new Callback<ResponseMessage>() {
                         @Override
