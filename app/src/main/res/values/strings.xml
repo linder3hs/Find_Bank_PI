@@ -32,7 +32,7 @@
     <string name="horario">Horario:</string>
     <string name="_8_00am_6_00pm">8:00am - 6:00pm</string>
 
-    <item name="visible" type="id"/>
-    <item name="masked" type="id"/>
+    <item name="visible" type="id" />
+    <item name="masked" type="id" />
 
 </resources>

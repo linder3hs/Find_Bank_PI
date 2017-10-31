@@ -3,8 +3,6 @@ package com.linder.find_bank.activities;
 import android.Manifest;
 import android.app.Activity;
 import android.app.Dialog;
-import android.app.SearchManager;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -16,12 +14,9 @@ import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
-import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -38,15 +33,8 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
-import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
-import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -56,13 +44,13 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.linder.find_bank.R;
-import android.support.v7.widget.SearchView; // not the default !
+import com.linder.find_bank.model.Agente;
 
 
-public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback, GoogleMap.OnMarkerClickListener, GoogleMap.OnInfoWindowClickListener {
+public class HomeActivity extends AppCompatActivity implements
+        NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback,
+        GoogleMap.OnMarkerClickListener, GoogleMap.OnInfoWindowClickListener {
 
     private static final String TAG = HomeActivity.class.getSimpleName();
     int PLACE_PICKER_REQUEST = 1;
@@ -114,30 +102,16 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         accsserPermison();
-        // init SharedPreferences
-        //btnMyUbication = (FloatingActionButton) findViewById(R.id.btnMyUbication);
-
-        /*btnMyUbication.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //speed = location.getSpeed();
-                //getMyLocation();
-                Toast.makeText(HomeActivity.this,"My Ubication ^ ", Toast.LENGTH_SHORT).show();
-
-            }
-        });*/
 
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        // get username from SharedPreferences
-        // String username = sharedPreferences.getString("username", null);
-        //String corroUser = getIntent().getExtras().getString("correo");
+
         String email = sharedPreferences.getString("email", null);
         Log.d(TAG, "email: " + email);
         NavigationView navigationView2 = (NavigationView) findViewById(R.id.nav_view);
         TextView emailText = (TextView) navigationView2.getHeaderView(0).findViewById(R.id.correoUser);
         emailText.setText(sharedPreferences.getString("email", null));
 
-        //Mejora para prender el gps
+        //Mejora para prender el gps automaticamente
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             AlertNoGps();
@@ -204,7 +178,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             btnosotros.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Toast.makeText(HomeActivity.this, "Muy pronto se habilitara esta opcion", Toast.LENGTH_SHORT).show();
+                    Snackbar snackbar = Snackbar.make(view,"Muy pronto se habilitara esta opcion",Snackbar.LENGTH_SHORT );
+                    snackbar.show();
                 }
             });
             return true;
@@ -224,7 +199,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             startActivity(intent3);
             Log.d("Intent", String.valueOf(intent3));
         } else if (id == R.id.nav_favoritos) {
-            Intent intent = new Intent(this, DetalleBancoActivity.class);
+            Intent intent = new Intent(this, FavoriteActivity.class);
             startActivity(intent);
 
         } else if (id == R.id.nav_nosotros) {
@@ -236,8 +211,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             btnosotros.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Toast.makeText(HomeActivity.this, "Muy pronto se habilitara esta opcion", Toast.LENGTH_SHORT).show();
-
+                    Snackbar snackbar = Snackbar.make(view,"Muy pronto se habilitara esta opcion",Snackbar.LENGTH_SHORT );
+                    snackbar.show();
                 }
             });
         } else if (id == R.id.salir) {
@@ -272,18 +247,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         uiSettings.setZoomControlsEnabled(true);
         uiSettings.setMyLocationButtonEnabled(true);
 
-        // Add a place for me
-        LatLng agenre = new LatLng(-12.0443305, -76.952573);
-        LatLng agenteSanta = new LatLng(-12.0387409, -76.999248);
-        markerInfo = googleMap.addMarker(new MarkerOptions()
-                .position(agenteSanta)
-                .title("Luagr Info")
-                .snippet("Informacion add")
-                .icon(BitmapDescriptorFactory.fromResource(R.drawable.compass)));
-        //Eventos
-        googleMap.setOnMarkerClickListener(this);
-        //googleMap.setOnMarkerDragListener((GoogleMap.OnMarkerDragListener) this);
-        googleMap.setOnInfoWindowClickListener(this);
 
         //Add a place with description
         LatLng cosmo = new LatLng(-12.0443305, -76.999248);
@@ -292,20 +255,9 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.compass)));
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(cosmo));
         googleMap.setOnMarkerClickListener(this);
-
-
         //  mMap.addMarker(new MarkerOptions().position(agenteSanta).title("Alondras").snippet("Agente BCP"));
-        mMap.addMarker(new MarkerOptions().position(agenre).title("Lugar2").snippet("Mensaje nº2"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(agenre));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(agenteSanta));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(cosmo));
-
-
         float zoon = 16;
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(agenteSanta, zoon
-        ));
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(cosmo, zoon));
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(agenre, zoon));
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(cosmo, zoon));
 
     }
@@ -407,15 +359,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         if (marker.equals(markerInfo)) {
 
         }
-    }
-
-    private void getDeviceLocation() {
-
-    }
-    private void getMyLocation() {
-       /* if(mMap.getMyLocation() != null) { // Check to ensure coordinates aren't null, probably a better way of doing this...
-            mapView.setCenterCoordinate(new LatLngZoom(mapView.getMyLocation().getLatitude(), mapView.getMyLocation().getLongitude(), 20), true);
-        }*/
     }
 
     public void callLogout(){

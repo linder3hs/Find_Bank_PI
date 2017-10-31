@@ -1,5 +1,6 @@
 package com.linder.find_bank.network;
 
+import com.linder.find_bank.model.Agente;
 import com.linder.find_bank.model.User;
 
 import java.util.List;
@@ -35,4 +36,8 @@ public interface ApiService {
             @Field("email") String email,
             @Field("password") String password,
             @Field("tipo") String tipo);
+
+    @GET("api/v1/agentes")
+    Call<List<Agente>> getAgentes();
+
 }

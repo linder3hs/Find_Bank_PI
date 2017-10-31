@@ -24,7 +24,7 @@
             android:src="@drawable/ic_my_location"
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
-            android:layout_margin="12dp" /-->
+            android:layout_margin="12dp"-->
 
         <fragment xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:map="http://schemas.android.com/apk/res-auto"
