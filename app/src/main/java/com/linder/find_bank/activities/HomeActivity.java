@@ -46,6 +46,15 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.linder.find_bank.R;
 import com.linder.find_bank.model.Agente;
+import com.linder.find_bank.network.ApiService;
+import com.linder.find_bank.network.ApiServiceGenerator;
+import com.linder.find_bank.respository.AgenteAdapter;
+
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class HomeActivity extends AppCompatActivity implements
@@ -71,6 +80,8 @@ public class HomeActivity extends AppCompatActivity implements
     final private int REQUEST_CODE_ASK_PERMISON = 124;
     int hasUbicationPermision;
 
+    //Llmado a los servicios Rest
+
     private void accsserPermison() {
         hasUbicationPermision = checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION);
         if (hasUbicationPermision != PackageManager.PERMISSION_GRANTED) {
@@ -95,7 +106,9 @@ public class HomeActivity extends AppCompatActivity implements
             }
 
         }
-    }
+
+
+}
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,6 +117,7 @@ public class HomeActivity extends AppCompatActivity implements
         accsserPermison();
 
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+
 
         String email = sharedPreferences.getString("email", null);
         Log.d(TAG, "email: " + email);
@@ -226,6 +240,75 @@ public class HomeActivity extends AppCompatActivity implements
         return true;
     }
 
+
+    private void initialize() {
+
+        ApiService service = ApiServiceGenerator.createService(ApiService.class);
+
+        Call<List<Agente>> call = service.getAgentes();
+
+        call.enqueue(new Callback<List<Agente>>() {
+            @Override
+            public void onResponse(Call<List<Agente>> call, Response<List<Agente>> response) {
+                try {
+                    int statusCode = response.code();
+                    Log.d("Agent", "HTTP status code: " + statusCode);
+
+                    if (response.isSuccessful()) {
+                        List<Agente> agentes = response.body();
+                        Log.d("Agent2", "Agentes: " + agentes);
+
+                        for (final Agente agente : agentes ) {
+                            float lat = agente.getLat();
+                            float lng = agente.getLng();
+                            LatLng cosmo = new LatLng(lat, lng);
+                            mMap.addMarker(new MarkerOptions()
+                                    .title(agente.getNombre())
+                                    .snippet(agente.getDescripcion())
+                                    .position(cosmo)
+                                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.compass)));
+                            mMap.moveCamera(CameraUpdateFactory.newLatLng(cosmo));
+                            mMap.setOnMarkerClickListener(HomeActivity.this);
+                            float zoon = 16;
+                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(cosmo, zoon));
+
+                            mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+                                @Override
+                                public void onInfoWindowClick(Marker marker) {
+                                        Toast.makeText(HomeActivity.this, agente.getNombre(), Toast.LENGTH_LONG).show();                                 }
+                            });
+
+
+
+
+                        }
+
+
+                        // AgenteAdapter adapter = (AgenteAdapter) agentesList.getAdapter();
+                        // adapter.setAgentes(agentes);
+                        // adapter.notifyDataSetChanged();
+                    } else {
+                        Log.d("Error", "onError: " + response.errorBody().string());
+                        throw new Exception("Error del servidor");
+                    }
+                } catch (Throwable t) {
+                    try {
+                        Log.e("onThrowable", "onThrowable: " + t.toString(), t);
+                        Toast.makeText(HomeActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
+                    } catch (Throwable x) {
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Agente>> call, Throwable t) {
+                Log.e("onFailure", "onFailure: " + t.toString());
+                Toast.makeText(HomeActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
+
+    }
+
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
@@ -246,19 +329,25 @@ public class HomeActivity extends AppCompatActivity implements
         UiSettings uiSettings = mMap.getUiSettings();
         uiSettings.setZoomControlsEnabled(true);
         uiSettings.setMyLocationButtonEnabled(true);
+        initialize();
 
 
         //Add a place with description
-        LatLng cosmo = new LatLng(-12.0443305, -76.999248);
+      /*  LatLng cosmo = new LatLng(lat, lng);
+
+        //Valores
+        Log.d("Lat", String.valueOf(lat));
+        Log.d("Log", String.valueOf(lng));
+
         markerAgente = googleMap.addMarker(new MarkerOptions()
                 .position(cosmo)
                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.compass)));
-        googleMap.moveCamera(CameraUpdateFactory.newLatLng(cosmo));
-        googleMap.setOnMarkerClickListener(this);
+        googleMap.moveCamera(CameraUpdateFactory.newLatLng(cosmo));*/
+        //googleMap.setOnMarkerClickListener(this);
         //  mMap.addMarker(new MarkerOptions().position(agenteSanta).title("Alondras").snippet("Agente BCP"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(cosmo));
-        float zoon = 16;
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(cosmo, zoon));
+        //mMap.moveCamera(CameraUpdateFactory.newLatLng(cosmo));
+       // float zoon = 16;
+       // mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(cosmo, zoon));
 
     }
 
@@ -331,7 +420,7 @@ public class HomeActivity extends AppCompatActivity implements
 
     @Override
     public boolean onMarkerClick(Marker marker) {
-        if (marker.equals(markerAgente)) {
+       /* if (marker.equals(markerAgente)) {
             final Dialog dialogs = new Dialog(this);
             dialogs.setContentView(R.layout.activity_detalle_banco);
             dialogs.setTitle("Agente");
@@ -348,9 +437,9 @@ public class HomeActivity extends AppCompatActivity implements
                 public void onClick(View view) {
                     dialogs.dismiss();
                 }
-            });
+            });*/
 
-        }
+        //}
         return false;
     }
 
@@ -368,5 +457,6 @@ public class HomeActivity extends AppCompatActivity implements
         //boolean success = editor.clear().commit(); // not recommended
         finish();
     }
+
 
 }
