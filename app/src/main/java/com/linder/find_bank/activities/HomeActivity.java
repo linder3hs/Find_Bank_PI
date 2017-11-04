@@ -12,10 +12,13 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
@@ -57,13 +60,11 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 
-public class HomeActivity extends AppCompatActivity implements
-        NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback,
-        GoogleMap.OnMarkerClickListener, GoogleMap.OnInfoWindowClickListener {
+public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback, GoogleMap.OnMarkerClickListener, GoogleMap.OnInfoWindowClickListener, SwipeRefreshLayout.OnRefreshListener {
 
     private static final String TAG = HomeActivity.class.getSimpleName();
     int PLACE_PICKER_REQUEST = 1;
-    //FloatingActionButton btnMyUbication;
+    FloatingActionButton btnRefresh;
     private Marker markerAgente;
     private Marker markerInfo;
     // SharedPreferences
@@ -80,7 +81,7 @@ public class HomeActivity extends AppCompatActivity implements
     final private int REQUEST_CODE_ASK_PERMISON = 124;
     int hasUbicationPermision;
 
-    //Llmado a los servicios Rest
+    //Llamado a los servicios Rest
 
     private void accsserPermison() {
         hasUbicationPermision = checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION);
@@ -117,7 +118,19 @@ public class HomeActivity extends AppCompatActivity implements
         accsserPermison();
 
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        btnRefresh = (FloatingActionButton) findViewById(R.id.btnRefresh);
 
+        btnRefresh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    public void run() {
+                        initialize();
+                    }
+                },2000);
+            }
+        });
 
         String email = sharedPreferences.getString("email", null);
         Log.d(TAG, "email: " + email);
@@ -262,7 +275,7 @@ public class HomeActivity extends AppCompatActivity implements
                             float lat = agente.getLat();
                             float lng = agente.getLng();
                             LatLng cosmo = new LatLng(lat, lng);
-                            mMap.addMarker(new MarkerOptions()
+                            markerAgente = mMap.addMarker(new MarkerOptions()
                                     .title(agente.getNombre())
                                     .snippet(agente.getDescripcion())
                                     .position(cosmo)
@@ -275,14 +288,16 @@ public class HomeActivity extends AppCompatActivity implements
                             mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
                                 @Override
                                 public void onInfoWindowClick(Marker marker) {
-                                        Toast.makeText(HomeActivity.this, agente.getNombre(), Toast.LENGTH_LONG).show();                                 }
+                                    if (marker.equals(markerAgente)){
+                                        onMarkerClick(markerAgente);
+                                        Toast.makeText(HomeActivity.this, "Funciona xd", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
                             });
-
-
+                            //onMarkerClick(markerAgente);
 
 
                         }
-
 
                         // AgenteAdapter adapter = (AgenteAdapter) agentesList.getAdapter();
                         // adapter.setAgentes(agentes);
@@ -333,16 +348,17 @@ public class HomeActivity extends AppCompatActivity implements
 
 
         //Add a place with description
-      /*  LatLng cosmo = new LatLng(lat, lng);
+       LatLng cosmo2 = new LatLng(-12.134101, -77.0236405);
 
         //Valores
-        Log.d("Lat", String.valueOf(lat));
-        Log.d("Log", String.valueOf(lng));
+      //  Log.d("Lat", String.valueOf(lat));
+      //  Log.d("Log", String.valueOf(lng));
 
         markerAgente = googleMap.addMarker(new MarkerOptions()
-                .position(cosmo)
+                .position(cosmo2)
+                .title("cosmo2")
                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.compass)));
-        googleMap.moveCamera(CameraUpdateFactory.newLatLng(cosmo));*/
+        googleMap.moveCamera(CameraUpdateFactory.newLatLng(cosmo2));
         //googleMap.setOnMarkerClickListener(this);
         //  mMap.addMarker(new MarkerOptions().position(agenteSanta).title("Alondras").snippet("Agente BCP"));
         //mMap.moveCamera(CameraUpdateFactory.newLatLng(cosmo));
@@ -420,7 +436,7 @@ public class HomeActivity extends AppCompatActivity implements
 
     @Override
     public boolean onMarkerClick(Marker marker) {
-       /* if (marker.equals(markerAgente)) {
+        if (marker.equals(markerAgente)) {
             final Dialog dialogs = new Dialog(this);
             dialogs.setContentView(R.layout.activity_detalle_banco);
             dialogs.setTitle("Agente");
@@ -437,26 +453,60 @@ public class HomeActivity extends AppCompatActivity implements
                 public void onClick(View view) {
                     dialogs.dismiss();
                 }
-            });*/
+            });
 
-        //}
-        return false;
+            }
+            return false;
+        }
+
+        public void callLogout(){
+            // remove from SharedPreferences
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            boolean success = editor.putBoolean("islogged", false).commit();
+            //boolean success = editor.clear().commit(); // not recommended
+            finish();
+        }
+
+
+
+    @Override
+    public void onRefresh() {
+       // swipeLayout.setRefreshing(true);
+
+        //Vamos a simular un refresco con un handle.
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                //initialize();
+                //Se supone que aqui hemos realizado las tareas necesarias de refresco, y que ya podemos ocultar la barra de progreso
+                //swipeLayout.setRefreshing(false);
+
+            }
+        }, 2000);
+
     }
 
     @Override
     public void onInfoWindowClick(Marker marker) {
-        if (marker.equals(markerInfo)) {
+        if (marker.equals(markerAgente)) {
+            final Dialog dialogs = new Dialog(this);
+            dialogs.setContentView(R.layout.activity_detalle_banco);
+            dialogs.setTitle("Agente");
+            dialogs.closeOptionsMenu();
+            dialogs.setCancelable(false);
+            dialogs.show();
+            Switch aSwitch = (Switch) dialogs.findViewById(R.id.estadoB);
+            aSwitch.setEnabled(false);
+            aSwitch.setClickable(false);
+
+            ImageView btnClose = (ImageView) dialogs.findViewById(R.id.btnClose);
+            btnClose.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    dialogs.dismiss();
+                }
+            });
 
         }
     }
-
-    public void callLogout(){
-        // remove from SharedPreferences
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        boolean success = editor.putBoolean("islogged", false).commit();
-        //boolean success = editor.clear().commit(); // not recommended
-        finish();
-    }
-
-
 }

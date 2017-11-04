@@ -1,6 +1,8 @@
 package com.linder.find_bank.activities;
 
 import android.content.Intent;
+import android.os.Handler;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -19,9 +21,10 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class FavoriteActivity extends AppCompatActivity {
+public class FavoriteActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
 
     private RecyclerView agentesList;
+    private SwipeRefreshLayout swipeLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +39,17 @@ public class FavoriteActivity extends AppCompatActivity {
         agentesList.setLayoutManager(new LinearLayoutManager(this));
 
         agentesList.setAdapter(new AgenteAdapter(this));
+        swipeLayout = (SwipeRefreshLayout) findViewById(R.id.swipeLayout);
+
+        //Indicamos que listener recogerá la retrollamada (callback), en este caso, será el metodo OnRefresh de esta clase.
+
+        swipeLayout.setOnRefreshListener(this);
+        //Podemos espeficar si queremos, un patron de colores diferente al patrón por defecto.
+        swipeLayout.setColorSchemeResources(
+                android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
 
         initialize();
 
@@ -82,4 +96,20 @@ public class FavoriteActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onRefresh() {
+        swipeLayout.setRefreshing(true);
+
+        //Vamos a simular un refresco con un handle.
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                initialize();
+                //Se supone que aqui hemos realizado las tareas necesarias de refresco, y que ya podemos ocultar la barra de progreso
+                swipeLayout.setRefreshing(false);
+
+            }
+        }, 2000);
+
+    }
 }
