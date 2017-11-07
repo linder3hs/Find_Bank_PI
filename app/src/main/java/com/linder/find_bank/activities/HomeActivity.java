@@ -87,7 +87,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         hasUbicationPermision = checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION);
         if (hasUbicationPermision != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_CODE_ASK_PERMISON);
-
         }
     }
 

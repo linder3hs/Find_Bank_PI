@@ -9,5 +9,6 @@
     <color name="rating">#307caf</color>
     <color name="bar">#22a3df</color>
     <color name="editTextColorWhite">#FFFFFF</color>
-    <color name="bgsnack">#43b980</color>
+    <color name="bgsnack1">#43b980</color>
+    <color name="bgsnack2">#c0392b</color>
 </resources>

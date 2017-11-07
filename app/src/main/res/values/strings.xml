@@ -35,4 +35,6 @@
     <item name="visible" type="id" />
     <item name="masked" type="id" />
 
+    <string name="error_invalid_email">This email address is invalid</string>
+
 </resources>
