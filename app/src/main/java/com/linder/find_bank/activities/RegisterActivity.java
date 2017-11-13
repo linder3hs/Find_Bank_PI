@@ -61,84 +61,92 @@ public class RegisterActivity extends AppCompatActivity {
                 final String hpassword = Hash.sha1(password);
                 final String tipo = "cliente";
 
-                if (nombre.isEmpty() || email.isEmpty() || password.isEmpty()  || passwordAgain.isEmpty()) {
-                    Snackbar snackbar = Snackbar.make(view, "Completar todos los campos!", Snackbar.LENGTH_LONG);// Snackbar message
+                if (nombre.isEmpty() || email.isEmpty() || password.isEmpty()  || passwordAgain.isEmpty()) { // Comprobar que los campos esten completos
+                    Snackbar snackbar = Snackbar.make(view, getString(R.string.error_completar_campos), Snackbar.LENGTH_LONG);// Snackbar message
                     snackbar.setActionTextColor(getResources().getColor(R.color.white));
                     View snaView1 = snackbar.getView();
                     snaView1.setBackgroundColor(getResources().getColor(R.color.bgsnack2));
                     snackbar.show();
-                    //Toast.makeText(RegisterActivity.this, "Rellene los datos", Toast.LENGTH_SHORT).show();
-                }else{
-                    if(nombre.matches("[0-9]")){
-                        Snackbar snackbar = Snackbar.make(view, "Ingresar un nombre valido!", Snackbar.LENGTH_LONG);// Snackbar message
+
+                } else if (nombre.matches("[0-9]")) { // Comprobar los caracteres de nombre
+                    Snackbar snackbar = Snackbar.make(view, getString(R.string.error_caracteres_numericos), Snackbar.LENGTH_LONG);// Snackbar message
+                    snackbar.setActionTextColor(getResources().getColor(R.color.white));
+                    View snaView1 = snackbar.getView();
+                    snaView1.setBackgroundColor(getResources().getColor(R.color.bgsnack2));
+                    snackbar.show();
+
+                } else if (email.matches("[a-zA-Z0-9._-]+@[a-z]+.[a-z]+")) { // Comprobar que sea un email valido
+
+                    if( password.length() < 6 ){ // Comprobar que el password sea mayor a 5
+                        Snackbar snackbar = Snackbar.make(view, getString(R.string.error_contraseña_demasiado_corta), Snackbar.LENGTH_LONG);// Snackbar message
                         snackbar.setActionTextColor(getResources().getColor(R.color.white));
                         View snaView1 = snackbar.getView();
                         snaView1.setBackgroundColor(getResources().getColor(R.color.bgsnack2));
                         snackbar.show();
-                    }else if (email.matches("[a-zA-Z0-9._-]+@[a-z]+.[a-z]+")){
+
+                    } else if ( password.equals(passwordAgain) ){ // Comprobar que el password coincide
                         progressDialog();
-                        if (password.equals(passwordAgain) && password.length()>=6){
-                            ApiService service = ApiServiceGenerator.createService(ApiService.class);
+                        ApiService service = ApiServiceGenerator.createService(ApiService.class);
 
-                            Call<ResponseMessage> call = null;
-                            call = service.registrarUsuario(nombre, email, hpassword, tipo);
+                        Call<ResponseMessage> call = null;
+                        call = service.registrarUsuario(nombre, email, hpassword, tipo);
 
-                            call.enqueue(new Callback<ResponseMessage>() {
-                                @Override
-                                public void onResponse(Call<ResponseMessage> call, Response<ResponseMessage> response) {
+                        call.enqueue(new Callback<ResponseMessage>() {
+                            @Override
+                            public void onResponse(Call<ResponseMessage> call, Response<ResponseMessage> response) {
+                                try {
+                                    int statusCode = response.code();
+                                    Log.d(TAG, "HTTP status code: " + statusCode);
+                                    if (response.isSuccessful()) {
+                                        ResponseMessage responseMessage = response.body();
+                                        Log.d(TAG, "responseMessage: " + responseMessage);
+                                        Toast.makeText(RegisterActivity.this, responseMessage.getMessage(), Toast.LENGTH_LONG).show();
+                                        // Go to Login
+                                        progressDialog.dismiss();
+                                        goLogin();
+                                    } else {
+                                        progressDialog.dismiss();
+                                        Log.e(TAG, "onError: " + response.errorBody().string());
+                                        Snackbar snackbar = Snackbar.make(view, "Error: Dirección de correo electrónico ya registrada!", Snackbar.LENGTH_LONG);// Snackbar message
+                                        snackbar.setActionTextColor(getResources().getColor(R.color.white));
+                                        View snaView1 = snackbar.getView();
+                                        snaView1.setBackgroundColor(getResources().getColor(R.color.bgsnack2));
+                                        snackbar.show();
+                                        //throw new Exception();
+                                    }
+
+                                } catch (Throwable t) {
                                     try {
-                                        int statusCode = response.code();
-                                        Log.d(TAG, "HTTP status code: " + statusCode);
-                                        if (response.isSuccessful()) {
-                                            ResponseMessage responseMessage = response.body();
-                                            Log.d(TAG, "responseMessage: " + responseMessage);
-                                            Toast.makeText(RegisterActivity.this, responseMessage.getMessage(), Toast.LENGTH_LONG).show();
-                                            // Go to Login
-                                            goLogin();
-                                        } else {
-                                            progressDialog.dismiss();
-                                            Log.e(TAG, "onError: " + response.errorBody().string());
-                                            Snackbar snackbar = Snackbar.make(view, "Error!", Snackbar.LENGTH_LONG);// Snackbar message
-                                            snackbar.setActionTextColor(getResources().getColor(R.color.white));
-                                            View snaView1 = snackbar.getView();
-                                            snaView1.setBackgroundColor(getResources().getColor(R.color.bgsnack2));
-                                            snackbar.show();
-                                            //throw new Exception();
-                                        }
-
-                                    } catch (Throwable t) {
-                                        try {
-                                            Log.e(TAG, "onThrowable: " + t.toString(), t);
-                                            Toast.makeText(RegisterActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
-                                        } catch (Throwable x) {
-                                        }
+                                        Log.e(TAG, "onThrowable: " + t.toString(), t);
+                                        Toast.makeText(RegisterActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
+                                    } catch (Throwable x) {
                                     }
                                 }
+                            }
 
-                                @Override
-                                public void onFailure(Call<ResponseMessage> call, Throwable t) {
-                                    Log.e(TAG, "onFailure: " + t.toString());
-                                    Toast.makeText(RegisterActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
-                                }
+                            @Override
+                            public void onFailure(Call<ResponseMessage> call, Throwable t) {
+                                Log.e(TAG, "onFailure: " + t.toString());
+                                Toast.makeText(RegisterActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
+                            }
 
-                            });
+                        });
 
-                        }else{
-                            progressDialog.dismiss();
-                            Snackbar snackbar = Snackbar.make(view, "Las contraseña deben ser iguales y mayor a 6!", Snackbar.LENGTH_LONG);// Snackbar message
-                            snackbar.setActionTextColor(getResources().getColor(R.color.white));
-                            View snaView1 = snackbar.getView();
-                            snaView1.setBackgroundColor(getResources().getColor(R.color.bgsnack2));
-                            snackbar.show();
-                            //Toast.makeText(RegisterActivity.this, "Las contraseña deben coincidir", Toast.LENGTH_SHORT).show();
-                        }
                     }else{
-                        Snackbar snackbar = Snackbar.make(view, "Ingresar un correo valido!", Snackbar.LENGTH_LONG);// Snackbar message
+                        Snackbar snackbar = Snackbar.make(view, getString(R.string.error_contraseñas_diferentes), Snackbar.LENGTH_LONG);// Snackbar message
                         snackbar.setActionTextColor(getResources().getColor(R.color.white));
                         View snaView1 = snackbar.getView();
                         snaView1.setBackgroundColor(getResources().getColor(R.color.bgsnack2));
                         snackbar.show();
                     }
+
+                }else{
+                    Snackbar snackbar = Snackbar.make(view, getString(R.string.error_ingresar_correo_valido), Snackbar.LENGTH_LONG);// Snackbar message
+                    snackbar.setActionTextColor(getResources().getColor(R.color.white));
+                    View snaView1 = snackbar.getView();
+                    snaView1.setBackgroundColor(getResources().getColor(R.color.bgsnack2));
+                    snackbar.show();
+
                 }
             }
         });
@@ -162,4 +170,5 @@ public class RegisterActivity extends AppCompatActivity {
         progressDialog.setTitle("Find Bank");
         progressDialog.show();
     }
+
 }

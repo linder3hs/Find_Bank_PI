@@ -20,6 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
         </LinearLayout>
+
         <LinearLayout
             android:layout_marginTop="16dp"
             android:id="@+id/campos"
@@ -29,24 +30,26 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp">
+
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 style="@style/EditTextBlack"
                 android:theme="@style/EditTextBlack"
                 android:layout_height="wrap_content">
+
                 <EditText
                     android:id="@+id/nameRegister"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:drawableLeft="@drawable/ic_person"
-                    android:inputType="text"
-                    android:textColorHint="@color/black"
                     android:drawablePadding="8dp"
-                    android:paddingTop="21dp"
+                    android:drawableStart="@drawable/ic_person"
+                    android:hint="@string/nameRegister"
+                    android:inputType="textPersonName"
                     android:padding="18dp"
-                    android:theme="@style/EditTextBlack"
+                    android:paddingTop="21dp"
+                    android:textColorHint="@color/black"
                     android:textSize="19sp"
-                    android:hint="@string/nameRegister"/>
+                    android:theme="@style/EditTextBlack" />
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout

@@ -87,17 +87,18 @@ public class LoginActivity extends AppCompatActivity {
                 final String password = txtpassword.getText().toString();
                 final String hpassword = Hash.sha1(password);
                 final String tipo = "cliente";
-                boolean cancel = false;
-                View focusView = null;
+
+                // Comprobar que los campos esten completos
                 if (email.isEmpty() || hpassword.isEmpty()) {
-                    Snackbar snackbar = Snackbar.make(view, "Completar todos los campos!", Snackbar.LENGTH_LONG);// Snackbar message
+                    Snackbar snackbar = Snackbar.make(view, getString(R.string.error_completar_campos), Snackbar.LENGTH_LONG);// Snackbar message
                     snackbar.setActionTextColor(getResources().getColor(R.color.white));
                     View snaView1 = snackbar.getView();
                     snaView1.setBackgroundColor(getResources().getColor(R.color.bgsnack2));
                     snackbar.show();
-                    //Toast.makeText(LoginActivity.this, "Rellene los campos", Toast.LENGTH_SHORT).show();
-                    //return;
+
                 }else{
+
+                    // Comprobar que sea un email valido
                     if (email.matches("[a-zA-Z0-9._-]+@[a-z]+.[a-z]+")){
                         progressDialog();
                         ApiService service = ApiServiceGenerator.createService(ApiService.class);
@@ -121,11 +122,12 @@ public class LoginActivity extends AppCompatActivity {
                                                 .putBoolean("islogged", true)
                                                 .commit();
                                         // Go to Dashboard
+                                        progressDialog.dismiss();
                                         goDashboard();
                                     } else {
                                         progressDialog.dismiss();
                                         Log.e(TAG, "onError: " + response.errorBody().string());
-                                        Snackbar snackbar = Snackbar.make(view, "Correo o contraseña incorrectos!", Snackbar.LENGTH_LONG);// Snackbar message
+                                        Snackbar snackbar = Snackbar.make(view, getString(R.string.error_correo_contraseña_incorrectos), Snackbar.LENGTH_LONG);// Snackbar message
                                         snackbar.setActionTextColor(getResources().getColor(R.color.white));
                                         View snaView1 = snackbar.getView();
                                         snaView1.setBackgroundColor(getResources().getColor(R.color.bgsnack2));
@@ -150,21 +152,17 @@ public class LoginActivity extends AppCompatActivity {
 
                         });
                     }else{
-                        Snackbar snackbar = Snackbar.make(view, "Correo no valido!", Snackbar.LENGTH_LONG);// Snackbar message
+                        Snackbar snackbar = Snackbar.make(view, getString(R.string.error_ingresar_correo_valido), Snackbar.LENGTH_LONG);// Snackbar message
                         snackbar.setActionTextColor(getResources().getColor(R.color.white));
                         View snaView1 = snackbar.getView();
                         snaView1.setBackgroundColor(getResources().getColor(R.color.bgsnack2));
                         snackbar.show();
                     }
                 }
+
             }
         });
 
-    }
-
-    private boolean isEmailValid(String email) {
-        //TODO: Replace this with your own logic
-        return email.contains("@");
     }
 
     private void goDashboard() {

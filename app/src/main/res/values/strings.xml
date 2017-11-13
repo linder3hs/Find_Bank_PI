@@ -35,6 +35,11 @@
     <item name="visible" type="id" />
     <item name="masked" type="id" />
 
-    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_completar_campos">Completar todos los campos!</string>
+    <string name="error_caracteres_numericos">No se permiten caracteres numéricos en el nombre!</string>
+    <string name="error_contraseña_demasiado_corta">La contraseña es demasiado corta!</string>
+    <string name="error_ingresar_correo_valido">Ingresar un correo valido!</string>
+    <string name="error_contraseñas_diferentes">Las contraseña deben ser iguales!</string>
+    <string name="error_correo_contraseña_incorrectos">Correo o contraseña incorrectos!</string>
 
 </resources>
