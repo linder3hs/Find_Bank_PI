@@ -49,9 +49,11 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.linder.find_bank.R;
 import com.linder.find_bank.model.Agente;
+import com.linder.find_bank.model.User;
 import com.linder.find_bank.network.ApiService;
 import com.linder.find_bank.network.ApiServiceGenerator;
 import com.linder.find_bank.respository.AgenteAdapter;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -76,6 +78,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     LocationListener locationListener;
     AlertDialog alertDialog = null;
     double speed;
+    private String email;
+    private ImageView fotoImage;
 
     //Variales de permiso
     final private int REQUEST_CODE_ASK_PERMISON = 124;
@@ -131,11 +135,13 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             }
         });
 
-        String email = sharedPreferences.getString("email", null);
+        email = sharedPreferences.getString("email", null);
         Log.d(TAG, "email: " + email);
         NavigationView navigationView2 = (NavigationView) findViewById(R.id.nav_view);
         TextView emailText = (TextView) navigationView2.getHeaderView(0).findViewById(R.id.correoUser);
         emailText.setText(sharedPreferences.getString("email", null));
+
+        fotoImage = (ImageView) navigationView2.getHeaderView(0).findViewById(R.id.profile_image);
 
         //Mejora para prender el gps automaticamente
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
@@ -319,6 +325,43 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 Log.e("onFailure", "onFailure: " + t.toString());
                 Toast.makeText(HomeActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
             }
+        });
+
+        Call<User> call2 = service.showUsuario(email);
+
+        call2.enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                try {
+                    int statusCode = response.code();
+                    Log.d(TAG, "HTTP status code: " + statusCode);
+
+                    if (response.isSuccessful()) {
+
+                        User user = response.body();
+                        Log.d(TAG, "user: " + user);
+                        String url = ApiService.API_BASE_URL + "/images/" + user.getImagen();
+                        Picasso.with(HomeActivity.this).load(url).into(fotoImage);
+
+                    } else {
+                        Log.e(TAG, "onError: " + response.errorBody().string());
+                        throw new Exception("Error en el servicio");
+                    }
+
+                } catch (Throwable t) {
+                    try {
+                        Log.e(TAG, "onThrowable: " + t.toString(), t);
+                        Toast.makeText(HomeActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
+                    }catch (Throwable x){}
+                }
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+                Log.e(TAG, "onFailure: " + t.toString());
+                Toast.makeText(HomeActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
+            }
+
         });
 
     }

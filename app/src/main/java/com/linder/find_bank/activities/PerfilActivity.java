@@ -79,7 +79,6 @@ public class PerfilActivity extends AppCompatActivity {
                         nombreText.setText(user.getNombre());
                         emailText2.setText(user.getCorreo());
 
-
                     } else {
                         Log.e(TAG, "onError: " + response.errorBody().string());
                         throw new Exception("Error en el servicio");
@@ -102,7 +101,5 @@ public class PerfilActivity extends AppCompatActivity {
         });
 
     }
-
-
 
 }
