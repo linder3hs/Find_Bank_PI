@@ -10,6 +10,7 @@ import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
 
 /**
  * Created by ROQUE on 22/10/2017.
@@ -36,6 +37,9 @@ public interface ApiService {
             @Field("email") String email,
             @Field("password") String password,
             @Field("tipo") String tipo);
+
+    @GET("api/v1/usuarios/{email}")
+    Call<User> showUsuario(@Path("email") String email);
 
     @GET("api/v1/agentes")
     Call<List<Agente>> getAgentes();

@@ -42,4 +42,6 @@
     <string name="error_contraseñas_diferentes">Las contraseña deben ser iguales!</string>
     <string name="error_correo_contraseña_incorrectos">Correo o contraseña incorrectos!</string>
 
+    <string name="nombre">Nombre:</string>
+
 </resources>

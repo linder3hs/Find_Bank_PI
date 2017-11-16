@@ -9,6 +9,7 @@ public class User {
     private String nombre;
     private String email;
     private String password;
+    private String imagen;
 
     public Integer getCod() {
         return id;
@@ -42,13 +43,23 @@ public class User {
         this.password = pass;
     }
 
+    public String getImagen() {
+        return imagen;
+    }
+
+    public void setImagen(String imagen) {
+        this.imagen = imagen;
+    }
+
     @Override
     public String toString() {
-        return "Usuario{" +
-                "cod=" + id +
+        return "User{" +
+                "id=" + id +
                 ", nombre='" + nombre + '\'' +
-                ", correo='" + email + '\'' +
-                ", pass='" + password + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", imagen='" + imagen + '\'' +
                 '}';
     }
+
 }
