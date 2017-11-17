@@ -52,7 +52,6 @@ public class FavoriteActivity extends AppCompatActivity implements SwipeRefreshL
                 android.R.color.holo_red_light);
 
         initialize();
-
     }
 
     private void initialize() {
