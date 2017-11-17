@@ -273,14 +273,14 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                     Log.d("Agent", "HTTP status code: " + statusCode);
 
                     if (response.isSuccessful()) {
-                        List<Agente> agentes = response.body();
+                        final List<Agente> agentes = response.body();
                         Log.d("Agent2", "Agentes: " + agentes);
 
-                        for (final Agente agente : agentes ) {
+                        for (Agente agente : agentes ) {
                             float lat = agente.getLat();
                             float lng = agente.getLng();
                             LatLng cosmo = new LatLng(lat, lng);
-                            markerAgente = mMap.addMarker(new MarkerOptions()
+                             mMap.addMarker(new MarkerOptions()
                                     .title(agente.getNombre())
                                     .snippet(agente.getDescripcion())
                                     .position(cosmo)
@@ -290,19 +290,42 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                             float zoon = 16;
                             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(cosmo, zoon));
 
-                            mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
-                                @Override
-                                public void onInfoWindowClick(Marker marker) {
-                                    if (marker.equals(markerAgente)){
-                                        onMarkerClick(markerAgente);
-                                        Toast.makeText(HomeActivity.this, "Funciona xd", Toast.LENGTH_SHORT).show();
+                        }
+
+                        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+                            @Override
+                            public boolean onMarkerClick(Marker marker) {
+
+                                for (Agente agente : agentes){
+                                    if (agente.getNombre().equals(marker.getTitle())){
+
+                                        final Dialog dialogs = new Dialog(HomeActivity.this);
+                                        dialogs.setContentView(R.layout.activity_detalle_banco);
+                                        dialogs.closeOptionsMenu();
+                                        dialogs.setCancelable(false);
+                                        dialogs.show();
+                                        Switch aSwitch = (Switch) dialogs.findViewById(R.id.estadoB);
+                                        aSwitch.setEnabled(false);
+                                        aSwitch.setClickable(false);
+                                        TextView direccion = (TextView) dialogs.findViewById(R.id.direccionAgente);
+                                        TextView nombre = (TextView) dialogs.findViewById(R.id.nombreAgente);
+                                        nombre.setText(agente.getNombre());
+                                        direccion.setText(agente.getDireccion());
+
+                                        ImageView btnClose = (ImageView) dialogs.findViewById(R.id.btnClose);
+                                        btnClose.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View view) {
+                                                dialogs.dismiss();
+                                            }
+                                        });
+
+                                        Toast.makeText(HomeActivity.this, agente.getNombre(), Toast.LENGTH_SHORT).show();
                                     }
                                 }
-                            });
-                            //onMarkerClick(markerAgente);
-
-
-                        }
+                                return false;
+                            }
+                        });
 
                         // AgenteAdapter adapter = (AgenteAdapter) agentesList.getAdapter();
                         // adapter.setAgentes(agentes);
@@ -396,11 +419,11 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
       //  Log.d("Lat", String.valueOf(lat));
       //  Log.d("Log", String.valueOf(lng));
 
-        markerAgente = googleMap.addMarker(new MarkerOptions()
+       /* markerAgente = googleMap.addMarker(new MarkerOptions()
                 .position(cosmo2)
                 .title("cosmo2")
                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.compass)));
-        googleMap.moveCamera(CameraUpdateFactory.newLatLng(cosmo2));
+        googleMap.moveCamera(CameraUpdateFactory.newLatLng(cosmo2));*/
         //googleMap.setOnMarkerClickListener(this);
         //  mMap.addMarker(new MarkerOptions().position(agenteSanta).title("Alondras").snippet("Agente BCP"));
         //mMap.moveCamera(CameraUpdateFactory.newLatLng(cosmo));
