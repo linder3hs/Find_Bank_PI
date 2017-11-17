@@ -47,6 +47,9 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.like.IconType;
+import com.like.LikeButton;
+import com.like.OnLikeListener;
 import com.linder.find_bank.R;
 import com.linder.find_bank.model.Agente;
 import com.linder.find_bank.model.User;
@@ -54,6 +57,8 @@ import com.linder.find_bank.network.ApiService;
 import com.linder.find_bank.network.ApiServiceGenerator;
 import com.linder.find_bank.respository.AgenteAdapter;
 import com.squareup.picasso.Picasso;
+
+import org.w3c.dom.Text;
 
 import java.util.List;
 
@@ -80,6 +85,9 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     double speed;
     private String email;
     private ImageView fotoImage;
+    //Variable del dialog agente
+    private TextView nombreAgent;
+    private TextView direccionAgent;
 
     //Variales de permiso
     final private int REQUEST_CODE_ASK_PERMISON = 124;
@@ -273,11 +281,11 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                     Log.d("Agent", "HTTP status code: " + statusCode);
 
                     if (response.isSuccessful()) {
-                        List<Agente> agentes = response.body();
+                        final List<Agente> agentes = response.body();
                         Log.d("Agent2", "Agentes: " + agentes);
 
                         for (final Agente agente : agentes ) {
-                            float lat = agente.getLat();
+                            final float lat = agente.getLat();
                             float lng = agente.getLng();
                             LatLng cosmo = new LatLng(lat, lng);
                             markerAgente = mMap.addMarker(new MarkerOptions()
@@ -290,23 +298,57 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                             float zoon = 16;
                             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(cosmo, zoon));
 
-                            mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
-                                @Override
-                                public void onInfoWindowClick(Marker marker) {
-                                    if (marker.equals(markerAgente)){
-                                        onMarkerClick(markerAgente);
-                                        Toast.makeText(HomeActivity.this, "Funciona xd", Toast.LENGTH_SHORT).show();
-                                    }
-                                }
-                            });
-                            //onMarkerClick(markerAgente);
 
+                                mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+                                    @Override
+                                    public boolean onMarkerClick(Marker marker) {
+                            for (final Agente agente1 : agentes) {
+                                Dialog dialogs = new Dialog(HomeActivity.this);
+                                Toast.makeText(HomeActivity.this, agente1.getNombre(), Toast.LENGTH_SHORT).show();
+                                dialogs.setContentView(R.layout.activity_detalle_banco);
+                                dialogs.show();
+                                //dialogs.setCancelable(false);
+                                LikeButton btnHeart = (LikeButton) dialogs.findViewById(R.id.btn_heart);
+                                nombreAgent = (TextView) dialogs.findViewById(R.id.nombreAgente);
+                                direccionAgent = (TextView) dialogs.findViewById(R.id.direccionAgente);
+                                nombreAgent.setText(agente1.getNombre());
+                                direccionAgent.setText(agente1.getDireccion());
+                                Switch aSwitch = (Switch) dialogs.findViewById(R.id.estadoB);
+                                aSwitch.setEnabled(false);
+                                aSwitch.setClickable(false);
+
+                                btnHeart.setOnLikeListener(new OnLikeListener() {
+                                    @Override
+                                    public void liked(LikeButton likeButton) {
+                                        Toast.makeText(HomeActivity.this, "Agente agregado a favoritos", Toast.LENGTH_SHORT).show();
+                                        likeButton.setCircleEndColorRes(R.color.colorPrimary);
+
+                                    }
+
+                                    @Override
+                                    public void unLiked(LikeButton likeButton) {
+                                        Toast.makeText(HomeActivity.this, "Desmarcaste a este agente :'(", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+
+                                ImageView btnClose = (ImageView) dialogs.findViewById(R.id.btnClose);
+                                btnClose.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        //dialogs.dismiss();
+                                    }
+                                });
+                            }
+
+
+                                        return false;
+
+
+                                    }
+                                });
 
                         }
 
-                        // AgenteAdapter adapter = (AgenteAdapter) agentesList.getAdapter();
-                        // adapter.setAgentes(agentes);
-                        // adapter.notifyDataSetChanged();
                     } else {
                         Log.d("Error", "onError: " + response.errorBody().string());
                         throw new Exception("Error del servidor");
@@ -530,8 +572,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void onInfoWindowClick(Marker marker) {
-        if (marker.equals(markerAgente)) {
-            final Dialog dialogs = new Dialog(this);
+        /*if (marker.equals(markerAgente)) {
+            /*final Dialog dialogs = new Dialog(this);
             dialogs.setContentView(R.layout.activity_detalle_banco);
             dialogs.setTitle("Agente");
             dialogs.closeOptionsMenu();
@@ -549,6 +591,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 }
             });
 
-        }
+        }*/
     }
 }

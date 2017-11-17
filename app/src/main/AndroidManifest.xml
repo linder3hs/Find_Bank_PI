@@ -71,12 +71,11 @@
         <activity
             android:name=".activities.PerfilActivity"
             android:parentActivityName=".activities.HomeActivity" />
-
         <activity
             android:name=".activities.FavoriteActivity"
-            android:parentActivityName=".activities.HomeActivity"
-            android:label="Favoritos">
-        </activity>
+            android:label="Favoritos"
+            android:parentActivityName=".activities.HomeActivity"></activity>
+        <activity android:name=".RegisterActivity"></activity>
     </application>
 
 </manifest>

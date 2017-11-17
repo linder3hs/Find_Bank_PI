@@ -46,10 +46,10 @@ public class FavoriteActivity extends AppCompatActivity implements SwipeRefreshL
         swipeLayout.setOnRefreshListener(this);
         //Podemos espeficar si queremos, un patron de colores diferente al patrón por defecto.
         swipeLayout.setColorSchemeResources(
-                android.R.color.holo_blue_bright,
-                android.R.color.holo_green_light,
-                android.R.color.holo_orange_light,
-                android.R.color.holo_red_light);
+                android.R.color.holo_blue_dark,
+                android.R.color.holo_green_dark,
+                android.R.color.holo_orange_dark,
+                android.R.color.holo_red_dark);
 
         initialize();
 

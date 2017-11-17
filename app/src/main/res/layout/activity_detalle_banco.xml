@@ -19,6 +19,17 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="left">
+            <com.like.LikeButton
+                android:id="@+id/btn_heart"
+                app:icon_type="heart"
+                app:icon_size="25dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:gravity="right">
             <ImageView
                 android:id="@+id/btnClose"
@@ -38,6 +49,7 @@
             android:orientation="vertical"
             android:background="#53292929">
                 <TextView
+                    android:id="@+id/nombreAgente"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/nombre_de_agente"
@@ -48,6 +60,7 @@
                     android:textSize="20sp"
                     android:layout_margin="6dp"/>
                 <TextView
+                    android:id="@+id/direccionAgente"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/direccion_de_agente"
