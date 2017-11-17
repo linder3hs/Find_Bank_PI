@@ -11,8 +11,34 @@ public class Agente {
     private float lat;
     private float lng;
     private String tipo;
-    private char sistema;
-   // private boolean sistema;
+    private String hora_ini;
+    private String hora_fin;
+
+    public String getHora_ini() {
+        return hora_ini;
+    }
+
+    public void setHora_ini(String hora_ini) {
+        this.hora_ini = hora_ini;
+    }
+
+    public String getHora_fin() {
+        return hora_fin;
+    }
+
+    public void setHora_fin(String hora_fin) {
+        this.hora_fin = hora_fin;
+    }
+
+    public String getSistema() {
+        return sistema;
+    }
+
+    public void setSistema(String sistema) {
+        this.sistema = sistema;
+    }
+
+    private String sistema;
     private int seguridad;
     private String horario;
     private String descripcion;
@@ -58,14 +84,6 @@ public class Agente {
         this.tipo = tipo;
     }
 
-   // public boolean isSistema() {
-    //    return sistema;
-    //}
-
-   // public void setSistema(boolean sistema) {
-    //    this.sistema = sistema;
-   // }
-
     public int getSeguridad() {
         return seguridad;
     }
@@ -98,7 +116,9 @@ public class Agente {
                 ", lat=" + lat +
                 ", lng=" + lng +
                 ", tipo='" + tipo + '\'' +
-               // ", sistema=" + sistema +
+                ", hora_ini='" + hora_ini + '\'' +
+                ", hora_fin='" + hora_fin + '\'' +
+                ", sistema='" + sistema + '\'' +
                 ", seguridad=" + seguridad +
                 ", horario='" + horario + '\'' +
                 ", descripcion='" + descripcion + '\'' +
