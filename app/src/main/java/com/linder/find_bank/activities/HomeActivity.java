@@ -1,12 +1,14 @@
 package com.linder.find_bank.activities;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -32,6 +34,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -293,6 +296,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                         }
 
                         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+                            @SuppressLint("ResourceAsColor")
                             @Override
                             public boolean onMarkerClick(Marker marker) {
 
@@ -304,13 +308,47 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                                         dialogs.closeOptionsMenu();
                                         dialogs.setCancelable(false);
                                         dialogs.show();
-                                        Switch aSwitch = (Switch) dialogs.findViewById(R.id.estadoB);
-                                        aSwitch.setEnabled(false);
-                                        aSwitch.setClickable(false);
+                                        TextView aSwitch = (TextView) dialogs.findViewById(R.id.sistema);
+                                        if (agente.getSistema().equals("1")) {
+                                           aSwitch.setText("Si");
+                                           aSwitch.setBackgroundColor(Color.rgb(43, 174, 83  ));
+                                        } else {
+                                            aSwitch.setText("No");
+                                            aSwitch.setBackgroundColor(Color.argb(255, 192, 57, 43));
+                                        }
+
+                                        TextView tipo = (TextView) dialogs.findViewById(R.id.tipo);
+                                        tipo.setText(agente.getTipo());
+
+                                        TextView hora = (TextView) dialogs.findViewById(R.id.horaA);
+                                        hora.setText(agente.getHora_ini()+" am" + "-" + agente.getHora_fin()+ "pm");
+
                                         TextView direccion = (TextView) dialogs.findViewById(R.id.direccionAgente);
                                         TextView nombre = (TextView) dialogs.findViewById(R.id.nombreAgente);
                                         nombre.setText(agente.getNombre());
                                         direccion.setText(agente.getDireccion());
+
+                                        RatingBar ratingBar = (RatingBar) dialogs.findViewById(R.id.clalificacionAgente);
+                                        if (agente.getSeguridad() == 1) {
+                                            ratingBar.setNumStars(2);
+                                            ratingBar.setRating(1);
+                                        } else if (agente.getSeguridad() == 2) {
+                                            ratingBar.setNumStars(3);
+                                            ratingBar.setRating(2);
+                                        } else if (agente.getSeguridad() == 3) {
+                                            ratingBar.setNumStars(4);
+                                            ratingBar.setRating(3);
+                                        } else if (agente.getSeguridad() == 4) {
+                                            ratingBar.setNumStars(5);
+                                            ratingBar.setRating(4);
+                                        } else  if (agente.getSeguridad() == 5) {
+                                            ratingBar.setNumStars(5);
+                                            ratingBar.setRating(5);
+                                        } else {
+                                            ratingBar.setNumStars(0);
+                                        }
+
+
 
                                         ImageView btnClose = (ImageView) dialogs.findViewById(R.id.btnClose);
                                         btnClose.setOnClickListener(new View.OnClickListener() {
@@ -320,16 +358,12 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                                             }
                                         });
 
-                                        Toast.makeText(HomeActivity.this, agente.getNombre(), Toast.LENGTH_SHORT).show();
                                     }
                                 }
                                 return false;
                             }
                         });
 
-                        // AgenteAdapter adapter = (AgenteAdapter) agentesList.getAdapter();
-                        // adapter.setAgentes(agentes);
-                        // adapter.notifyDataSetChanged();
                     } else {
                         Log.d("Error", "onError: " + response.errorBody().string());
                         throw new Exception("Error del servidor");
@@ -508,9 +542,9 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             dialogs.closeOptionsMenu();
             dialogs.setCancelable(false);
             dialogs.show();
-            Switch aSwitch = (Switch) dialogs.findViewById(R.id.estadoB);
+           /* Switch aSwitch = (Switch) dialogs.findViewById(R.id.estadoB);
             aSwitch.setEnabled(false);
-            aSwitch.setClickable(false);
+            aSwitch.setClickable(false);*/
 
             ImageView btnClose = (ImageView) dialogs.findViewById(R.id.btnClose);
             btnClose.setOnClickListener(new View.OnClickListener() {
@@ -542,7 +576,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             public void run() {
-                //initialize();
+                initialize();
                 //Se supone que aqui hemos realizado las tareas necesarias de refresco, y que ya podemos ocultar la barra de progreso
                 //swipeLayout.setRefreshing(false);
 
@@ -560,9 +594,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             dialogs.closeOptionsMenu();
             dialogs.setCancelable(false);
             dialogs.show();
-            Switch aSwitch = (Switch) dialogs.findViewById(R.id.estadoB);
-            aSwitch.setEnabled(false);
-            aSwitch.setClickable(false);
 
             ImageView btnClose = (ImageView) dialogs.findViewById(R.id.btnClose);
             btnClose.setOnClickListener(new View.OnClickListener() {
