@@ -50,6 +50,8 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.like.LikeButton;
+import com.like.OnLikeListener;
 import com.linder.find_bank.R;
 import com.linder.find_bank.model.Agente;
 import com.linder.find_bank.model.User;
@@ -327,6 +329,20 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                                         nombre.setText(agente.getNombre());
                                         direccion.setText(agente.getDireccion());
 
+                                        LikeButton btnHeart = (LikeButton) dialogs.findViewById(R.id.btn_favorite);
+                                        btnHeart.setOnLikeListener(new OnLikeListener() {
+                                            @Override
+                                            public void liked(LikeButton likeButton) {
+                                                Toast.makeText(HomeActivity.this, "Le diste follow", Toast.LENGTH_SHORT).show();
+                                            }
+
+                                            @Override
+                                            public void unLiked(LikeButton likeButton) {
+                                                Toast.makeText(HomeActivity.this, "Le diste unfollow", Toast.LENGTH_SHORT).show();
+
+                                            }
+                                        });
+
                                         RatingBar ratingBar = (RatingBar) dialogs.findViewById(R.id.clalificacionAgente);
                                         if (agente.getSeguridad() == 1) {
                                             ratingBar.setNumStars(2);
@@ -445,24 +461,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         initialize();
 
 
-        //Add a place with description
-       LatLng cosmo2 = new LatLng(-12.134101, -77.0236405);
-
-        //Valores
-      //  Log.d("Lat", String.valueOf(lat));
-      //  Log.d("Log", String.valueOf(lng));
-
-       /* markerAgente = googleMap.addMarker(new MarkerOptions()
-                .position(cosmo2)
-                .title("cosmo2")
-                .icon(BitmapDescriptorFactory.fromResource(R.drawable.compass)));
-        googleMap.moveCamera(CameraUpdateFactory.newLatLng(cosmo2));*/
-        //googleMap.setOnMarkerClickListener(this);
-        //  mMap.addMarker(new MarkerOptions().position(agenteSanta).title("Alondras").snippet("Agente BCP"));
-        //mMap.moveCamera(CameraUpdateFactory.newLatLng(cosmo));
-       // float zoon = 16;
-       // mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(cosmo, zoon));
-
     }
 
     public void AlertNoGps() {
@@ -534,26 +532,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onMarkerClick(Marker marker) {
-        if (marker.equals(markerAgente)) {
-            final Dialog dialogs = new Dialog(this);
-            dialogs.setContentView(R.layout.activity_detalle_banco);
-            dialogs.setTitle("Agente");
-            dialogs.closeOptionsMenu();
-            dialogs.setCancelable(false);
-            dialogs.show();
-           /* Switch aSwitch = (Switch) dialogs.findViewById(R.id.estadoB);
-            aSwitch.setEnabled(false);
-            aSwitch.setClickable(false);*/
 
-            ImageView btnClose = (ImageView) dialogs.findViewById(R.id.btnClose);
-            btnClose.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    dialogs.dismiss();
-                }
-            });
-
-            }
             return false;
         }
 
