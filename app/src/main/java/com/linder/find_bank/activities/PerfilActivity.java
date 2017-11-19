@@ -40,7 +40,7 @@ public class PerfilActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         emailText1 = (TextView)findViewById(R.id.txtEmail1);
-        emailText2 = (TextView)findViewById(R.id.txtEmail2);
+        //emailText2 = (TextView)findViewById(R.id.txtEmail2);
         nombreText = (TextView)findViewById(R.id.txtNombre);
         fotoImage = (ImageView)findViewById(R.id.profile_image);
 
@@ -77,7 +77,7 @@ public class PerfilActivity extends AppCompatActivity {
                         Picasso.with(PerfilActivity.this).load(url).into(fotoImage);
 
                         nombreText.setText(user.getNombre());
-                        emailText2.setText(user.getCorreo());
+                        //emailText2.setText(user.getCorreo());
 
                     } else {
                         Log.e(TAG, "onError: " + response.errorBody().string());
