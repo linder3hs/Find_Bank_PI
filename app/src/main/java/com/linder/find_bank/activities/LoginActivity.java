@@ -71,6 +71,7 @@ public class LoginActivity extends AppCompatActivity {
             // Go to Dashboard
             goDashboard();
         }
+
         txtemail.setHintTextColor(Color.WHITE);
         btnregister.setOnClickListener(new View.OnClickListener() {
             @Override

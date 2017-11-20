@@ -39,7 +39,8 @@ public interface ApiService {
             @Field("tipo") String tipo);
 
     @GET("api/v1/usuarios/{email}")
-    Call<User> showUsuario(@Path("email") String email);
+    Call<User> showUsuario(
+            @Path("email") String email);
 
     @GET("api/v1/agentes")
     Call<List<Agente>> getAgentes();

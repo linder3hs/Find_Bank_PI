@@ -85,6 +85,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     double speed;
     private String email;
     private ImageView fotoImage;
+    Integer user_id;
 
     //Variales de permiso
     final private int REQUEST_CODE_ASK_PERMISON = 124;
@@ -115,8 +116,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             }
 
         }
-
-}
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -158,7 +158,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
         if (status == ConnectionResult.SUCCESS) {
 
-
             SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                     .findFragmentById(R.id.map);
             mapFragment.getMapAsync(this);
@@ -172,7 +171,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -220,7 +218,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             });
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -234,7 +231,9 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             Intent intent3 = new Intent(this, PerfilActivity.class);
             startActivity(intent3);
             Log.d("Intent", String.valueOf(intent3));
+
         } else if (id == R.id.nav_favoritos) {
+            goFavoritos();
             Intent intent = new Intent(this, FavoriteActivity.class);
             startActivity(intent);
 
@@ -262,9 +261,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
-
     private void initialize() {
-
         ApiService service = ApiServiceGenerator.createService(ApiService.class);
 
         Call<List<Agente>> call = service.getAgentes();
@@ -363,8 +360,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                                             ratingBar.setNumStars(0);
                                         }
 
-
-
                                         ImageView btnClose = (ImageView) dialogs.findViewById(R.id.btnClose);
                                         btnClose.setOnClickListener(new View.OnClickListener() {
                                             @Override
@@ -412,8 +407,14 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
                         User user = response.body();
                         Log.d(TAG, "user: " + user);
+
+                        Intent i = new Intent(HomeActivity.this, FavoriteActivity.class);
+
                         String url = ApiService.API_BASE_URL + "/images/" + user.getImagen();
                         Picasso.with(HomeActivity.this).load(url).into(fotoImage);
+
+                        user_id= user.getCod();
+                        i.putExtra("user_id",user_id);
 
                     } else {
                         Log.e(TAG, "onError: " + response.errorBody().string());
@@ -438,6 +439,10 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
+    private void goFavoritos(){
+
+    }
+
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
@@ -452,14 +457,12 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             return;
         }
 
-
         mMap.setMyLocationEnabled(true);
         mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         UiSettings uiSettings = mMap.getUiSettings();
         uiSettings.setZoomControlsEnabled(true);
         uiSettings.setMyLocationButtonEnabled(true);
         initialize();
-
 
     }
 
@@ -532,19 +535,16 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onMarkerClick(Marker marker) {
+        return false;
+    }
 
-            return false;
-        }
-
-        public void callLogout(){
-            // remove from SharedPreferences
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            boolean success = editor.putBoolean("islogged", false).commit();
-            //boolean success = editor.clear().commit(); // not recommended
-            finish();
-        }
-
-
+    public void callLogout(){
+        // remove from SharedPreferences
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        boolean success = editor.putBoolean("islogged", false).commit();
+        // boolean success = editor.clear().commit(); // not recommended
+        finish();
+    }
 
     @Override
     public void onRefresh() {
