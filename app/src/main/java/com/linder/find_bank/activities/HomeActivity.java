@@ -57,6 +57,7 @@ import com.linder.find_bank.model.Agente;
 import com.linder.find_bank.model.User;
 import com.linder.find_bank.network.ApiService;
 import com.linder.find_bank.network.ApiServiceGenerator;
+import com.linder.find_bank.network.ResponseMessage;
 import com.linder.find_bank.respository.AgenteAdapter;
 import com.squareup.picasso.Picasso;
 
@@ -264,6 +265,49 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     private void initialize() {
         ApiService service = ApiServiceGenerator.createService(ApiService.class);
 
+        Call<User> call2 = service.showUsuario(email);
+
+        call2.enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                try {
+                    int statusCode = response.code();
+                    Log.d(TAG, "HTTP status code: " + statusCode);
+
+                    if (response.isSuccessful()) {
+
+                        User user = response.body();
+                        Log.d(TAG, "user: " + user);
+
+                        Intent i = new Intent(HomeActivity.this, FavoriteActivity.class);
+
+                        String url = ApiService.API_BASE_URL + "/images/" + user.getImagen();
+                        Picasso.with(HomeActivity.this).load(url).into(fotoImage);
+
+                        user_id= user.getId();
+                        i.putExtra("user_id",user_id);
+
+                    } else {
+                        Log.e(TAG, "onError: " + response.errorBody().string());
+                        throw new Exception("Error en el servicio");
+                    }
+
+                } catch (Throwable t) {
+                    try {
+                        Log.e(TAG, "onThrowable: " + t.toString(), t);
+                        Toast.makeText(HomeActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
+                    }catch (Throwable x){}
+                }
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+                Log.e(TAG, "onFailure: " + t.toString());
+                Toast.makeText(HomeActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
+            }
+
+        });
+
         Call<List<Agente>> call = service.getAgentes();
 
         call.enqueue(new Callback<List<Agente>>() {
@@ -308,8 +352,44 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                                         dialogs.show();
                                         TextView aSwitch = (TextView) dialogs.findViewById(R.id.sistema);
                                         if (agente.getSistema().equals("1")) {
+
                                            aSwitch.setText("Si");
                                            aSwitch.setBackgroundColor(Color.rgb(43, 174, 83  ));
+
+                                           ApiService service = ApiServiceGenerator.createService(ApiService.class);
+                                           Call<ResponseMessage> call = null;
+                                           int agente_id = agente.getId();
+                                           Log.d(TAG, ""+ user_id);
+                                           call = service.registrarFavorito(user_id, agente_id);
+                                           call.enqueue(new Callback<ResponseMessage>() {
+                                               @Override
+                                               public void onResponse(Call<ResponseMessage> call, Response<ResponseMessage> response) {
+                                                   try {
+                                                       int statusCode = response.code();
+                                                       Log.d(TAG, "HTTP STATUS CODE" + statusCode);
+                                                       if (response.isSuccessful()) {
+                                                           ResponseMessage responseMessage = response.body();
+                                                           Log.d(TAG, "response message" + responseMessage);
+                                                           Toast.makeText(HomeActivity.this, "Agregado a favorito", Toast.LENGTH_SHORT).show();
+                                                       } else {
+                                                           Log.e(TAG, "onError: " + response.errorBody().string());
+                                                       }
+
+                                                    } catch (Throwable t) {
+                                                        try {
+                                                            Log.e(TAG, "onThrowable: " + t.toString(), t);
+                                                            Toast.makeText(HomeActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
+                                                        } catch (Throwable x) {
+                                                        }
+                                                    }
+                                                }
+
+                                                @Override
+                                                public void onFailure(Call<ResponseMessage> call, Throwable t) {
+                                                    Log.e(TAG, "onFailure: " + t.toString());
+                                                    Toast.makeText(HomeActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
+                                                }
+                                            }) ;
                                         } else {
                                             aSwitch.setText("No");
                                             aSwitch.setBackgroundColor(Color.argb(255, 192, 57, 43));
@@ -392,49 +472,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 Log.e("onFailure", "onFailure: " + t.toString());
                 Toast.makeText(HomeActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
             }
-        });
-
-        Call<User> call2 = service.showUsuario(email);
-
-        call2.enqueue(new Callback<User>() {
-            @Override
-            public void onResponse(Call<User> call, Response<User> response) {
-                try {
-                    int statusCode = response.code();
-                    Log.d(TAG, "HTTP status code: " + statusCode);
-
-                    if (response.isSuccessful()) {
-
-                        User user = response.body();
-                        Log.d(TAG, "user: " + user);
-
-                        Intent i = new Intent(HomeActivity.this, FavoriteActivity.class);
-
-                        String url = ApiService.API_BASE_URL + "/images/" + user.getImagen();
-                        Picasso.with(HomeActivity.this).load(url).into(fotoImage);
-
-                        user_id= user.getCod();
-                        i.putExtra("user_id",user_id);
-
-                    } else {
-                        Log.e(TAG, "onError: " + response.errorBody().string());
-                        throw new Exception("Error en el servicio");
-                    }
-
-                } catch (Throwable t) {
-                    try {
-                        Log.e(TAG, "onThrowable: " + t.toString(), t);
-                        Toast.makeText(HomeActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
-                    }catch (Throwable x){}
-                }
-            }
-
-            @Override
-            public void onFailure(Call<User> call, Throwable t) {
-                Log.e(TAG, "onFailure: " + t.toString());
-                Toast.makeText(HomeActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
-            }
-
         });
 
     }

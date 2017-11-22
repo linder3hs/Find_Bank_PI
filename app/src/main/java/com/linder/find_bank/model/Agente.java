@@ -6,6 +6,7 @@ package com.linder.find_bank.model;
 
 public class Agente {
 
+    private int id;
     private String nombre;
     private String direccion;
     private float lat;
@@ -13,6 +14,19 @@ public class Agente {
     private String tipo;
     private String hora_ini;
     private String hora_fin;
+
+    private String sistema;
+    private int seguridad;
+    private String horario;
+    private String descripcion;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getHora_ini() {
         return hora_ini;
@@ -37,12 +51,6 @@ public class Agente {
     public void setSistema(String sistema) {
         this.sistema = sistema;
     }
-
-    private String sistema;
-    private int seguridad;
-    private String horario;
-    private String descripcion;
-
 
     public String getNombre() {
         return nombre;
@@ -111,7 +119,8 @@ public class Agente {
     @Override
     public String toString() {
         return "Agente{" +
-                "nombre='" + nombre + '\'' +
+                "id=" + id +
+                ", nombre='" + nombre + '\'' +
                 ", direccion='" + direccion + '\'' +
                 ", lat=" + lat +
                 ", lng=" + lng +
@@ -124,4 +133,5 @@ public class Agente {
                 ", descripcion='" + descripcion + '\'' +
                 '}';
     }
+
 }

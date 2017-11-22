@@ -45,4 +45,10 @@ public interface ApiService {
     @GET("api/v1/agentes")
     Call<List<Agente>> getAgentes();
 
+    @FormUrlEncoded
+    @POST("api/v1/favoritos")
+    Call<ResponseMessage> registrarFavorito(
+            @Field("user_id") int user_id,
+            @Field("agente_id") int agente_id);
+
 }
