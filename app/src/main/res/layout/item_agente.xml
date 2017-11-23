@@ -23,7 +23,9 @@
             android:layout_height="64dp"
             android:layout_alignParentStart="true"
             android:layout_marginEnd="16dp"
-            app:srcCompat="@mipmap/ic_launcher"/>
+            android:src="@drawable/find"
+            android:tint="#000"
+            />
 
         <TextView
             android:id="@+id/nombre_text"
@@ -41,7 +43,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <TextView
-                android:id="@+id/latitud"
+                android:id="@+id/direccionFavo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_toEndOf="@+id/foto_image"
@@ -51,7 +53,7 @@
                 android:text="lat"/>
 
             <TextView
-                android:id="@+id/longitud"
+                android:id="@+id/sistemaFavor"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_toEndOf="@+id/foto_image"

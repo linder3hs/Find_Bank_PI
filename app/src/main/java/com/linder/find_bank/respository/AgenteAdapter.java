@@ -33,15 +33,15 @@ public class AgenteAdapter extends RecyclerView.Adapter<AgenteAdapter.ViewHolder
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public ImageView fotoimage;
-        public TextView nombreAgente, lat, lng;
+        public TextView nombreAgente, direccion, sistema;
 
         public ViewHolder(View itemView) {
             super(itemView);
 
             //fotoimage = (ImageView) itemView.findViewById(R.id.foto_image);
             nombreAgente = (TextView) itemView.findViewById(R.id.nombre_text);
-            lat = (TextView) itemView.findViewById(R.id.latitud);
-            lng = (TextView) itemView.findViewById(R.id.longitud);
+            direccion = (TextView) itemView.findViewById(R.id.direccionFavo);
+            sistema = (TextView) itemView.findViewById(R.id.sistemaFavor);
 
         }
     }
@@ -56,16 +56,16 @@ public class AgenteAdapter extends RecyclerView.Adapter<AgenteAdapter.ViewHolder
     public void onBindViewHolder(AgenteAdapter.ViewHolder holder, int position) {
 
         Agente agente = this.agentes.get(position);
-
-        float lat = agente.getLat();
-        float lng = agente.getLng();
+        String siste;
+        if (agente.getSistema().equals("1")) {
+            siste = "Si tiene sistema";
+        } else {
+            siste = "No tienes sistema";
+        }
         holder.nombreAgente.setText(agente.getNombre());
-        holder.lat.setText(String.valueOf(lat));
-        holder.lng.setText(String.valueOf(lng));
+        holder.direccion.setText(agente.getDireccion());
+        holder.sistema.setText(siste);
 
-    //     holder.lat.setText((double) agente.getLat());
-    //     holder.lng.setText((int) agente.getLng());
-    //     holder.lat.setText((int) agente.getLat());
     }
 
     @Override

@@ -24,8 +24,9 @@ import retrofit2.Response;
 public class FavoriteActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
 
     private RecyclerView agentesList;
+    private static final String TAG = FavoriteActivity.class.getSimpleName();
     private SwipeRefreshLayout swipeLayout;
-
+    private int userId;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,7 +35,8 @@ public class FavoriteActivity extends AppCompatActivity implements SwipeRefreshL
         //Flecha atras
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-
+        userId = getIntent().getIntExtra("id_user",0);
+        Log.d(TAG, String.valueOf(userId));
         agentesList = (RecyclerView) findViewById(R.id.recyclerview);
         agentesList.setLayoutManager(new LinearLayoutManager(this));
 
@@ -58,7 +60,7 @@ public class FavoriteActivity extends AppCompatActivity implements SwipeRefreshL
 
         ApiService service = ApiServiceGenerator.createService(ApiService.class);
 
-        Call<List<Agente>> call = service.getAgentes();
+        Call<List<Agente>> call = service.showFavoritos(userId);
 
         call.enqueue(new Callback<List<Agente>>() {
             @Override

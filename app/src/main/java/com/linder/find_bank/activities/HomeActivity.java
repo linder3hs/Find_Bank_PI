@@ -35,7 +35,6 @@ import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RatingBar;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -58,7 +57,6 @@ import com.linder.find_bank.model.User;
 import com.linder.find_bank.network.ApiService;
 import com.linder.find_bank.network.ApiServiceGenerator;
 import com.linder.find_bank.network.ResponseMessage;
-import com.linder.find_bank.respository.AgenteAdapter;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -87,6 +85,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     private String email;
     private ImageView fotoImage;
     Integer user_id;
+    private FloatingActionButton newAgent;
 
     //Variales de permiso
     final private int REQUEST_CODE_ASK_PERMISON = 124;
@@ -127,6 +126,15 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         btnRefresh = (FloatingActionButton) findViewById(R.id.btnRefresh);
+        newAgent = (FloatingActionButton) findViewById(R.id.newAgent);
+        newAgent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(HomeActivity.this, NewAgentActivity.class);
+                startActivity(intent);
+            }
+        });
+
 
         btnRefresh.setOnClickListener(new View.OnClickListener() {
             @Override

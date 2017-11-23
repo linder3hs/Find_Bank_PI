@@ -1,14 +1,17 @@
 package com.linder.find_bank.activities;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,10 +29,12 @@ import retrofit2.Response;
 public class PerfilActivity extends AppCompatActivity {
     // SharedPreferences
     private SharedPreferences sharedPreferences;
-
+    private FloatingActionButton btnEditar;
     private static final String TAG = PerfilActivity.class.getSimpleName();
 
     private String email;
+    private String userId;
+    private String emailSend, nombreSend, passwordSend;
     private ImageView fotoImage;
     private TextView emailText1,emailText2,nombreText;
 
@@ -38,6 +43,14 @@ public class PerfilActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_perfil);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        FloatingActionButton btnEditar = (FloatingActionButton) findViewById(R.id.btnEditar);
+        btnEditar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mandarDatos();
+            }
+        });
 
         emailText1 = (TextView)findViewById(R.id.txtEmail1);
         //emailText2 = (TextView)findViewById(R.id.txtEmail2);
@@ -52,6 +65,8 @@ public class PerfilActivity extends AppCompatActivity {
 
         initialize();
         emailText1.setText(sharedPreferences.getString("email", null));
+
+
     }
 
     private void initialize(){
@@ -77,7 +92,9 @@ public class PerfilActivity extends AppCompatActivity {
                         Picasso.with(PerfilActivity.this).load(url).into(fotoImage);
 
                         nombreText.setText(user.getNombre());
-                        //emailText2.setText(user.getCorreo());
+                        emailSend = user.getCorreo();
+                        nombreSend = user.getNombre();
+
 
                     } else {
                         Log.e(TAG, "onError: " + response.errorBody().string());
@@ -99,6 +116,13 @@ public class PerfilActivity extends AppCompatActivity {
             }
 
         });
+
+    }
+    public void mandarDatos() {
+        Intent intent = new Intent(PerfilActivity.this, EditarActivity.class);
+        intent.putExtra("nombreSend", nombreSend);
+        intent.putExtra("emailSend", emailSend);
+        startActivity(intent);
 
     }
 
