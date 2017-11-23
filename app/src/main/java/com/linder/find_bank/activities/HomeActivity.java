@@ -20,6 +20,7 @@ import android.provider.Settings;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
@@ -90,14 +91,17 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
     //Variales de permiso
     final private int REQUEST_CODE_ASK_PERMISON = 124;
-    int hasUbicationPermision;
+    //int hasUbicationPermision;
 
     //Llamado a los servicios Rest
 
     private void accsserPermison() {
-        hasUbicationPermision = checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION);
-        if (hasUbicationPermision != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_CODE_ASK_PERMISON);
+        // Check permission (Api 22 check in Manifest, Api 23 check by requestPermissions)
+        if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // Dont have permission => request one or many permissions (String[])
+            ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_CODE_ASK_PERMISON);
+        }else {
+            // Have permission
         }
     }
 
@@ -150,7 +154,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
         //Mejora para prender el gps automaticamente
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+        if (locationManager != null && !locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             AlertNoGps();
         }
 
@@ -234,7 +238,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             Log.d("Intent", String.valueOf(intent3));
 
         } else if (id == R.id.nav_favoritos) {
-            goFavoritos();
             Intent intent = new Intent(this, FavoriteActivity.class);
             startActivity(intent);
 
@@ -265,8 +268,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     private void initialize() {
         ApiService service = ApiServiceGenerator.createService(ApiService.class);
 
+        //Muestra los datos del usuario
         Call<User> call2 = service.showUsuario(email);
-
         call2.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
@@ -278,13 +281,12 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
                         User user = response.body();
                         Log.d(TAG, "user: " + user);
-
                         Intent i = new Intent(HomeActivity.this, FavoriteActivity.class);
 
-                        String url = ApiService.API_BASE_URL + "/images/" + user.getImagen();
-                        Picasso.with(HomeActivity.this).load(url).into(fotoImage);
+                        String url = ApiService.API_BASE_URL + "/images/" + user.getImagen();//Obtiene la imagen
+                        Picasso.with(HomeActivity.this).load(url).into(fotoImage);//Guarda la imagen
 
-                        user_id= user.getId();
+                        user_id= user.getId();//Obtiene el Id de usuario
                         i.putExtra("user_id",user_id);
 
                     } else {
@@ -296,7 +298,9 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                     try {
                         Log.e(TAG, "onThrowable: " + t.toString(), t);
                         Toast.makeText(HomeActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
-                    }catch (Throwable x){}
+                    }catch (Throwable x){
+                        Toast.makeText(HomeActivity.this, "Error", Toast.LENGTH_LONG).show();
+                    }
                 }
             }
 
@@ -308,8 +312,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
         });
 
+        //Muestra los datos de los Agentes
         Call<List<Agente>> call = service.getAgentes();
-
         call.enqueue(new Callback<List<Agente>>() {
             @Override
             public void onResponse(Call<List<Agente>> call, Response<List<Agente>> response) {
@@ -325,7 +329,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                             float lat = agente.getLat();
                             float lng = agente.getLng();
                             LatLng cosmo = new LatLng(lat, lng);
-                             mMap.addMarker(new MarkerOptions()
+                            mMap.addMarker(new MarkerOptions()
                                     .title(agente.getNombre())
                                     .snippet(agente.getDescripcion())
                                     .position(cosmo)
@@ -334,7 +338,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                             mMap.setOnMarkerClickListener(HomeActivity.this);
                             float zoon = 16;
                             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(cosmo, zoon));
-
                         }
 
                         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
@@ -350,14 +353,14 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                                         dialogs.closeOptionsMenu();
                                         dialogs.setCancelable(false);
                                         dialogs.show();
-                                        TextView aSwitch = (TextView) dialogs.findViewById(R.id.sistema);
+                                        TextView aSwitch = dialogs.findViewById(R.id.sistema);
                                         if (agente.getSistema().equals("1")) {
 
-                                           aSwitch.setText("Si");
+                                           aSwitch.setText(R.string.si);
                                            aSwitch.setBackgroundColor(Color.rgb(43, 174, 83  ));
 
                                            ApiService service = ApiServiceGenerator.createService(ApiService.class);
-                                           Call<ResponseMessage> call = null;
+                                           Call<ResponseMessage> call;
                                            int agente_id = agente.getId();
                                            Log.d(TAG, ""+ user_id);
                                            call = service.registrarFavorito(user_id, agente_id);
@@ -380,6 +383,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                                                             Log.e(TAG, "onThrowable: " + t.toString(), t);
                                                             Toast.makeText(HomeActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
                                                         } catch (Throwable x) {
+                                                            Toast.makeText(HomeActivity.this, "Error", Toast.LENGTH_LONG).show();
                                                         }
                                                     }
                                                 }
@@ -391,18 +395,18 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                                                 }
                                             }) ;
                                         } else {
-                                            aSwitch.setText("No");
+                                            aSwitch.setText(R.string.no);
                                             aSwitch.setBackgroundColor(Color.argb(255, 192, 57, 43));
                                         }
 
-                                        TextView tipo = (TextView) dialogs.findViewById(R.id.tipo);
+                                        TextView tipo = dialogs.findViewById(R.id.tipo);
                                         tipo.setText(agente.getTipo());
 
-                                        TextView hora = (TextView) dialogs.findViewById(R.id.horaA);
+                                        TextView hora = dialogs.findViewById(R.id.horaA);
                                         hora.setText(agente.getHora_ini()+" am" + "-" + agente.getHora_fin()+ "pm");
 
-                                        TextView direccion = (TextView) dialogs.findViewById(R.id.direccionAgente);
-                                        TextView nombre = (TextView) dialogs.findViewById(R.id.nombreAgente);
+                                        TextView direccion = dialogs.findViewById(R.id.direccionAgente);
+                                        TextView nombre = dialogs.findViewById(R.id.nombreAgente);
                                         nombre.setText(agente.getNombre());
                                         direccion.setText(agente.getDireccion());
 
@@ -463,6 +467,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                         Log.e("onThrowable", "onThrowable: " + t.toString(), t);
                         Toast.makeText(HomeActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
                     } catch (Throwable x) {
+                        Toast.makeText(HomeActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 }
             }
@@ -473,10 +478,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 Toast.makeText(HomeActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
-
-    }
-
-    private void goFavoritos(){
 
     }
 
@@ -540,16 +541,13 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
                     checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION)
                             != PackageManager.PERMISSION_GRANTED) {
-
                 return;
             } else {
-                //locationManager.removeUpdates(locationListener);
+                /* locationManager.removeUpdates(locationListener); */
             }
-
         } else {
-            locationManager.removeUpdates(locationListener);
+            /* locationManager.removeUpdates(locationListener); */
         }
-
     }
 
     @Override
@@ -557,14 +555,13 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         super.onPostResume();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 
-            if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                    && checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
-                return;
             } else {
-                //locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+                /* Da problemas con Api 21 */
+                /* locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener); */
             }
-        } else {
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
         }
 
 
@@ -620,4 +617,5 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
         }
     }
+
 }
