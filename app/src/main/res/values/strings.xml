@@ -43,5 +43,7 @@
     <string name="error_correo_contraseña_incorrectos">Correo o contraseña incorrectos!</string>
 
     <string name="nombre">Nombre:</string>
+    <string name="si">Si</string>
+    <string name="no">No</string>
 
 </resources>
