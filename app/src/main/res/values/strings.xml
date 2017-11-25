@@ -7,7 +7,7 @@
     <string name="no_tiene_una_cuenta">¿No tienes una cuenta?  </string>
     <string name="registrarse"><u>Registrate</u> </string>
     <string name="register">Solicita tu registro</string>
-    <string name="nameRegister">Nombre:</string>
+    <string name="nameRegister">Nombre completo:</string>
     <string name="emailRegister">Email:</string>
     <string name="passwordRegister">Contraseña:</string>
     <string name="passwordRegisterAgain">Confirmar contraseña:</string>
@@ -19,10 +19,29 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Nosotros</string>
-    <string name="nosotros">Somos un un grupo de jovenes programadores:
+    <string name="nosotros">Somos un grupo de jovenes programadores:
         \n- Linder Hassinger \n- Seichi Honda \n- Roque Alarcon</string>
     <string name="nombre_de_usuario">Nombre de usuario</string>
     <string name="email_of_user">Email of user</string>
     <string name="title_activity_display_message">Back</string>
+    <string name="nombre_de_agente">Nombre de agente</string>
+    <string name="direccion_de_agente">Direccion de agente</string>
+    <string name="sistema">Sistema:</string>
+    <string name="no_disponible">No disponible</string>
+    <string name="seguridad">Seguridad: </string>
+    <string name="horario">Horario:</string>
+    <string name="_8_00am_6_00pm">8:00am - 6:00pm</string>
+
+    <item name="visible" type="id" />
+    <item name="masked" type="id" />
+
+    <string name="error_completar_campos">Completar todos los campos!</string>
+    <string name="error_caracteres_numericos">No se permiten caracteres numéricos en el nombre!</string>
+    <string name="error_contraseña_demasiado_corta">La contraseña es demasiado corta!</string>
+    <string name="error_ingresar_correo_valido">Ingresar un correo valido!</string>
+    <string name="error_contraseñas_diferentes">Las contraseña deben ser iguales!</string>
+    <string name="error_correo_contraseña_incorrectos">Correo o contraseña incorrectos!</string>
+
+    <string name="nombre">Nombre:</string>
 
 </resources>

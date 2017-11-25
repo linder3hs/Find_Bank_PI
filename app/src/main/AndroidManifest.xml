@@ -27,7 +27,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-
             android:name=".activities.SplashActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -59,17 +58,24 @@
             android:label="@string/title_activity_maps" />
         <activity
             android:name=".activities.RegisterActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:label="Solicita tu registro"
+            android:parentActivityName=".activities.LoginActivity" />
         <activity
             android:name=".activities.HomeActivity"
             android:label="@string/title_activity_home"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".activities.NosotrosActivity" />
-        <activity android:name=".activities.DetalleBancoActivity" />
-        <activity android:name=".activities.PerfilActivity"
+        <activity
+            android:name=".activities.DetalleBancoActivity"
+            android:parentActivityName=".activities.HomeActivity" />
+        <activity
+            android:name=".activities.PerfilActivity"
+            android:parentActivityName=".activities.HomeActivity" />
+        <activity
+            android:name=".activities.FavoriteActivity"
+            android:label="Favoritos"
             android:parentActivityName=".activities.HomeActivity"></activity>
-        <!-- The main/home activity (it has no parent activity) -->
-
+        <activity android:name=".RegisterActivity"></activity>
     </application>
 
 </manifest>

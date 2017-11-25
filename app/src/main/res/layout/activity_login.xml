@@ -5,11 +5,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/bg_fondo"
     xmlns:android="http://schemas.android.com/apk/res/android">
+
     <RelativeLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:background="@drawable/bg_fondo"
         tools:context="com.linderhassinger.proyecto_integrador.LoginActivity">
 
@@ -24,7 +25,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
                 android:layout_margin="16dp"
-                android:onClick="SignIn"
                 android:src="@drawable/find"
                 tools:ignore="ContentDescription" />
 
@@ -42,11 +42,11 @@
         <android.support.design.widget.TextInputLayout
             android:id="@+id/textInputLayout1"
             style="@style/EditTextWhite"
+            app:passwordToggleEnabled="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:theme="@style/EditTextWhite"
-            android:layout_alignParentStart="true"
-            android:layout_below="@+id/logobcp">
+            android:layout_alignParentStart="true">
 
             <EditText
                 android:id="@+id/txtCorreo"
@@ -71,8 +71,7 @@
             android:layout_width="match_parent"
             android:theme="@style/EditTextWhite"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_below="@+id/textInputLayout1">
+            android:layout_alignParentStart="true">
 
             <EditText
                 android:id="@+id/txtPass"
@@ -94,22 +93,20 @@
 
         </android.support.design.widget.TextInputLayout>
 
-        <Button
-            android:id="@+id/btnIngresar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/textInputLayout2"
-            android:layout_marginBottom="15dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginTop="15dp"
-            android:background="@drawable/bg_button_sig_in"
-            android:text="@string/ingresar"
-            android:textAllCaps="false"
-            android:textColor="@color/white"
-            android:textSize="19sp"
-            android:textStyle="bold" />
-
+            <Button
+                android:id="@+id/btnIngresar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="15dp"
+                android:background="@drawable/bg_button_sig_in"
+                android:text="@string/ingresar"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="19sp"
+                android:textStyle="bold" />
 
 
         </LinearLayout>
@@ -139,7 +136,7 @@
                 android:textAllCaps="false"
                 android:background="@drawable/bg_transparent"
                 android:textColor="#fff"
-                android:textSize="19dp"/>
+                android:textSize="19sp"/>
         </LinearLayout>
 
     </RelativeLayout>

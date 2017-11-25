@@ -12,12 +12,13 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
-import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
@@ -29,17 +30,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
-import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -49,12 +47,33 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.like.IconType;
+import com.like.LikeButton;
+import com.like.OnLikeListener;
 import com.linder.find_bank.R;
+import com.linder.find_bank.model.Agente;
+import com.linder.find_bank.model.User;
+import com.linder.find_bank.network.ApiService;
+import com.linder.find_bank.network.ApiServiceGenerator;
+import com.linder.find_bank.respository.AgenteAdapter;
+import com.squareup.picasso.Picasso;
 
-public class HomeActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback {
+import org.w3c.dom.Text;
+
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+
+public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback, GoogleMap.OnMarkerClickListener, GoogleMap.OnInfoWindowClickListener, SwipeRefreshLayout.OnRefreshListener {
+
     private static final String TAG = HomeActivity.class.getSimpleName();
     int PLACE_PICKER_REQUEST = 1;
+    FloatingActionButton btnRefresh;
+    private Marker markerAgente;
+    private Marker markerInfo;
     // SharedPreferences
     private SharedPreferences sharedPreferences;
     private GoogleMap mMap;
@@ -63,16 +82,23 @@ public class HomeActivity extends AppCompatActivity
     LocationManager locationManager;
     LocationListener locationListener;
     AlertDialog alertDialog = null;
+    double speed;
+    private String email;
+    private ImageView fotoImage;
+    //Variable del dialog agente
+    private TextView nombreAgent;
+    private TextView direccionAgent;
 
     //Variales de permiso
     final private int REQUEST_CODE_ASK_PERMISON = 124;
     int hasUbicationPermision;
 
+    //Llamado a los servicios Rest
+
     private void accsserPermison() {
         hasUbicationPermision = checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION);
         if (hasUbicationPermision != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_CODE_ASK_PERMISON);
-
         }
     }
 
@@ -81,15 +107,11 @@ public class HomeActivity extends AppCompatActivity
         switch (requestCode) {
 
             case REQUEST_CODE_ASK_PERMISON: {
-
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
                     Toast.makeText(this, "Permiso de ubicacion concedido", Toast.LENGTH_SHORT).show();
-
                 } else {
-
                     Toast.makeText(this, "Permiso denegado", Toast.LENGTH_SHORT).show();
                 }
                 return;
@@ -97,28 +119,41 @@ public class HomeActivity extends AppCompatActivity
 
         }
 
-    }
+
+}
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         accsserPermison();
-        // init SharedPreferences
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        // get username from SharedPreferences
-        // String username = sharedPreferences.getString("username", null);
-        //String corroUser = getIntent().getExtras().getString("correo");
-        String username = sharedPreferences.getString("username", null);
-        Log.d(TAG, "username: " + username);
-        //Log.d(TAG, "correo: " + corroUser);
-        NavigationView navigationView2 = (NavigationView) findViewById(R.id.nav_view);
-        TextView correo = (TextView) navigationView2.getHeaderView(0).findViewById(R.id.correoUser);
-       // correo.setText(corroUser);
 
-        //Mejora para prender el gps
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        btnRefresh = (FloatingActionButton) findViewById(R.id.btnRefresh);
+
+        btnRefresh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    public void run() {
+                        initialize();
+                    }
+                },2000);
+            }
+        });
+
+        email = sharedPreferences.getString("email", null);
+        Log.d(TAG, "email: " + email);
+        NavigationView navigationView2 = (NavigationView) findViewById(R.id.nav_view);
+        TextView emailText = (TextView) navigationView2.getHeaderView(0).findViewById(R.id.correoUser);
+        emailText.setText(sharedPreferences.getString("email", null));
+
+        fotoImage = (ImageView) navigationView2.getHeaderView(0).findViewById(R.id.profile_image);
+
+        //Mejora para prender el gps automaticamente
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-        if ( !locationManager.isProviderEnabled( LocationManager.GPS_PROVIDER ) ) {
+        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             AlertNoGps();
         }
 
@@ -172,17 +207,21 @@ public class HomeActivity extends AppCompatActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             Dialog dialogs = new Dialog(this);
             dialogs.setContentView(R.layout.activity_nosotros);
             dialogs.setTitle("Nosotros");
             dialogs.show();
+            Button btnosotros = (Button) dialogs.findViewById(R.id.nosotros);
+            btnosotros.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Snackbar snackbar = Snackbar.make(view,"Muy pronto se habilitara esta opcion",Snackbar.LENGTH_SHORT );
+                    snackbar.show();
+                }
+            });
             return true;
         }
 
@@ -196,31 +235,177 @@ public class HomeActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_perfil) {
-            Intent intent3 = new Intent(HomeActivity.this, PerfilActivity.class);
+            Intent intent3 = new Intent(this, PerfilActivity.class);
             startActivity(intent3);
             Log.d("Intent", String.valueOf(intent3));
         } else if (id == R.id.nav_favoritos) {
-            // Intent intent = new Intent(HomeActivity.this, DetalleBancoActivity.class);
-            // startActivity(intent);
+            Intent intent = new Intent(this, FavoriteActivity.class);
+            startActivity(intent);
 
         } else if (id == R.id.nav_nosotros) {
             Dialog dialogs = new Dialog(this);
             dialogs.setContentView(R.layout.activity_nosotros);
             dialogs.setTitle("Nosotros");
             dialogs.show();
+            Button btnosotros = (Button) dialogs.findViewById(R.id.nosotros);
+            btnosotros.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Snackbar snackbar = Snackbar.make(view,"Muy pronto se habilitara esta opcion",Snackbar.LENGTH_SHORT );
+                    snackbar.show();
+                }
+            });
         } else if (id == R.id.salir) {
-
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            boolean success = editor.putBoolean("islogged", false).commit();
-            // boolean success = editor.clear().commit(); // not recommended
-            Intent intent1 = new Intent(HomeActivity.this, LoginActivity.class);
+            Intent intent1 = new Intent(this, LoginActivity.class);
             startActivity(intent1);
-            finish();
+            callLogout();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+
+    private void initialize() {
+
+        ApiService service = ApiServiceGenerator.createService(ApiService.class);
+
+        Call<List<Agente>> call = service.getAgentes();
+
+        call.enqueue(new Callback<List<Agente>>() {
+            @Override
+            public void onResponse(Call<List<Agente>> call, Response<List<Agente>> response) {
+                try {
+                    int statusCode = response.code();
+                    Log.d("Agent", "HTTP status code: " + statusCode);
+
+                    if (response.isSuccessful()) {
+                        final List<Agente> agentes = response.body();
+                        Log.d("Agent2", "Agentes: " + agentes);
+
+                        for (final Agente agente : agentes ) {
+                            final float lat = agente.getLat();
+                            float lng = agente.getLng();
+                            LatLng cosmo = new LatLng(lat, lng);
+                            markerAgente = mMap.addMarker(new MarkerOptions()
+                                    .title(agente.getNombre())
+                                    .snippet(agente.getDescripcion())
+                                    .position(cosmo)
+                                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.compass)));
+                            mMap.moveCamera(CameraUpdateFactory.newLatLng(cosmo));
+                            mMap.setOnMarkerClickListener(HomeActivity.this);
+                            float zoon = 16;
+                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(cosmo, zoon));
+
+
+                                mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+                                    @Override
+                                    public boolean onMarkerClick(Marker marker) {
+                            for (final Agente agente1 : agentes) {
+                                Dialog dialogs = new Dialog(HomeActivity.this);
+                                Toast.makeText(HomeActivity.this, agente1.getNombre(), Toast.LENGTH_SHORT).show();
+                                dialogs.setContentView(R.layout.activity_detalle_banco);
+                                dialogs.show();
+                                //dialogs.setCancelable(false);
+                                LikeButton btnHeart = (LikeButton) dialogs.findViewById(R.id.btn_heart);
+                                nombreAgent = (TextView) dialogs.findViewById(R.id.nombreAgente);
+                                direccionAgent = (TextView) dialogs.findViewById(R.id.direccionAgente);
+                                nombreAgent.setText(agente1.getNombre());
+                                direccionAgent.setText(agente1.getDireccion());
+                                Switch aSwitch = (Switch) dialogs.findViewById(R.id.estadoB);
+                                aSwitch.setEnabled(false);
+                                aSwitch.setClickable(false);
+
+                                btnHeart.setOnLikeListener(new OnLikeListener() {
+                                    @Override
+                                    public void liked(LikeButton likeButton) {
+                                        Toast.makeText(HomeActivity.this, "Agente agregado a favoritos", Toast.LENGTH_SHORT).show();
+                                        likeButton.setCircleEndColorRes(R.color.colorPrimary);
+
+                                    }
+
+                                    @Override
+                                    public void unLiked(LikeButton likeButton) {
+                                        Toast.makeText(HomeActivity.this, "Desmarcaste a este agente :'(", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+
+                                ImageView btnClose = (ImageView) dialogs.findViewById(R.id.btnClose);
+                                btnClose.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        //dialogs.dismiss();
+                                    }
+                                });
+                            }
+
+
+                                        return false;
+
+
+                                    }
+                                });
+
+                        }
+
+                    } else {
+                        Log.d("Error", "onError: " + response.errorBody().string());
+                        throw new Exception("Error del servidor");
+                    }
+                } catch (Throwable t) {
+                    try {
+                        Log.e("onThrowable", "onThrowable: " + t.toString(), t);
+                        Toast.makeText(HomeActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
+                    } catch (Throwable x) {
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Agente>> call, Throwable t) {
+                Log.e("onFailure", "onFailure: " + t.toString());
+                Toast.makeText(HomeActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
+
+        Call<User> call2 = service.showUsuario(email);
+
+        call2.enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                try {
+                    int statusCode = response.code();
+                    Log.d(TAG, "HTTP status code: " + statusCode);
+
+                    if (response.isSuccessful()) {
+
+                        User user = response.body();
+                        Log.d(TAG, "user: " + user);
+                        String url = ApiService.API_BASE_URL + "/images/" + user.getImagen();
+                        Picasso.with(HomeActivity.this).load(url).into(fotoImage);
+
+                    } else {
+                        Log.e(TAG, "onError: " + response.errorBody().string());
+                        throw new Exception("Error en el servicio");
+                    }
+
+                } catch (Throwable t) {
+                    try {
+                        Log.e(TAG, "onThrowable: " + t.toString(), t);
+                        Toast.makeText(HomeActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
+                    }catch (Throwable x){}
+                }
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+                Log.e(TAG, "onFailure: " + t.toString());
+                Toast.makeText(HomeActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
+            }
+
+        });
+
     }
 
     @Override
@@ -236,37 +421,33 @@ public class HomeActivity extends AppCompatActivity
             // for ActivityCompat#requestPermissions for more details.
             return;
         }
+
+
         mMap.setMyLocationEnabled(true);
         mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         UiSettings uiSettings = mMap.getUiSettings();
         uiSettings.setZoomControlsEnabled(true);
         uiSettings.setMyLocationButtonEnabled(true);
+        initialize();
 
-        // Add a place for me
-        LatLng agenre = new LatLng(-12.0443305, -76.952573);
-        LatLng agenteSanta = new LatLng(-12.0387409, -76.999248);
+
         //Add a place with description
-        LatLng cosmo = new LatLng(-12.0443305, -76.999248);
-        Marker cosmos = mMap.addMarker(new MarkerOptions()
-                .position(cosmo)
-                .title("Mi casa")
-                .snippet("Mensajito: Aca vivo")
+       LatLng cosmo2 = new LatLng(-12.134101, -77.0236405);
+
+        //Valores
+      //  Log.d("Lat", String.valueOf(lat));
+      //  Log.d("Log", String.valueOf(lng));
+
+        markerAgente = googleMap.addMarker(new MarkerOptions()
+                .position(cosmo2)
+                .title("cosmo2")
                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.compass)));
-        googleMap.moveCamera(CameraUpdateFactory.newLatLng(cosmo));
-
-        mMap.addMarker(new MarkerOptions().position(agenteSanta).title("Alondras").snippet("Agente BCP"));
-        mMap.addMarker(new MarkerOptions().position(agenre).title("Lugar2").snippet("Mensaje nº2"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(agenre));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(agenteSanta));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(cosmo));
-
-
-        float zoon = 16;
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(agenteSanta, zoon
-        ));
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(cosmo, zoon));
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(agenre, zoon));
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(cosmo, zoon));
+        googleMap.moveCamera(CameraUpdateFactory.newLatLng(cosmo2));
+        //googleMap.setOnMarkerClickListener(this);
+        //  mMap.addMarker(new MarkerOptions().position(agenteSanta).title("Alondras").snippet("Agente BCP"));
+        //mMap.moveCamera(CameraUpdateFactory.newLatLng(cosmo));
+       // float zoon = 16;
+       // mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(cosmo, zoon));
 
     }
 
@@ -335,5 +516,81 @@ public class HomeActivity extends AppCompatActivity
         }
 
 
+    }
+
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+        if (marker.equals(markerAgente)) {
+            final Dialog dialogs = new Dialog(this);
+            dialogs.setContentView(R.layout.activity_detalle_banco);
+            dialogs.setTitle("Agente");
+            dialogs.closeOptionsMenu();
+            dialogs.setCancelable(false);
+            dialogs.show();
+            Switch aSwitch = (Switch) dialogs.findViewById(R.id.estadoB);
+            aSwitch.setEnabled(false);
+            aSwitch.setClickable(false);
+
+            ImageView btnClose = (ImageView) dialogs.findViewById(R.id.btnClose);
+            btnClose.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    dialogs.dismiss();
+                }
+            });
+
+            }
+            return false;
+        }
+
+        public void callLogout(){
+            // remove from SharedPreferences
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            boolean success = editor.putBoolean("islogged", false).commit();
+            //boolean success = editor.clear().commit(); // not recommended
+            finish();
+        }
+
+
+
+    @Override
+    public void onRefresh() {
+       // swipeLayout.setRefreshing(true);
+
+        //Vamos a simular un refresco con un handle.
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                //initialize();
+                //Se supone que aqui hemos realizado las tareas necesarias de refresco, y que ya podemos ocultar la barra de progreso
+                //swipeLayout.setRefreshing(false);
+
+            }
+        }, 2000);
+
+    }
+
+    @Override
+    public void onInfoWindowClick(Marker marker) {
+        /*if (marker.equals(markerAgente)) {
+            /*final Dialog dialogs = new Dialog(this);
+            dialogs.setContentView(R.layout.activity_detalle_banco);
+            dialogs.setTitle("Agente");
+            dialogs.closeOptionsMenu();
+            dialogs.setCancelable(false);
+            dialogs.show();
+            Switch aSwitch = (Switch) dialogs.findViewById(R.id.estadoB);
+            aSwitch.setEnabled(false);
+            aSwitch.setClickable(false);
+
+            ImageView btnClose = (ImageView) dialogs.findViewById(R.id.btnClose);
+            btnClose.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    dialogs.dismiss();
+                }
+            });
+
+        }*/
     }
 }

@@ -5,46 +5,61 @@ package com.linder.find_bank.model;
  */
 
 public class User {
-    private String name;
-    private String correo;
+    private Integer id;
+    private String nombre;
+    private String email;
     private String password;
+    private String imagen;
 
-    public User(String name, String correo, String password) {
-        this.name = name;
-        this.correo = correo;
-        this.password = password;
+    public Integer getCod() {
+        return id;
     }
 
-    public String getName() {
-        return name;
+    public void setCod(Integer cod) {
+        this.id = cod;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
 
     public String getCorreo() {
-        return correo;
+        return email;
     }
 
     public void setCorreo(String correo) {
-        this.correo = correo;
+        this.email = correo;
     }
 
-    public String getPassword() {
+    public String getPass() {
         return password;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setPass(String pass) {
+        this.password = pass;
+    }
+
+    public String getImagen() {
+        return imagen;
+    }
+
+    public void setImagen(String imagen) {
+        this.imagen = imagen;
     }
 
     @Override
     public String toString() {
         return "User{" +
-                "name='" + name + '\'' +
-                ", correo='" + correo + '\'' +
+                "id=" + id +
+                ", nombre='" + nombre + '\'' +
+                ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
+                ", imagen='" + imagen + '\'' +
                 '}';
     }
+
 }

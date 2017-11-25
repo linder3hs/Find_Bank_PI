@@ -21,13 +21,6 @@
           android:layout_height="100dp"
           android:src="@drawable/find"
           android:layout_gravity="center"/>
-      <ProgressBar
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_margin="12dp"
-          android:backgroundTint="@color/white"
-          style="@style/EditTextWhite"
-          android:theme="@style/EditTextWhite"/>
    </LinearLayout>
 
 

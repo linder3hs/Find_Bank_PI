@@ -9,11 +9,32 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.linder.find_bank.activities.HomeActivity"
     tools:showIn="@layout/app_bar_home">
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:weightSum="1">
+
+        <!--android.support.design.widget.FloatingActionButton
+            android:id="@+id/btnMyUbication"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/EditTextWhite"
+            android:theme="@style/EditTextWhite"
+            android:src="@drawable/ic_my_location"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_margin="12dp"-->
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/btnRefresh"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_margin="22dp"
+            android:src="@drawable/ic_refresh"
+            style="@style/EditTextWhite"
+            android:theme="@style/EditTextWhite"
+            android:layout_alignParentBottom="true"/>
 
         <fragment xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:map="http://schemas.android.com/apk/res-auto"
@@ -24,7 +45,7 @@
             android:layout_height="match_parent"
             tools:context="com.linder.find_bank.activities.MapsActivity" />
 
-    </LinearLayout>
+    </RelativeLayout>
 
 
 
