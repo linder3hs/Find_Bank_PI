@@ -42,18 +42,12 @@ public interface ApiService {
     Call<User> showUsuario(
             @Path("email") String email);
 
+    @GET("api/v1/agentes")
+    Call<List<Agente>> getAgentes();
+
     @GET("api/v1/favoritos/{id}")
     Call<List<Agente>> showFavoritos(
             @Path("id") int id);
-
-    @POST("api/v1/favoritos")
-    Call<ResponseMessage> newAgentFavorite(
-      @Field("user_id") int user_id,
-      @Field("agente_id") int agente_id);
-
-
-    @GET("api/v1/agentes")
-    Call<List<Agente>> getAgentes();
 
     @FormUrlEncoded
     @POST("api/v1/favoritos")

@@ -26,7 +26,7 @@ public class FavoriteActivity extends AppCompatActivity implements SwipeRefreshL
     private RecyclerView agentesList;
     private static final String TAG = FavoriteActivity.class.getSimpleName();
     private SwipeRefreshLayout swipeLayout;
-    private int userId;
+    Integer user_id;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,8 +35,10 @@ public class FavoriteActivity extends AppCompatActivity implements SwipeRefreshL
         //Flecha atras
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        userId = getIntent().getIntExtra("id_user",0);
-        Log.d(TAG, String.valueOf(userId));
+        Bundle extras = getIntent().getExtras();
+        user_id = extras.getInt("user_id");
+        Log.d(TAG, String.valueOf(user_id));
+
         agentesList = (RecyclerView) findViewById(R.id.recyclerview);
         agentesList.setLayoutManager(new LinearLayoutManager(this));
 
@@ -60,7 +62,7 @@ public class FavoriteActivity extends AppCompatActivity implements SwipeRefreshL
 
         ApiService service = ApiServiceGenerator.createService(ApiService.class);
 
-        Call<List<Agente>> call = service.showFavoritos(userId);
+        Call<List<Agente>> call = service.showFavoritos(user_id);
 
         call.enqueue(new Callback<List<Agente>>() {
             @Override
@@ -71,7 +73,8 @@ public class FavoriteActivity extends AppCompatActivity implements SwipeRefreshL
 
                     if (response.isSuccessful()) {
                         List<Agente> agentes = response.body();
-                        Log.d("Agent2", "Agentes: "+ agentes);
+                        Log.d("Agent", "Usuario: "+ user_id);
+                        Log.d("Agent", "Agentes: "+ agentes);
 
                         AgenteAdapter adapter = (AgenteAdapter) agentesList.getAdapter();
                         adapter.setAgentes(agentes);
