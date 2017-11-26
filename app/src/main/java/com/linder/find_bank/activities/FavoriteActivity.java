@@ -35,8 +35,7 @@ public class FavoriteActivity extends AppCompatActivity implements SwipeRefreshL
         //Flecha atras
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        Bundle extras = getIntent().getExtras();
-        user_id = extras.getInt("user_id");
+        user_id = getIntent().getIntExtra("user_id",0);
         Log.d(TAG, String.valueOf(user_id));
 
         agentesList = (RecyclerView) findViewById(R.id.recyclerview);

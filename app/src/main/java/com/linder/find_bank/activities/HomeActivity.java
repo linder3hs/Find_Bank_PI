@@ -87,6 +87,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     private String email;
     private ImageView fotoImage;
     Integer user_id;
+    Integer agente_id;
     private FloatingActionButton newAgent;
     //Variales de permiso
     final private int REQUEST_CODE_ASK_PERMISON = 124;
@@ -370,45 +371,13 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                                            aSwitch.setText(R.string.si);
                                            aSwitch.setBackgroundColor(Color.rgb(43, 174, 83  ));
 
-                                           ApiService service = ApiServiceGenerator.createService(ApiService.class);
-                                           Call<ResponseMessage> call;
-                                           int agente_id = agente.getId();
-                                           Log.d(TAG, ""+ user_id);
-                                           call = service.registrarFavorito(user_id, agente_id);
-                                           call.enqueue(new Callback<ResponseMessage>() {
-                                               @Override
-                                               public void onResponse(Call<ResponseMessage> call, Response<ResponseMessage> response) {
-                                                   try {
-                                                       int statusCode = response.code();
-                                                       Log.d(TAG, "HTTP STATUS CODE" + statusCode);
-                                                       if (response.isSuccessful()) {
-                                                           ResponseMessage responseMessage = response.body();
-                                                           Log.d(TAG, "response message" + responseMessage);
-                                                           Toast.makeText(HomeActivity.this, "Agregado a favorito", Toast.LENGTH_SHORT).show();
-                                                       } else {
-                                                           Log.e(TAG, "onError: " + response.errorBody().string());
-                                                       }
-
-                                                    } catch (Throwable t) {
-                                                        try {
-                                                            Log.e(TAG, "onThrowable: " + t.toString(), t);
-                                                            Toast.makeText(HomeActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
-                                                        } catch (Throwable x) {
-                                                            Toast.makeText(HomeActivity.this, "Error", Toast.LENGTH_LONG).show();
-                                                        }
-                                                    }
-                                                }
-
-                                                @Override
-                                                public void onFailure(Call<ResponseMessage> call, Throwable t) {
-                                                    Log.e(TAG, "onFailure: " + t.toString());
-                                                    Toast.makeText(HomeActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
-                                                }
-                                            }) ;
                                         } else {
                                             aSwitch.setText(R.string.no);
                                             aSwitch.setBackgroundColor(Color.argb(255, 192, 57, 43));
                                         }
+
+                                        agente_id = agente.getId();
+                                        Log.d(TAG, "agente_id: " + agente_id );
 
                                         TextView tipo = dialogs.findViewById(R.id.tipo);
                                         tipo.setText(agente.getTipo());
@@ -425,7 +394,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                                         btnHeart.setOnLikeListener(new OnLikeListener() {
                                             @Override
                                             public void liked(LikeButton likeButton) {
-                                                Toast.makeText(HomeActivity.this, "Le diste follow", Toast.LENGTH_SHORT).show();
+                                                agregarFavorito();
                                             }
 
                                             @Override
@@ -504,7 +473,44 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         Intent intent = new Intent(HomeActivity.this, FavoriteActivity.class);
         intent.putExtra("user_id",user_id);
         startActivity(intent);
-        //Log.d("Agent", "Usuario: "+ user_id);
+    }
+
+    public void agregarFavorito(){
+        ApiService service = ApiServiceGenerator.createService(ApiService.class);
+        Call<ResponseMessage> call;
+
+        Log.d(TAG, ""+ user_id);
+        call = service.registrarFavorito(user_id, agente_id);
+        call.enqueue(new Callback<ResponseMessage>() {
+            @Override
+            public void onResponse(Call<ResponseMessage> call, Response<ResponseMessage> response) {
+                try {
+                    int statusCode = response.code();
+                    Log.d(TAG, "HTTP STATUS CODE" + statusCode);
+                    if (response.isSuccessful()) {
+                        ResponseMessage responseMessage = response.body();
+                        Log.d(TAG, "response message" + responseMessage);
+                        Toast.makeText(HomeActivity.this, "Agregado a favorito", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Log.e(TAG, "onError: " + response.errorBody().string());
+                    }
+
+                } catch (Throwable t) {
+                    try {
+                        Log.e(TAG, "onThrowable: " + t.toString(), t);
+                        Toast.makeText(HomeActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
+                    } catch (Throwable x) {
+                        Toast.makeText(HomeActivity.this, "Error", Toast.LENGTH_LONG).show();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseMessage> call, Throwable t) {
+                Log.e(TAG, "onFailure: " + t.toString());
+                Toast.makeText(HomeActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        }) ;
     }
 
     @Override
