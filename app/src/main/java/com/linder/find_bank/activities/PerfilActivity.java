@@ -1,16 +1,12 @@
 package com.linder.find_bank.activities;
 
-import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -33,10 +29,10 @@ public class PerfilActivity extends AppCompatActivity {
     private static final String TAG = PerfilActivity.class.getSimpleName();
 
     private String email;
-    private String userId;
+    private Integer idSend;
     private String emailSend, nombreSend, passwordSend;
     private ImageView fotoImage;
-    private TextView emailText1,emailText2,nombreText;
+    private TextView emailText1,nombreText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +49,6 @@ public class PerfilActivity extends AppCompatActivity {
         });
 
         emailText1 = (TextView)findViewById(R.id.txtEmail1);
-        //emailText2 = (TextView)findViewById(R.id.txtEmail2);
         nombreText = (TextView)findViewById(R.id.txtNombre);
         fotoImage = (ImageView)findViewById(R.id.profile_image);
 
@@ -62,17 +57,13 @@ public class PerfilActivity extends AppCompatActivity {
 
         email = sharedPreferences.getString("email", null);
         Log.d(TAG, "email: " + email);
-
-        initialize();
+        initialize();// Llamado a los servicios Rest
         emailText1.setText(sharedPreferences.getString("email", null));
-
 
     }
 
     private void initialize(){
-
         ApiService service = ApiServiceGenerator.createService(ApiService.class);
-
         Call<User> call = service.showUsuario(email);
 
         call.enqueue(new Callback<User>() {
@@ -90,11 +81,13 @@ public class PerfilActivity extends AppCompatActivity {
 
                         String url = ApiService.API_BASE_URL + "/images/" + user.getImagen();
                         Picasso.with(PerfilActivity.this).load(url).into(fotoImage);
-
                         nombreText.setText(user.getNombre());
+
+                        // Obtiene los datos del usuario
+                        idSend = user.getId();
                         emailSend = user.getCorreo();
                         nombreSend = user.getNombre();
-
+                        passwordSend = user.getPass();
 
                     } else {
                         Log.e(TAG, "onError: " + response.errorBody().string());
@@ -116,14 +109,15 @@ public class PerfilActivity extends AppCompatActivity {
             }
 
         });
-
     }
+
     public void mandarDatos() {
         Intent intent = new Intent(PerfilActivity.this, EditarActivity.class);
+        intent.putExtra("idSend", idSend);
         intent.putExtra("nombreSend", nombreSend);
         intent.putExtra("emailSend", emailSend);
+        intent.putExtra("passwordSend", passwordSend);
         startActivity(intent);
-
     }
 
 }

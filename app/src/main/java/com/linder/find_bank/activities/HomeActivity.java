@@ -90,9 +90,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     private FloatingActionButton newAgent;
     //Variales de permiso
     final private int REQUEST_CODE_ASK_PERMISON = 124;
-    //int hasUbicationPermision;
-
-    //Llamado a los servicios Rest
 
     private void accsserPermison() {
         // Check permission (Api 22 check in Manifest, Api 23 check by requestPermissions)
@@ -157,6 +154,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
         email = sharedPreferences.getString("email", null);
         Log.d(TAG, "email: " + email);
+
         NavigationView navigationView2 = (NavigationView) findViewById(R.id.nav_view);
         TextView emailText = (TextView) navigationView2.getHeaderView(0).findViewById(R.id.correoUser);
         emailText.setText(sharedPreferences.getString("email", null));
@@ -249,8 +247,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             Log.d("Intent", String.valueOf(intent3));
 
         } else if (id == R.id.nav_favoritos) {
-            Intent intent = new Intent(this, FavoriteActivity.class);
-            startActivity(intent);
+            Log.d("Agent", "Usuario: "+ user_id);
+            goFavoritos();
 
         } else if (id == R.id.nav_nosotros) {
             Dialog dialogs = new Dialog(this);
@@ -279,6 +277,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
+    //Llamado a los servicios Rest
     private void initialize() {
         ApiService service = ApiServiceGenerator.createService(ApiService.class);
 
@@ -295,13 +294,11 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
                         User user = response.body();
                         Log.d(TAG, "user: " + user);
-                        Intent i = new Intent(HomeActivity.this, FavoriteActivity.class);
 
                         String url = ApiService.API_BASE_URL + "/images/" + user.getImagen();//Obtiene la imagen
                         Picasso.with(HomeActivity.this).load(url).into(fotoImage);//Guarda la imagen
 
                         user_id= user.getId();//Obtiene el Id de usuario
-                        i.putExtra("user_id",user_id);
 
                     } else {
                         Log.e(TAG, "onError: " + response.errorBody().string());
@@ -503,6 +500,13 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
+    public void goFavoritos(){
+        Intent intent = new Intent(HomeActivity.this, FavoriteActivity.class);
+        intent.putExtra("user_id",user_id);
+        startActivity(intent);
+        //Log.d("Agent", "Usuario: "+ user_id);
+    }
+
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
@@ -568,6 +572,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 /* locationManager.removeUpdates(locationListener); */
             }
         } else {
+            /* Da problemas con Api 21 */
             /* locationManager.removeUpdates(locationListener); */
         }
     }

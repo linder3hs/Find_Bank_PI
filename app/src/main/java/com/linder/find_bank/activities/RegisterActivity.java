@@ -88,7 +88,7 @@ public class RegisterActivity extends AppCompatActivity {
                         progressDialog();
                         ApiService service = ApiServiceGenerator.createService(ApiService.class);
 
-                        Call<ResponseMessage> call = null;
+                        Call<ResponseMessage> call;
                         call = service.registrarUsuario(nombre, email, hpassword, tipo);
 
                         call.enqueue(new Callback<ResponseMessage>() {
