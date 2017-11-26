@@ -52,6 +52,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.like.LikeButton;
 import com.like.OnLikeListener;
+import com.linder.find_bank.EditAgenteActivity;
 import com.linder.find_bank.R;
 import com.linder.find_bank.model.Agente;
 import com.linder.find_bank.model.User;
@@ -87,7 +88,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     private ImageView fotoImage;
     Integer user_id;
     private FloatingActionButton newAgent;
-
     //Variales de permiso
     final private int REQUEST_CODE_ASK_PERMISON = 124;
     //int hasUbicationPermision;
@@ -130,6 +130,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         btnRefresh = (FloatingActionButton) findViewById(R.id.btnRefresh);
+
         newAgent = (FloatingActionButton) findViewById(R.id.newAgent);
         newAgent.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -151,6 +152,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 },2000);
             }
         });
+
+
 
         email = sharedPreferences.getString("email", null);
         Log.d(TAG, "email: " + email);
@@ -266,6 +269,9 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             Intent intent1 = new Intent(this, LoginActivity.class);
             startActivity(intent1);
             callLogout();
+        } else if (id == R.id.nav_agentes) {
+           Intent intent = new Intent(HomeActivity.this, AgenteAllActivity.class);
+           startActivity(intent);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -460,6 +466,14 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                                             }
                                         });
 
+                                        Button btnEdiar = (Button) dialogs.findViewById(R.id.editarAgent);
+                                        btnEdiar.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View view) {
+                                                editarAgent();
+                                            }
+                                        });
+
                                     }
                                 }
                                 return false;
@@ -624,6 +638,11 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             });
 
         }
+    }
+
+    public void editarAgent() {
+        Intent intent = new Intent(this, EditAgenteActivity.class);
+        startActivity(intent);
     }
 
 }

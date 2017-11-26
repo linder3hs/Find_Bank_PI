@@ -81,8 +81,16 @@
             android:parentActivityName=".activities.PerfilActivity" />
         <activity
             android:name=".activities.NewAgentActivity"
+            android:label="Crear Agente"
+            android:parentActivityName=".activities.HomeActivity" />
+        <activity
+            android:name=".activities.AgenteAllActivity"
             android:parentActivityName=".activities.HomeActivity"
-            android:label="Crear Agente"></activity>
+            android:label="Todos los Agentes"/>
+        <activity android:name=".EditAgenteActivity"
+            android:label="Editar Agente"
+            android:parentActivityName=".activities.HomeActivity"
+            ></activity>
     </application>
 
 </manifest>

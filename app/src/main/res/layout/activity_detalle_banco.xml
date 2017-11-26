@@ -205,6 +205,11 @@
                     android:layout_gravity="center"
                     android:textSize="18sp"
                     android:layout_margin="12dp" />
+                <Button
+                    android:id="@+id/editarAgent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Editar"/>
         </LinearLayout>
     </LinearLayout>
 </RelativeLayout>
