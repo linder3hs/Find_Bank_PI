@@ -45,5 +45,6 @@
     <string name="nombre">Nombre:</string>
     <string name="si">Si</string>
     <string name="no">No</string>
+    <string name="actualizar">Actualizar</string>
 
 </resources>

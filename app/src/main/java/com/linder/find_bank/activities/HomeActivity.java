@@ -90,7 +90,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
     //Variales de permiso
     final private int REQUEST_CODE_ASK_PERMISON = 124;
-    //int hasUbicationPermision;
 
     private void accsserPermison() {
         // Check permission (Api 22 check in Manifest, Api 23 check by requestPermissions)
