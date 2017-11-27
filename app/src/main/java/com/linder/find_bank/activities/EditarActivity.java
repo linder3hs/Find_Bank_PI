@@ -38,7 +38,6 @@ public class EditarActivity extends AppCompatActivity {
 
         nombreText = (EditText) findViewById(R.id.nombreNew);
         emailText = (EditText) findViewById(R.id.emailNew);
-
         id = getIntent().getIntExtra("idSend",0);
         nombre = getIntent().getStringExtra("nombreSend");
         email = getIntent().getStringExtra("emailSend");
