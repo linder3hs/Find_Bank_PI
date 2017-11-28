@@ -40,12 +40,19 @@
                 android:layout_marginBottom="0dp"
                 android:layout_marginEnd="0dp"/>
         </LinearLayout>
+        <com.like.LikeButton
+            app:icon_type="heart"
+            app:icon_size="25dp"
+            android:backgroundTint="#fff"
+            android:id="@+id/btn_favorite"
+            android:layout_width="40dp"
+            android:layout_height="40dp"/>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="120dp"
-            android:layout_marginBottom="0dp"
+            android:layout_marginBottom="05dp"
             android:orientation="vertical"
             android:background="#53292929">
                 <TextView
@@ -121,14 +128,20 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
-                <Switch
-                    android:id="@+id/estadoB"
-                    android:layout_margin="12dp"
-                    android:layout_width="wrap_content"
+                <TextView
+                    android:id="@+id/sistema"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:theme="@style/RatingBar"
-                    android:shadowColor="@color/bar"/>
+                    android:text="Si"
+                    android:textStyle="bold"
+                    android:textColor="@color/white"
+                    android:background="#40c151"
+                    android:textSize="18sp"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:layout_margin="12dp"/>
                 <RatingBar
+                    android:id="@+id/clalificacionAgente"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:theme="@style/RatingBar"
@@ -159,6 +172,28 @@
             android:textSize="22sp"
             android:textStyle="bold"
             android:textColor="#2e9fd7"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tipo: "
+            android:textColor="#000"
+            android:layout_gravity="center"
+            android:textSize="18sp"
+            android:layout_margin="12dp"/>
+        <TextView
+            android:id="@+id/tipo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tipo"
+            android:textColor="#000"
+            android:layout_gravity="center"
+            android:textSize="18sp"
+            android:layout_margin="12dp" />
+    </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -173,6 +208,7 @@
                     android:textSize="18sp"
                     android:layout_margin="12dp"/>
                 <TextView
+                    android:id="@+id/horaA"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/_8_00am_6_00pm"
@@ -180,6 +216,11 @@
                     android:layout_gravity="center"
                     android:textSize="18sp"
                     android:layout_margin="12dp" />
+                <Button
+                    android:id="@+id/editarAgent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Editar"/>
         </LinearLayout>
     </LinearLayout>
 </RelativeLayout>

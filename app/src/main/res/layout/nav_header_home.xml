@@ -14,14 +14,13 @@
     android:theme="@style/ThemeOverlay.AppCompat.Dark"
     android:weightSum="1">
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+    <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/profile_image"
         android:layout_width="96dp"
         android:layout_height="96dp"
-        android:src="@drawable/girl_profile"
-        app:civ_border_width="1dp"
-        app:civ_border_color="#FFF"/>
+        android:src="@drawable/ic_user"
+        app:civ_border_color="#FFF"
+        app:civ_border_width="1dp" />
 
 <LinearLayout
     android:layout_width="match_parent"

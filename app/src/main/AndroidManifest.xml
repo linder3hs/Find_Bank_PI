@@ -21,9 +21,9 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/ic_gind_bank2"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@drawable/ic_gind_bank2"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
@@ -74,8 +74,23 @@
         <activity
             android:name=".activities.FavoriteActivity"
             android:label="Favoritos"
-            android:parentActivityName=".activities.HomeActivity"></activity>
-        <activity android:name=".RegisterActivity"></activity>
+            android:parentActivityName=".activities.HomeActivity" />
+        <activity
+            android:name=".activities.EditarActivity"
+            android:label="Editar Usuario"
+            android:parentActivityName=".activities.PerfilActivity" />
+        <activity
+            android:name=".activities.NewAgentActivity"
+            android:label="Crear Agente"
+            android:parentActivityName=".activities.HomeActivity" />
+        <activity
+            android:name=".activities.AgenteAllActivity"
+            android:parentActivityName=".activities.HomeActivity"
+            android:label="Todos los Agentes"/>
+        <activity android:name=".EditAgenteActivity"
+            android:label="Editar Agente"
+            android:parentActivityName=".activities.HomeActivity"
+            ></activity>
     </application>
 
 </manifest>

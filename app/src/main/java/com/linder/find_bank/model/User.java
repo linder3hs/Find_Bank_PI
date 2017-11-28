@@ -11,12 +11,12 @@ public class User {
     private String password;
     private String imagen;
 
-    public Integer getCod() {
+    public Integer getId() {
         return id;
     }
 
-    public void setCod(Integer cod) {
-        this.id = cod;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getNombre() {

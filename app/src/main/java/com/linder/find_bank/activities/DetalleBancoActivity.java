@@ -20,9 +20,6 @@ public class DetalleBancoActivity extends AppCompatActivity {
 
         //Flecha de atras Nota: Poner una clase padre en el manifest
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        Switch aSwitch = (Switch) findViewById(R.id.estadoB);
-        aSwitch.setEnabled(false);
-        aSwitch.setClickable(false);
 
         String nombre;
         String direccion;

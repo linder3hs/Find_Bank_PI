@@ -14,17 +14,15 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:weightSum="1">
-
-        <!--android.support.design.widget.FloatingActionButton
-            android:id="@+id/btnMyUbication"
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/newAgent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:foregroundGravity="center"
             style="@style/EditTextWhite"
+            android:src="@drawable/ic_add"
             android:theme="@style/EditTextWhite"
-            android:src="@drawable/ic_my_location"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:layout_margin="12dp"-->
+            android:layout_margin="22dp"/>
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/btnRefresh"
             android:layout_width="wrap_content"
