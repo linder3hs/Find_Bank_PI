@@ -52,7 +52,6 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.like.LikeButton;
 import com.like.OnLikeListener;
-import com.linder.find_bank.EditAgenteActivity;
 import com.linder.find_bank.R;
 import com.linder.find_bank.model.Agente;
 import com.linder.find_bank.model.User;
@@ -68,7 +67,12 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 
-public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback, GoogleMap.OnMarkerClickListener, GoogleMap.OnInfoWindowClickListener, SwipeRefreshLayout.OnRefreshListener {
+public class HomeActivity extends AppCompatActivity implements
+        NavigationView.OnNavigationItemSelectedListener,
+        OnMapReadyCallback,
+        GoogleMap.OnMarkerClickListener,
+        GoogleMap.OnInfoWindowClickListener,
+        SwipeRefreshLayout.OnRefreshListener {
 
     private static final String TAG = HomeActivity.class.getSimpleName();
     int PLACE_PICKER_REQUEST = 1;
@@ -653,6 +657,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
     public void editarAgent() {
         Intent intent = new Intent(this, EditAgenteActivity.class);
+        intent.putExtra("id_agente_edt", agente_id);
         startActivity(intent);
     }
 

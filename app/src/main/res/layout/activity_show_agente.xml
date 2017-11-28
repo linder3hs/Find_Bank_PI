@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:context="com.linder.find_bank.activities.ShowAgenteActivity">
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            app:cardCornerRadius="5dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="12dp">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/showAgentName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="@string/nombreshow"
+                    android:layout_gravity="center"
+                    android:textSize="24sp"
+                    android:layout_margin="12dp"/>
+                <TextView
+                    android:id="@+id/showAgentAddress"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/direccion"
+                    android:textSize="17sp"
+                    android:layout_margin="6dp"
+                    android:paddingLeft="8dp"
+                    android:drawablePadding="8dp"
+                    android:drawableLeft="@drawable/ic_home"/>
+                <TextView
+                    android:id="@+id/showAgentSystem"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Sistema"
+                    android:textSize="17sp"
+                    android:drawablePadding="8dp"
+                    android:layout_margin="6dp"
+                    android:paddingLeft="8dp"
+                    android:drawableLeft="@drawable/ic_settings_system"/>
+                <TextView
+                    android:id="@+id/showAgentSecure"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Seguridad"
+                    android:textSize="17sp"
+                    android:drawablePadding="8dp"
+                    android:paddingLeft="8dp"
+                    android:layout_margin="6dp"
+                    android:drawableLeft="@drawable/ic_security"/>
+                <TextView
+                    android:id="@+id/showAgentType"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Tipo"
+                    android:drawablePadding="8dp"
+                    android:textSize="17sp"
+                    android:layout_margin="6dp"
+                    android:paddingLeft="8dp"
+                    android:drawableLeft="@drawable/ic_store_mall"/>
+            </LinearLayout>
+
+
+
+        </android.support.v7.widget.CardView>
+
+    </RelativeLayout>
+</ScrollView>

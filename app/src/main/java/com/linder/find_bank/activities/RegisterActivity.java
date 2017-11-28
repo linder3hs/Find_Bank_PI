@@ -56,8 +56,8 @@ public class RegisterActivity extends AppCompatActivity {
             public void onClick(final View view) {
                 final String nombre = txtnombre.getText().toString();
                 final String email = txtemail.getText().toString();
-                final String password = txtpassword.getText().toString();
                 final String passwordAgain = txtpasswordAgain.getText().toString();
+                final String password = txtpassword.getText().toString();
                 final String hpassword = Hash.sha1(password);
                 final String tipo = "cliente";
 

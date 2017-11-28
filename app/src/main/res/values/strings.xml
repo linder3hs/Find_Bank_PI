@@ -46,5 +46,7 @@
     <string name="si">Si</string>
     <string name="no">No</string>
     <string name="actualizar">Actualizar</string>
+    <string name="direccion">Direccion</string>
+    <string name="nombreshow">Nombre</string>
 
 </resources>

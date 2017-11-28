@@ -47,6 +47,12 @@ public interface ApiService {
     Call<User> showUsuario(
             @Path("email") String email);
 
+    //Mostrar Agente
+    @GET("api/v1/agentes/{id}")
+    Call<Agente> showAgente(
+            @Path("id") int id);
+
+
     // Editar usuario
     @FormUrlEncoded
     @PUT("api/v1/usuarios/{id}")
@@ -54,6 +60,14 @@ public interface ApiService {
             @Path("id") int id,
             @Field("nombre") String nombre,
             @Field("email") String email);
+
+    //Editar Agente
+    @FormUrlEncoded
+    @PUT("api/v1/agentes/{id}")
+    Call<ResponseMessage> updateAgente(
+            @Path("id") int id,
+            @Field("sistema") String sistema,
+            @Field("seguridad") String seguridad);
 
     // Lista de agentes
     @GET("api/v1/agentes")

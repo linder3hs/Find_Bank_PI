@@ -5,7 +5,52 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.linder.find_bank.EditAgenteActivity">
+    android:orientation="vertical"
+    tools:context="com.linder.find_bank.activities.EditAgenteActivity">
 
-
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Seguridad"
+        android:gravity="center"
+        android:textSize="20sp"
+        android:layout_margin="12dp"
+        android:textColor="@color/black"
+        android:textStyle="bold"/>
+    <RatingBar
+        android:id="@+id/newSecureAgente"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Estado"
+        android:gravity="center"
+        android:textSize="20sp"
+        android:layout_margin="12dp"
+        android:textColor="@color/black"
+        android:textStyle="bold"/>
+    <Switch
+        android:id="@+id/newStateAgent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:textOff="Cerrado"
+        android:textOn="Abierto"/>
+    <Button
+        android:id="@+id/btn"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_margin="12dp"
+        android:onClick="updateAgente"
+        android:drawableLeft="@drawable/ic_check"
+        android:padding="14dp"
+        android:gravity="center"
+        android:background="@drawable/btn_round"
+        android:layout_gravity="center"
+        android:textStyle="bold"
+        android:textColor="@color/white"
+        android:textAllCaps="false"
+        android:textSize="20sp"/>
 </LinearLayout>
