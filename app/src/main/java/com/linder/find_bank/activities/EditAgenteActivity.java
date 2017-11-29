@@ -51,7 +51,7 @@ public class EditAgenteActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b){
-                   seguridad = "1";
+                    seguridad = "1";
                 } else {
                     seguridad = "0";
                 }
