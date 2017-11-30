@@ -6,6 +6,7 @@ import com.linder.find_bank.model.User;
 import java.util.List;
 
 import retrofit2.Call;
+import retrofit2.http.DELETE;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -90,5 +91,13 @@ public interface ApiService {
     Call<ResponseMessage> registrarFavorito(
             @Field("user_id") int user_id,
             @Field("agente_id") int agente_id);
+
+    // Guardar favorito
+    @FormUrlEncoded
+    @POST("api/v1/favoritos/destroy")
+    Call<ResponseMessage> eliminarFavorito(
+            @Field("user_id") int user_id,
+            @Field("agente_id") int agente_id);
+
 
 }

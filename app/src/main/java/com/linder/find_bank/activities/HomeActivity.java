@@ -437,7 +437,7 @@ public class HomeActivity extends AppCompatActivity implements
                                             }
                                             @Override
                                             public void unLiked(LikeButton likeButton) {
-                                                Toast.makeText(HomeActivity.this, "Le diste unfollow", Toast.LENGTH_SHORT).show();
+                                                eliminarFavorito();
                                             }
                                         });
 
@@ -527,7 +527,44 @@ public class HomeActivity extends AppCompatActivity implements
                     if (response.isSuccessful()) {
                         ResponseMessage responseMessage = response.body();
                         Log.d(TAG, "response message" + responseMessage);
-                        Toast.makeText(HomeActivity.this, "Agregado a favorito", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(HomeActivity.this, "Agregado a favoritos", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Log.e(TAG, "onError: " + response.errorBody().string());
+                    }
+
+                } catch (Throwable t) {
+                    try {
+                        Log.e(TAG, "onThrowable: " + t.toString(), t);
+                        Toast.makeText(HomeActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
+                    } catch (Throwable x) {
+                        Toast.makeText(HomeActivity.this, "Error", Toast.LENGTH_LONG).show();
+                    }
+                }
+            }
+            @Override
+            public void onFailure(Call<ResponseMessage> call, Throwable t) {
+                Log.e(TAG, "onFailure: " + t.toString());
+                Toast.makeText(HomeActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        }) ;
+    }
+
+    public void eliminarFavorito(){
+        ApiService service = ApiServiceGenerator.createService(ApiService.class);
+        Call<ResponseMessage> call;
+
+        Log.d(TAG, ""+ user_id);
+        call = service.eliminarFavorito(user_id, agente_id);
+        call.enqueue(new Callback<ResponseMessage>() {
+            @Override
+            public void onResponse(Call<ResponseMessage> call, Response<ResponseMessage> response) {
+                try {
+                    int statusCode = response.code();
+                    Log.d(TAG, "HTTP STATUS CODE" + statusCode);
+                    if (response.isSuccessful()) {
+                        ResponseMessage responseMessage = response.body();
+                        Log.d(TAG, "response message" + responseMessage);
+                        Toast.makeText(HomeActivity.this, "Eliminado de favoritos", Toast.LENGTH_SHORT).show();
                     } else {
                         Log.e(TAG, "onError: " + response.errorBody().string());
                     }
