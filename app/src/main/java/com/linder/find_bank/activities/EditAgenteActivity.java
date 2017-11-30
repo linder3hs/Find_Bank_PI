@@ -28,6 +28,9 @@ public class EditAgenteActivity extends AppCompatActivity {
     private String switchOff = "Agente Cerrado";
     private String seguridad, sistema;
     private int id;
+    private int ratingA;
+    private String sisteA;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,28 +39,19 @@ public class EditAgenteActivity extends AppCompatActivity {
         newSecure = (RatingBar) findViewById(R.id.newSecureAgente);
         newState = (Switch) findViewById(R.id.newStateAgent);
         id = getIntent().getIntExtra("id_agente_edt",0);
-        Toast.makeText(this, String.valueOf(id), Toast.LENGTH_SHORT).show();
-        String ratingValue = String.valueOf(newSecure.getRating());
-        Toast.makeText(getApplicationContext(), "Rate: " + ratingValue, Toast.LENGTH_LONG).show();
-
-
+        ratingA = getIntent().getIntExtra("rating",0);
+        sisteA = getIntent().getStringExtra("sistem");
+        newSecure.setRating(ratingA);
+        if (sisteA.equals("1")) {
+            newState.setChecked(true);
+        } else {
+            newState.setChecked(false);
+        }
 
 
     }
     private void initialize(){
-        newState.setChecked(true);
 
-        newState.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if (b){
-                    seguridad = "1";
-                } else {
-                    seguridad = "0";
-                }
-
-            }
-        });
         if (newState.isChecked()) {
             seguridad = "1";
         } else {

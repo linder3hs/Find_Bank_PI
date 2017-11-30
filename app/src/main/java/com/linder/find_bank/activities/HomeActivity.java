@@ -95,6 +95,8 @@ public class HomeActivity extends AppCompatActivity implements
     private FloatingActionButton newAgent;
     //Variales de permiso
     final private int REQUEST_CODE_ASK_PERMISON = 124;
+    private int ratingA;
+    private String sisteA;
 
     private void accsserPermison() {
         // Check permission (Api 22 check in Manifest, Api 23 check by requestPermissions)
@@ -382,6 +384,8 @@ public class HomeActivity extends AppCompatActivity implements
 
                                         agente_id = agente.getId();
                                         Log.d(TAG, "agente_id: " + agente_id );
+                                        ratingA = agente.getSeguridad();
+                                        sisteA = agente.getSistema();
 
                                         TextView tipo = dialogs.findViewById(R.id.tipo);
                                         tipo.setText(agente.getTipo());
@@ -658,6 +662,8 @@ public class HomeActivity extends AppCompatActivity implements
     public void editarAgent() {
         Intent intent = new Intent(this, EditAgenteActivity.class);
         intent.putExtra("id_agente_edt", agente_id);
+        intent.putExtra("rating", ratingA);
+        intent.putExtra("sistem", sisteA);
         startActivity(intent);
     }
 
