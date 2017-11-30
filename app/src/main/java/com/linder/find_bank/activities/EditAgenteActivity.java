@@ -40,9 +40,6 @@ public class EditAgenteActivity extends AppCompatActivity {
         String ratingValue = String.valueOf(newSecure.getRating());
         Toast.makeText(getApplicationContext(), "Rate: " + ratingValue, Toast.LENGTH_LONG).show();
 
-
-
-
     }
     private void initialize(){
         newState.setChecked(true);

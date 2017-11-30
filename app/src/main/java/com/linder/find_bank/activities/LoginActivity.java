@@ -102,6 +102,7 @@ public class LoginActivity extends AppCompatActivity {
                     // Comprobar que sea un email valido
                     if (email.matches("[a-zA-Z0-9._-]+@[a-z]+.[a-z]+")){
                         progressDialog();
+
                         ApiService service = ApiServiceGenerator.createService(ApiService.class);
                         Call<ResponseMessage> call = null;
                         call = service.loginUsuario(email, hpassword, tipo);

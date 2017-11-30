@@ -87,7 +87,6 @@ public class HomeActivity extends AppCompatActivity implements
     LocationManager locationManager;
     LocationListener locationListener;
     AlertDialog alertDialog = null;
-    double speed;
     private String email;
     private ImageView fotoImage;
     Integer user_id;
@@ -154,8 +153,6 @@ public class HomeActivity extends AppCompatActivity implements
                 },2000);
             }
         });
-
-
 
         email = sharedPreferences.getString("email", null);
         Log.d(TAG, "email: " + email);
@@ -369,6 +366,46 @@ public class HomeActivity extends AppCompatActivity implements
                                         dialogs.closeOptionsMenu();
                                         dialogs.setCancelable(false);
                                         dialogs.show();
+
+                                        agente_id = agente.getId();
+                                        Log.d(TAG, "agente_id: " + agente_id );
+
+                                        final LikeButton btnHeart = (LikeButton) dialogs.findViewById(R.id.btn_favorite);
+
+                                        ApiService service = ApiServiceGenerator.createService(ApiService.class);
+                                        Call<ResponseMessage> call = null;
+                                        call = service.validarFavorito(user_id,agente_id);
+
+                                        call.enqueue(new Callback<ResponseMessage>() {
+                                            @Override
+                                            public void onResponse(Call<ResponseMessage> call, Response<ResponseMessage> response) {
+                                                try {
+                                                    int statusCode = response.code();
+                                                    Log.d(TAG, "HTTP status code: " + statusCode);
+                                                    if (response.isSuccessful()) {
+                                                        ResponseMessage responseMessage = response.body();
+                                                        Log.d(TAG, "responseMessage: " + responseMessage);
+                                                        //Toast.makeText(HomeActivity.this, responseMessage.getMessage(), Toast.LENGTH_LONG).show();
+                                                        btnHeart.setLiked(true);
+                                                    } else {
+                                                        Log.d("Error", "onError: " + response.errorBody().string());
+                                                        //throw new Exception("Error del servidor");
+                                                    }
+                                                } catch (Throwable t) {
+                                                    try {
+                                                        Log.e("onThrowable", "onThrowable: " + t.toString(), t);
+                                                        Toast.makeText(HomeActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
+                                                    } catch (Throwable x) {
+                                                    }
+                                                }
+                                            }
+                                            @Override
+                                            public void onFailure(Call<ResponseMessage> call, Throwable t) {
+                                                Log.e(TAG, "onFailure: " + t.toString());
+                                                Toast.makeText(HomeActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
+                                            }
+                                        });
+
                                         TextView aSwitch = dialogs.findViewById(R.id.sistema);
                                         if (agente.getSistema().equals("1")) {
 
@@ -379,9 +416,6 @@ public class HomeActivity extends AppCompatActivity implements
                                             aSwitch.setText(R.string.no);
                                             aSwitch.setBackgroundColor(Color.argb(255, 192, 57, 43));
                                         }
-
-                                        agente_id = agente.getId();
-                                        Log.d(TAG, "agente_id: " + agente_id );
 
                                         TextView tipo = dialogs.findViewById(R.id.tipo);
                                         tipo.setText(agente.getTipo());
@@ -394,17 +428,14 @@ public class HomeActivity extends AppCompatActivity implements
                                         nombre.setText(agente.getNombre());
                                         direccion.setText(agente.getDireccion());
 
-                                        LikeButton btnHeart = (LikeButton) dialogs.findViewById(R.id.btn_favorite);
                                         btnHeart.setOnLikeListener(new OnLikeListener() {
                                             @Override
                                             public void liked(LikeButton likeButton) {
                                                 agregarFavorito();
                                             }
-
                                             @Override
                                             public void unLiked(LikeButton likeButton) {
                                                 Toast.makeText(HomeActivity.this, "Le diste unfollow", Toast.LENGTH_SHORT).show();
-
                                             }
                                         });
 
@@ -508,7 +539,6 @@ public class HomeActivity extends AppCompatActivity implements
                     }
                 }
             }
-
             @Override
             public void onFailure(Call<ResponseMessage> call, Throwable t) {
                 Log.e(TAG, "onFailure: " + t.toString());
@@ -530,14 +560,12 @@ public class HomeActivity extends AppCompatActivity implements
             // for ActivityCompat#requestPermissions for more details.
             return;
         }
-
         mMap.setMyLocationEnabled(true);
         mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         UiSettings uiSettings = mMap.getUiSettings();
         uiSettings.setZoomControlsEnabled(true);
         uiSettings.setMyLocationButtonEnabled(true);
         initialize();
-
     }
 
     public void AlertNoGps() {
@@ -559,7 +587,6 @@ public class HomeActivity extends AppCompatActivity implements
 
         alertDialog = builder.create();
         alertDialog.show();
-
     }
 
     @Override
@@ -600,8 +627,6 @@ public class HomeActivity extends AppCompatActivity implements
                 /* locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener); */
             }
         }
-
-
     }
 
     @Override
@@ -628,10 +653,8 @@ public class HomeActivity extends AppCompatActivity implements
                 initialize();
                 //Se supone que aqui hemos realizado las tareas necesarias de refresco, y que ya podemos ocultar la barra de progreso
                 //swipeLayout.setRefreshing(false);
-
             }
         }, 2000);
-
     }
 
     @Override
