@@ -6,6 +6,7 @@ import com.linder.find_bank.model.User;
 import java.util.List;
 
 import retrofit2.Call;
+import retrofit2.http.DELETE;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -33,7 +34,7 @@ public interface ApiService {
             @Field("password") String password,
             @Field("tipo") String tipo);
 
-    // Guardar usuario
+    // Registrar usuario
     @FormUrlEncoded
     @POST("api/v1/usuarios")
     Call<ResponseMessage> registrarUsuario(
@@ -42,18 +43,12 @@ public interface ApiService {
             @Field("password") String password,
             @Field("tipo") String tipo);
 
-    // Mostrar usuario
+    // Mostrar datos del usuario
     @GET("api/v1/usuarios/{email}")
     Call<User> showUsuario(
             @Path("email") String email);
 
-    //Mostrar Agente
-    @GET("api/v1/agentes/{id}")
-    Call<Agente> showAgente(
-            @Path("id") int id);
-
-
-    // Editar usuario
+    // Editar datos del usuario
     @FormUrlEncoded
     @PUT("api/v1/usuarios/{id}")
     Call<ResponseMessage> updateUsuario(
@@ -61,7 +56,12 @@ public interface ApiService {
             @Field("nombre") String nombre,
             @Field("email") String email);
 
-    //Editar Agente
+    // Mostrar datos del Agente
+    @GET("api/v1/agentes/{id}")
+    Call<Agente> showAgente(
+            @Path("id") int id);
+
+    // Editar Agente
     @FormUrlEncoded
     @PUT("api/v1/agentes/{id}")
     Call<ResponseMessage> updateAgente(
@@ -72,6 +72,13 @@ public interface ApiService {
     // Lista de agentes
     @GET("api/v1/agentes")
     Call<List<Agente>> getAgentes();
+
+    // Validacion de favoritos
+    @FormUrlEncoded
+    @POST("api/v1/favoritos/validacion")
+    Call<ResponseMessage> validarFavorito(
+            @Field("user_id") int user_id,
+            @Field("agente_id") int agente_id);
 
     // Mostrar agentes favoritos de un usuario
     @GET("api/v1/favoritos/{id}")
@@ -84,5 +91,13 @@ public interface ApiService {
     Call<ResponseMessage> registrarFavorito(
             @Field("user_id") int user_id,
             @Field("agente_id") int agente_id);
+
+    // Guardar favorito
+    @FormUrlEncoded
+    @POST("api/v1/favoritos/destroy")
+    Call<ResponseMessage> eliminarFavorito(
+            @Field("user_id") int user_id,
+            @Field("agente_id") int agente_id);
+
 
 }

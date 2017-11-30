@@ -32,6 +32,7 @@ public class AgenteAdapter extends RecyclerView.Adapter<AgenteAdapter.ViewHolder
         this.agentes = agentes;
     }
 
+
     public class ViewHolder extends RecyclerView.ViewHolder {
         public ImageView fotoimage;
         public TextView nombreAgente, direccion, sistema;
