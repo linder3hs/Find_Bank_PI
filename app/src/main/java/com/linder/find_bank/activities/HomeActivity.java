@@ -134,17 +134,6 @@ public class HomeActivity extends AppCompatActivity implements
 
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         btnRefresh = (FloatingActionButton) findViewById(R.id.btnRefresh);
-
-        newAgent = (FloatingActionButton) findViewById(R.id.newAgent);
-        newAgent.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(HomeActivity.this, NewAgentActivity.class);
-                startActivity(intent);
-            }
-        });
-
-
         btnRefresh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
