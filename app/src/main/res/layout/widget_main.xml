@@ -4,41 +4,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:background="#3c3d3d"
+    android:gravity="center"
     android:layout_height="match_parent"
     android:orientation="horizontal">
 
-    <ImageButton
+    <ImageView
         android:id="@+id/button_widget"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:background="@drawable/bcp_logo"/>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:padding="8dp"
-        android:layout_weight="1">
-
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                android:text="My First Widget"/>
-
-            <TextView
-                android:id="@+id/text_widget"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:textSize="12sp"
-                android:layout_marginTop="21dp"
-                android:text="Contenido de ejemplo"/>
-
-    </LinearLayout>
+        android:layout_width="200dp"
+        android:layout_gravity="center"
+        android:layout_height="150dp"
+        android:background="@drawable/find"/>
 
 </LinearLayout>
