@@ -1,6 +1,5 @@
 package com.linder.find_bank.activities;
 
-import android.content.Intent;
 import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -27,6 +26,7 @@ public class FavoriteActivity extends AppCompatActivity implements SwipeRefreshL
     private static final String TAG = FavoriteActivity.class.getSimpleName();
     private SwipeRefreshLayout swipeLayout;
     Integer user_id;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -113,6 +113,6 @@ public class FavoriteActivity extends AppCompatActivity implements SwipeRefreshL
 
             }
         }, 2000);
-
     }
+
 }

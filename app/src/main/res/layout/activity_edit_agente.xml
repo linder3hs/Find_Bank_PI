@@ -11,26 +11,27 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Seguridad"
-        android:gravity="center"
-        android:textSize="20sp"
         android:layout_margin="12dp"
+        android:gravity="center"
+        android:text="@string/seguridad"
         android:textColor="@color/black"
-        android:textStyle="bold"/>
+        android:textSize="20sp"
+        android:textStyle="bold" />
     <RatingBar
         android:id="@+id/newSecureAgente"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"/>
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Estado"
-        android:gravity="center"
-        android:textSize="20sp"
         android:layout_margin="12dp"
+        android:gravity="center"
+        android:text="@string/sistema"
         android:textColor="@color/black"
-        android:textStyle="bold"/>
+        android:textSize="20sp"
+        android:textStyle="bold" />
     <Switch
         android:id="@+id/newStateAgent"
         android:layout_width="wrap_content"
