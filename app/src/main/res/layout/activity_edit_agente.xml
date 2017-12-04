@@ -19,6 +19,7 @@
         android:textStyle="bold"/>
     <Spinner
         android:id="@+id/spinnersecure"
+        android:layout_margin="12dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 

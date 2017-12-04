@@ -95,11 +95,7 @@ public class EditAgenteActivity extends AppCompatActivity {
             seguridad = "1";
 
         }
-
-
-        //La seguridad manda un string
-        //seguridad = String.valueOf(newSecure.getRating());
-        ApiService service = ApiServiceGenerator.createService(ApiService.class);
+         ApiService service = ApiServiceGenerator.createService(ApiService.class);
         Call<ResponseMessage> call;
         call = service.updateAgente(id, sistema, seguridad);
 

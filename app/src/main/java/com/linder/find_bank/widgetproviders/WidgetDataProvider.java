@@ -1,6 +1,8 @@
 package com.linder.find_bank.widgetproviders;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.os.Bundle;
 import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
@@ -20,7 +22,7 @@ import retrofit2.Response;
 public class WidgetDataProvider implements RemoteViewsService.RemoteViewsFactory {
 
     private static final String TAG = "WidgetDataProvider";
-
+    int id;
     List<String> mCollection = new ArrayList<>();
     Context mContext = null;
 
@@ -53,6 +55,14 @@ public class WidgetDataProvider implements RemoteViewsService.RemoteViewsFactory
         RemoteViews view = new RemoteViews(mContext.getPackageName(),
                 android.R.layout.simple_list_item_1);
         view.setTextViewText(android.R.id.text1, mCollection.get(position));
+        view.setTextColor(android.R.id.text1, Color.BLACK);
+        final Intent fillInIntent = new Intent();
+        fillInIntent.setAction(MyWidgetProvider.ACTION_TOAST);
+        final Bundle bundle = new Bundle();
+        bundle.putString(MyWidgetProvider.EXTRA_STRING,
+                mCollection.get(position));
+        fillInIntent.putExtras(bundle);
+        view.setOnClickFillInIntent(android.R.id.text1, fillInIntent);
         return view;
     }
 
@@ -78,50 +88,29 @@ public class WidgetDataProvider implements RemoteViewsService.RemoteViewsFactory
 
 
     private void initialize() {
-
-        ApiService service = ApiServiceGenerator.createService(ApiService.class);
-        Call<List<Agente>> call = service.getAgentes();
-        call.enqueue(new Callback<List<Agente>>() {
-            @Override
-            public void onResponse(Call<List<Agente>> call, Response<List<Agente>> response) {
-                try {
-
-                    int statusCode = response.code();
-                    Log.d(TAG, "HTTP status code: " + statusCode);
-
-                    if (response.isSuccessful()) {
-
-                        List<Agente> agentes = response.body();
-                        Log.d(TAG, "eventos: " + agentes);
-                        for (Agente agente : agentes){
-                            String nombre = agente.getNombre();
-                            String created_at = agente.getDescripcion();
-                            String lista = nombre + " " + created_at;
-
-                            Log.d(TAG, "nombre: " + nombre);
-                            mCollection.add(lista);
-                        }
-
-                    } else {
-                        Log.e(TAG, "onError: " + response.errorBody().string());
-                        throw new Exception("Error en el servicio");
-                    }
-
-                } catch (Throwable t) {
-                    try {
-                        Log.e(TAG, "onThrowable: " + t.toString(), t);
-                        //Toast.makeText(getLoadingView() , t.getMessage(), Toast.LENGTH_LONG).show();
-                    }catch (Throwable x){}
+        try {
+            ApiService service = ApiServiceGenerator.createService(ApiService.class);
+            Call<List<Agente>> call = service.getAgentes();
+            List<Agente> agentes = call.execute().body();
+            Log.d(TAG, "eventos: " + agentes);
+            for (Agente agente : agentes){
+                String nombre = agente.getNombre();
+                String s = agente.getSistema();
+                String sp;
+                if (s.equals("1")){
+                    sp = " Tiene Sistema";
+                }else if (s.equals("0")){
+                    sp = " No tiene sistema";
+                } else {
+                    sp = "error";
                 }
+                id = agente.getId();
+                Log.d(TAG, "nombre: " + nombre);
+                mCollection.add(nombre + sp);
             }
-
-            @Override
-            public void onFailure(Call<List<Agente>> call, Throwable t) {
-                Log.e(TAG, "onFailure: " + t.toString());
-                //Toast.makeText(MainActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
-            }
-
-        });
+        }catch(Exception e){
+            Log.e(TAG, e.toString());
+        }
     }
 
 }
