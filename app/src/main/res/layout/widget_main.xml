@@ -1,44 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="horizontal">
-
-    <ImageButton
-        android:id="@+id/button_widget"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:background="@drawable/bcp_logo"/>
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:padding="8dp"
-        android:layout_weight="1">
+        android:background="#fff"
+        android:orientation="vertical" >
 
+        <LinearLayout
+            android:id="@+id/widgetLayoutMain"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#fff"
+            android:orientation="horizontal"
+            android:paddingLeft="5dp"
+            android:layout_margin="5dp"
+            android:paddingRight="5dp" >
 
-            <TextView
-                android:layout_width="match_parent"
+            <ImageView
+                android:id="@+id/widgetImgLauncher"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:padding="5dp"
+                android:background="@color/black"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/find" />
+
+            <LinearLayout
+                android:id="@+id/widgetTopBar"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                android:text="My First Widget"/>
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:paddingBottom="4dp"
+                android:paddingLeft="8dp"
+                android:paddingTop="4dp" >
 
-            <TextView
-                android:id="@+id/text_widget"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:textSize="12sp"
-                android:layout_marginTop="21dp"
-                android:text="Contenido de ejemplo"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/app_name"
+                    android:textSize="16dp"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="#4B4B4D"
+                    android:textStyle="bold" />
 
+                <TextView
+                    android:id="@+id/txvWidgetTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="14dp"
+                    android:text="Lista de los agentes"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="#4B4B4D" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@color/colorPrimary" />
+
+        <ListView
+            android:id="@+id/widgetCollectionList"
+            android:layout_width="match_parent"
+            android:divider="@color/colorPrimary"
+            android:dividerHeight="1dp"
+            android:layout_height="wrap_content" >
+        </ListView>
     </LinearLayout>
 
-</LinearLayout>
+</FrameLayout>

@@ -11,27 +11,33 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="12dp"
+        android:text="Seguridad"
         android:gravity="center"
-        android:text="@string/seguridad"
-        android:textColor="@color/black"
         android:textSize="20sp"
-        android:textStyle="bold" />
-    <RatingBar
+        android:layout_margin="12dp"
+        android:textColor="@color/black"
+        android:textStyle="bold"/>
+    <Spinner
+        android:id="@+id/spinnersecure"
+        android:layout_margin="12dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    </Spinner>
+    <!-- <RatingBar
         android:id="@+id/newSecureAgente"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"/>
-
+        android:layout_gravity="center"/> -->
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="12dp"
+        android:text="Estado"
         android:gravity="center"
-        android:text="@string/sistema"
-        android:textColor="@color/black"
         android:textSize="20sp"
-        android:textStyle="bold" />
+        android:layout_margin="12dp"
+        android:textColor="@color/black"
+        android:textStyle="bold"/>
     <Switch
         android:id="@+id/newStateAgent"
         android:layout_width="wrap_content"

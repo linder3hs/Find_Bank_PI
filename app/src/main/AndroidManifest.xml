@@ -97,14 +97,19 @@
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
 
+
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/widget_info" />
         </receiver>
+        <!-- Widget service -->
+        <service android:name="com.linder.find_bank.widgetproviders.WidgetService"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
 
-        <activity android:name=".activities.ShowAgenteActivity"
-            android:parentActivityName=".activities.AgenteAllActivity"
-            android:label="Detalle de Agente"></activity>
+        <activity
+            android:name=".activities.ShowAgenteActivity"
+            android:label="Detalle de Agente"
+            android:parentActivityName=".activities.AgenteAllActivity" />
     </application>
 
 </manifest>

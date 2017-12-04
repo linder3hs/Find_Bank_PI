@@ -433,24 +433,15 @@ public class HomeActivity extends AppCompatActivity implements
                                             }
                                         });
 
-                                        RatingBar ratingBar = (RatingBar) dialogs.findViewById(R.id.clalificacionAgente);
+                                        TextView txtseguridad  = (TextView) dialogs.findViewById(R.id.txtseguridad);
                                         if (agente.getSeguridad() == 1) {
-                                            ratingBar.setNumStars(2);
-                                            ratingBar.setRating(1);
+                                            txtseguridad.setText("Peligroso");
                                         } else if (agente.getSeguridad() == 2) {
-                                            ratingBar.setNumStars(3);
-                                            ratingBar.setRating(2);
+                                            txtseguridad.setText("Normal");
                                         } else if (agente.getSeguridad() == 3) {
-                                            ratingBar.setNumStars(4);
-                                            ratingBar.setRating(3);
-                                        } else if (agente.getSeguridad() == 4) {
-                                            ratingBar.setNumStars(5);
-                                            ratingBar.setRating(4);
-                                        } else  if (agente.getSeguridad() == 5) {
-                                            ratingBar.setNumStars(5);
-                                            ratingBar.setRating(5);
+                                           txtseguridad.setText("Seguro");
                                         } else {
-                                            ratingBar.setNumStars(0);
+                                            txtseguridad.setText("Error");
                                         }
 
                                         ImageView btnClose = (ImageView) dialogs.findViewById(R.id.btnClose);
