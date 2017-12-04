@@ -52,7 +52,6 @@ public class AgenteAllActivity extends AppCompatActivity implements SwipeRefresh
         initialize();
     }
     private void initialize() {
-
         ApiService service = ApiServiceGenerator.createService(ApiService.class);
 
         Call<List<Agente>> call = service.getAgentes();
