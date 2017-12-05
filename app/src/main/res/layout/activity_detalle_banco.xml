@@ -68,7 +68,6 @@
                     android:layout_margin="6dp"/>
         </LinearLayout>
     </RelativeLayout>
-
     <LinearLayout
         android:id="@+id/containerDe"
         android:layout_below="@+id/containerBg"

@@ -413,7 +413,12 @@ public class HomeActivity extends AppCompatActivity implements
                                         tipo.setText(agente.getTipo());
 
                                         TextView hora = dialogs.findViewById(R.id.horaA);
-                                        hora.setText(agente.getHora_ini()+" am" + "-" + agente.getHora_fin()+ "pm");
+                                        String hi = agente.getHora_ini();
+                                        String hif = hi.substring(11);
+                                        String hf = agente.getHora_fin();
+                                        String hff = hf.substring(11);
+
+                                        hora.setText(hif + " am" + "-" + hff + "pm");
 
                                         TextView direccion = dialogs.findViewById(R.id.direccionAgente);
                                         TextView nombre = dialogs.findViewById(R.id.nombreAgente);
