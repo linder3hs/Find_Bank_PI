@@ -31,12 +31,12 @@ import retrofit2.Response;
 /**
  * Created by linderhassinger on 10/30/17.
  */
-
 public class AgenteAdapter extends RecyclerView.Adapter<AgenteAdapter.ViewHolder> {
 
     private static final String TAG = AgenteAdapter.class.getSimpleName();
 
     private List<Agente> agentes;
+
 
     public AgenteAdapter(FavoriteActivity favoriteActivity) {
         this.agentes = new ArrayList<>();
@@ -96,7 +96,8 @@ public class AgenteAdapter extends RecyclerView.Adapter<AgenteAdapter.ViewHolder
                 Call<ResponseMessage> call;
 
                 int agente_id = agente.getId();
-                int user_id=25;
+
+                int user_id= 25;
 
                 call = service.eliminarFavorito(user_id, agente_id);
                 call.enqueue(new Callback<ResponseMessage>() {

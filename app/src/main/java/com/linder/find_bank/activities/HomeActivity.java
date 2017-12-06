@@ -58,6 +58,7 @@ import com.linder.find_bank.model.User;
 import com.linder.find_bank.network.ApiService;
 import com.linder.find_bank.network.ApiServiceGenerator;
 import com.linder.find_bank.network.ResponseMessage;
+import com.linder.find_bank.respository.AgenteAdapter;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -499,6 +500,7 @@ public class HomeActivity extends AppCompatActivity implements
         intent.putExtra("user_id",user_id);
         startActivity(intent);
     }
+
 
     public void agregarFavorito(){
         ApiService service = ApiServiceGenerator.createService(ApiService.class);
