@@ -28,7 +28,7 @@
     <string name="direccion_de_agente">Direccion de agente</string>
     <string name="sistema">Sistema:</string>
     <string name="no_disponible">No disponible</string>
-    <string name="seguridad">Seguridad: </string>
+    <string name="seguridad">Seguridad de la zona: </string>
     <string name="horario">Horario:</string>
     <string name="_8_00am_6_00pm">8:00am - 6:00pm</string>
 
@@ -43,9 +43,17 @@
     <string name="error_correo_contraseña_incorrectos">Correo o contraseña incorrectos!</string>
 
     <string name="nombre">Nombre:</string>
-    <string name="si">Operativo</string>
-    <string name="no">Fuera de Servicio</string>
+    <string name="si">Si</string>
+    <string name="no">No</string>
     <string name="actualizar">Actualizar</string>
     <string name="direccion">Direccion</string>
     <string name="nombreshow">Nombre</string>
+    <string name="informar_de_un_cambio">Informar de un Cambio</string>
+
+    <string name="si_tiene_sistema">Si tiene sistema</string>
+    <string name="no_tiene_sistema">No tiene sistema</string>
+
+    <string name="agregado_a_favoritos">Agregado a favoritos</string>
+    <string name="eliminado_de_favoritos">Eliminado de favoritos</string>
+
 </resources>

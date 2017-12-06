@@ -429,10 +429,12 @@ public class HomeActivity extends AppCompatActivity implements
                                             @Override
                                             public void liked(LikeButton likeButton) {
                                                 agregarFavorito();
+                                                successSnackbar(likeButton);
                                             }
                                             @Override
                                             public void unLiked(LikeButton likeButton) {
                                                 eliminarFavorito();
+                                                failureSnackbar(likeButton);
                                             }
                                         });
 
@@ -513,7 +515,7 @@ public class HomeActivity extends AppCompatActivity implements
                     if (response.isSuccessful()) {
                         ResponseMessage responseMessage = response.body();
                         Log.d(TAG, "response message" + responseMessage);
-                        Toast.makeText(HomeActivity.this, "Agregado a favoritos", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(HomeActivity.this, "Agregado a favoritos", Toast.LENGTH_SHORT).show();
                     } else {
                         Log.e(TAG, "onError: " + response.errorBody().string());
                     }
@@ -550,7 +552,7 @@ public class HomeActivity extends AppCompatActivity implements
                     if (response.isSuccessful()) {
                         ResponseMessage responseMessage = response.body();
                         Log.d(TAG, "response message" + responseMessage);
-                        Toast.makeText(HomeActivity.this, "Eliminado de favoritos", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(HomeActivity.this, "Eliminado de favoritos", Toast.LENGTH_SHORT).show();
                     } else {
                         Log.e(TAG, "onError: " + response.errorBody().string());
                     }
@@ -570,6 +572,22 @@ public class HomeActivity extends AppCompatActivity implements
                 Toast.makeText(HomeActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
             }
         }) ;
+    }
+
+    public void successSnackbar(View view){
+        Snackbar snackbar = Snackbar.make(view, getString(R.string.agregado_a_favoritos), Snackbar.LENGTH_LONG);// Snackbar message
+        snackbar.setActionTextColor(getResources().getColor(R.color.white));
+        View snaView1 = snackbar.getView();
+        snaView1.setBackgroundColor(getResources().getColor(R.color.bgsnack1));
+        snackbar.show();
+    }
+
+    public void failureSnackbar(View view){
+        Snackbar snackbar = Snackbar.make(view, getString(R.string.eliminado_de_favoritos), Snackbar.LENGTH_LONG);// Snackbar message
+        snackbar.setActionTextColor(getResources().getColor(R.color.white));
+        View snaView1 = snackbar.getView();
+        snaView1.setBackgroundColor(getResources().getColor(R.color.bgsnack2));
+        snackbar.show();
     }
 
     @Override
