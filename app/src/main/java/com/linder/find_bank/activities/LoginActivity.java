@@ -48,6 +48,7 @@ public class LoginActivity extends AppCompatActivity {
 
         // init SharedPreferences
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        //sharedPreferences = getSharedPreferences("USER", Context.MODE_PRIVATE);
 
         // username remember
         final String email = sharedPreferences.getString("email", null);
