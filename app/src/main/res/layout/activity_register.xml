@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:background="@color/white"
     xmlns:android="http://schemas.android.com/apk/res/android" >
+
     <RelativeLayout
         android:gravity="center"
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -32,6 +33,7 @@
             android:layout_marginRight="16dp">
 
             <android.support.design.widget.TextInputLayout
+                android:id="@+id/til_nombre"
                 android:layout_width="match_parent"
                 style="@style/EditTextBlack"
                 android:theme="@style/EditTextBlack"
@@ -46,46 +48,30 @@
                     android:hint="@string/nameRegister"
                     android:inputType="textPersonName"
                     android:padding="18dp"
-                    android:paddingTop="21dp"
+                    android:maxLength="30"
                     android:textColorHint="@color/black"
-                    android:textSize="19sp"
                     android:theme="@style/EditTextBlack" />
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
+                android:id="@+id/til_correo"
                 android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 style="@style/EditTextBlack"
-                android:theme="@style/EditTextBlack"
-                android:layout_height="wrap_content">
+                android:theme="@style/EditTextBlack">
+
                 <EditText
                     android:id="@+id/emailRegister"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="18dp"
                     android:drawablePadding="8dp"
-                    android:drawableLeft="@drawable/ic_email_black"
-                    android:theme="@style/EditTextBlack"
+                    android:drawableStart="@drawable/ic_email_black"
+                    android:hint="@string/emailRegister"
                     android:inputType="textEmailAddress"
-                    android:hint="@string/emailRegister"/>
-            </android.support.design.widget.TextInputLayout>
-
-            <android.support.design.widget.TextInputLayout
-                android:layout_width="match_parent"
-                style="@style/EditTextBlack"
-                android:theme="@style/EditTextBlack"
-                android:layout_height="wrap_content">
-                <EditText
-                    android:id="@+id/passwordRegister"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:drawableLeft="@drawable/ic_lock_open"
-                    android:theme="@style/EditTextBlack"
+                    android:maxLength="30"
                     android:padding="18dp"
-                    android:ellipsize="start"
-                    android:textColorHint="@color/black"
-                    android:drawablePadding="8dp"
-                    android:inputType="textPassword"
-                    android:hint="@string/passwordRegister"/>
+                    android:theme="@style/EditTextBlack" />
+
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
@@ -95,17 +81,44 @@
                 app:passwordToggleEnabled="true"
                 app:passwordToggleTint="@color/colorPrimary"
                 style="@style/EditTextBlack">
+
+                <EditText
+                    android:id="@+id/passwordRegister"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="8dp"
+                    android:drawableStart="@drawable/ic_lock_black"
+                    android:ellipsize="start"
+                    android:hint="@string/passwordRegister"
+                    android:inputType="textPassword"
+                    android:maxLength="12"
+                    android:padding="18dp"
+                    android:textColorHint="@color/black"
+                    android:theme="@style/EditTextBlack" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:theme="@style/EditTextBlack"
+                app:passwordToggleEnabled="true"
+                app:passwordToggleTint="@color/colorPrimary"
+                style="@style/EditTextBlack">
+
                 <EditText
                     android:id="@+id/passwordRegisteragain"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:drawableLeft="@drawable/ic_lock_black"
-                    android:theme="@style/EditTextBlack"
-                    android:inputType="textPassword"
-                    android:padding="18dp"
                     android:drawablePadding="8dp"
-                    android:hint="@string/passwordRegisterAgain"/>
+                    android:drawableStart="@drawable/ic_lock_black"
+                    android:hint="@string/passwordRegisterAgain"
+                    android:inputType="textPassword"
+                    android:maxLength="12"
+                    android:padding="18dp"
+                    android:theme="@style/EditTextBlack" />
+
             </android.support.design.widget.TextInputLayout>
+
         </LinearLayout>
 
         <LinearLayout
@@ -114,6 +127,7 @@
             android:layout_below="@id/campos"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+
             <Button
                 android:id="@+id/finalRegister"
                 android:layout_width="250dp"
@@ -124,6 +138,9 @@
                 android:textColor="#fff"
                 android:textAllCaps="false"
                 android:textSize="18sp"/>
+
         </LinearLayout>
+
     </RelativeLayout>
+
 </ScrollView>

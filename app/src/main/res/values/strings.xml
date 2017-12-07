@@ -36,7 +36,7 @@
     <item name="masked" type="id" />
 
     <string name="error_completar_campos">Completar todos los campos!</string>
-    <string name="error_caracteres_numericos">No se permiten caracteres numéricos en el nombre!</string>
+    <string name="error_caracteres_numericos">Ingresar un nombre valido!</string>
     <string name="error_contraseña_demasiado_corta">La contraseña es demasiado corta!</string>
     <string name="error_ingresar_correo_valido">Ingresar un correo valido!</string>
     <string name="error_contraseñas_diferentes">Las contraseña deben ser iguales!</string>

@@ -2,29 +2,24 @@ package com.linder.find_bank.activities;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.InputType;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+import android.support.v7.widget.Toolbar;
 
 import com.linder.find_bank.R;
 import com.linder.find_bank.model.Hash;
 import com.linder.find_bank.network.ApiService;
 import com.linder.find_bank.network.ApiServiceGenerator;
 import com.linder.find_bank.network.ResponseMessage;
-
-import org.json.JSONArray;
-
-import java.io.DataOutputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.Scanner;
+import java.util.regex.Pattern;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -55,11 +50,13 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onClick(final View view) {
                 final String nombre = txtnombre.getText().toString();
-                final String email = txtemail.getText().toString();
-                final String passwordAgain = txtpasswordAgain.getText().toString();
+                final String email = txtemail .getText().toString();
                 final String password = txtpassword.getText().toString();
+                final String passwordAgain = txtpasswordAgain.getText().toString();
                 final String hpassword = Hash.sha1(password);
                 final String tipo = "cliente";
+
+                Pattern patron = Pattern.compile("^[a-zA-Z ]+$");
 
                 if (nombre.isEmpty() || email.isEmpty() || password.isEmpty()  || passwordAgain.isEmpty()) { // Comprobar que los campos esten completos
                     Snackbar snackbar = Snackbar.make(view, getString(R.string.error_completar_campos), Snackbar.LENGTH_LONG);// Snackbar message
@@ -68,14 +65,21 @@ public class RegisterActivity extends AppCompatActivity {
                     snaView1.setBackgroundColor(getResources().getColor(R.color.bgsnack2));
                     snackbar.show();
 
-                } else if (nombre.matches("[0-9]")) { // Comprobar los caracteres de nombre
+                } else if (!patron.matcher(nombre).matches() || nombre.length() > 30) { // Comprobar los caracteres de nombre
                     Snackbar snackbar = Snackbar.make(view, getString(R.string.error_caracteres_numericos), Snackbar.LENGTH_LONG);// Snackbar message
                     snackbar.setActionTextColor(getResources().getColor(R.color.white));
                     View snaView1 = snackbar.getView();
                     snaView1.setBackgroundColor(getResources().getColor(R.color.bgsnack2));
                     snackbar.show();
 
-                } else if (email.matches("[a-zA-Z0-9._-]+@[a-z]+.[a-z]+")) { // Comprobar que sea un email valido
+                }else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) { // Comprobar que sea un email valido
+                    Snackbar snackbar = Snackbar.make(view, getString(R.string.error_ingresar_correo_valido), Snackbar.LENGTH_LONG);// Snackbar message
+                    snackbar.setActionTextColor(getResources().getColor(R.color.white));
+                    View snaView1 = snackbar.getView();
+                    snaView1.setBackgroundColor(getResources().getColor(R.color.bgsnack2));
+                    snackbar.show();
+
+                } else if ( password.equals(passwordAgain) ) { // Comprobar que el password coincide
 
                     if( password.length() < 6 ){ // Comprobar que el password sea mayor a 5
                         Snackbar snackbar = Snackbar.make(view, getString(R.string.error_contraseña_demasiado_corta), Snackbar.LENGTH_LONG);// Snackbar message
@@ -84,7 +88,7 @@ public class RegisterActivity extends AppCompatActivity {
                         snaView1.setBackgroundColor(getResources().getColor(R.color.bgsnack2));
                         snackbar.show();
 
-                    } else if ( password.equals(passwordAgain) ){ // Comprobar que el password coincide
+                    } else {
                         progressDialog();
                         ApiService service = ApiServiceGenerator.createService(ApiService.class);
 
@@ -132,21 +136,14 @@ public class RegisterActivity extends AppCompatActivity {
 
                         });
 
-                    }else{
-                        Snackbar snackbar = Snackbar.make(view, getString(R.string.error_contraseñas_diferentes), Snackbar.LENGTH_LONG);// Snackbar message
-                        snackbar.setActionTextColor(getResources().getColor(R.color.white));
-                        View snaView1 = snackbar.getView();
-                        snaView1.setBackgroundColor(getResources().getColor(R.color.bgsnack2));
-                        snackbar.show();
                     }
 
                 }else{
-                    Snackbar snackbar = Snackbar.make(view, getString(R.string.error_ingresar_correo_valido), Snackbar.LENGTH_LONG);// Snackbar message
+                    Snackbar snackbar = Snackbar.make(view, getString(R.string.error_contraseñas_diferentes), Snackbar.LENGTH_LONG);// Snackbar message
                     snackbar.setActionTextColor(getResources().getColor(R.color.white));
                     View snaView1 = snackbar.getView();
                     snaView1.setBackgroundColor(getResources().getColor(R.color.bgsnack2));
                     snackbar.show();
-
                 }
             }
         });
