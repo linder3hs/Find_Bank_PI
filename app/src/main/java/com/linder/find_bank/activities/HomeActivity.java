@@ -260,9 +260,24 @@ public class HomeActivity extends AppCompatActivity implements
                 }
             });
         } else if (id == R.id.salir) {
-            Intent intent1 = new Intent(this, LoginActivity.class);
-            startActivity(intent1);
-            callLogout();
+            AlertDialog.Builder dialogo1 = new AlertDialog.Builder(this);
+            dialogo1.setTitle("Importante");
+            dialogo1.setMessage("¿ Seguro que desea salir?");
+            dialogo1.setCancelable(false);
+            dialogo1.setPositiveButton("Confirmar", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialogo1, int id) {
+                    Intent intent1 = new Intent(HomeActivity.this, LoginActivity.class);
+                    startActivity(intent1);
+                    callLogout();                }
+            });
+            dialogo1.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialogo1, int id) {
+                    dialogo1.dismiss();
+                    Toast.makeText(HomeActivity.this, "Gracias por quedarte", Toast.LENGTH_SHORT).show();
+                }
+            });
+            dialogo1.show();
+
         } else if (id == R.id.nav_agentes) {
             Intent intent = new Intent(HomeActivity.this, AgenteAllActivity.class);
             startActivity(intent);
@@ -423,11 +438,11 @@ public class HomeActivity extends AppCompatActivity implements
 
                                         TextView hora = dialogs.findViewById(R.id.horaA);
                                         String hi = agente.getHora_ini();
-                                        String hif = hi.substring(5,11);
+                                        String hif = hi.substring(11);
                                         String hf = agente.getHora_fin();
-                                        String hff = hf.substring(5,11);
+                                        String hff = hf.substring(11);
 
-                                        hora.setText(hif + " am" + "-" + hff + "pm");
+                                        hora.setText(hif + "am" + " - " + hff + "pm");
 
                                         TextView direccion = dialogs.findViewById(R.id.direccionAgente);
                                         TextView nombre = dialogs.findViewById(R.id.nombreAgente);
