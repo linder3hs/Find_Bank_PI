@@ -4,6 +4,7 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -132,6 +133,7 @@ public class HomeActivity extends AppCompatActivity implements
         accsserPermison();
 
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        //sharedPreferences = getSharedPreferences("USER", Context.MODE_PRIVATE);
         btnRefresh = (FloatingActionButton) findViewById(R.id.btnRefresh);
 
         btnRefresh.setOnClickListener(new View.OnClickListener() {
@@ -293,6 +295,12 @@ public class HomeActivity extends AppCompatActivity implements
                         Picasso.with(HomeActivity.this).load(url).into(fotoImage);//Guarda la imagen
 
                         user_id= user.getId();//Obtiene el Id de usuario
+
+                        // Save to SharedPreferences
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        boolean success = editor
+                                .putInt("user_id", user_id)
+                                .commit();
 
                     } else {
                         Log.e(TAG, "onError: " + response.errorBody().string());

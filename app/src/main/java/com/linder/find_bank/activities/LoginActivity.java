@@ -9,6 +9,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -18,6 +19,8 @@ import com.linder.find_bank.model.Hash;
 import com.linder.find_bank.network.ApiService;
 import com.linder.find_bank.network.ApiServiceGenerator;
 import com.linder.find_bank.network.ResponseMessage;
+
+import java.util.regex.Pattern;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -29,7 +32,6 @@ public class LoginActivity extends AppCompatActivity {
     private EditText txtemail, txtpassword;
     private Button btningresar, btnregister;
     private ProgressDialog progressDialog;
-    String nameuser;
 
     private static final String TAG = LoginActivity.class.getSimpleName();
 
@@ -46,6 +48,7 @@ public class LoginActivity extends AppCompatActivity {
 
         // init SharedPreferences
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        //sharedPreferences = getSharedPreferences("USER", Context.MODE_PRIVATE);
 
         // username remember
         final String email = sharedPreferences.getString("email", null);
@@ -77,6 +80,8 @@ public class LoginActivity extends AppCompatActivity {
                 final String hpassword = Hash.sha1(password);
                 final String tipo = "cliente";
 
+                Pattern patron = Pattern.compile("^[a-zA-Z ]+$");
+
                 // Comprobar que los campos esten completos
                 if (email.isEmpty() || hpassword.isEmpty()) {
                     Snackbar snackbar = Snackbar.make(view, getString(R.string.error_completar_campos), Snackbar.LENGTH_LONG);// Snackbar message
@@ -85,69 +90,69 @@ public class LoginActivity extends AppCompatActivity {
                     snaView1.setBackgroundColor(getResources().getColor(R.color.bgsnack2));
                     snackbar.show();
 
+                // Comprobar que sea un email valido
+                }else if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
+                    Snackbar snackbar = Snackbar.make(view, getString(R.string.error_ingresar_correo_valido), Snackbar.LENGTH_LONG);// Snackbar message
+                    snackbar.setActionTextColor(getResources().getColor(R.color.white));
+                    View snaView1 = snackbar.getView();
+                    snaView1.setBackgroundColor(getResources().getColor(R.color.bgsnack2));
+                    snackbar.show();
+
                 }else{
 
-                    // Comprobar que sea un email valido
-                    if (email.matches("[a-zA-Z0-9._-]+@[a-z]+.[a-z]+")){
-                        progressDialog();
+                    progressDialog();
 
-                        ApiService service = ApiServiceGenerator.createService(ApiService.class);
-                        Call<ResponseMessage> call = null;
-                        call = service.loginUsuario(email, hpassword, tipo);
+                    ApiService service = ApiServiceGenerator.createService(ApiService.class);
+                    Call<ResponseMessage> call = null;
+                    call = service.loginUsuario(email, hpassword, tipo);
 
-                        call.enqueue(new Callback<ResponseMessage>() {
-                            @Override
-                            public void onResponse(Call<ResponseMessage> call, Response<ResponseMessage> response) {
+                    call.enqueue(new Callback<ResponseMessage>() {
+                        @Override
+                        public void onResponse(Call<ResponseMessage> call, Response<ResponseMessage> response) {
+                            try {
+                                int statusCode = response.code();
+                                Log.d(TAG, "HTTP status code: " + statusCode);
+                                if (response.isSuccessful()) {
+                                    ResponseMessage responseMessage = response.body();
+                                    Log.d(TAG, "responseMessage: " + responseMessage);
+                                    Toast.makeText(LoginActivity.this, responseMessage.getMessage(), Toast.LENGTH_LONG).show();
+                                    // Save to SharedPreferences
+                                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                                    boolean success = editor
+                                            .putString("email", email)
+                                            .putBoolean("islogged", true)
+                                            .commit();
+                                    // Go to Dashboard
+                                    progressDialog.dismiss();
+                                    goDashboard();
+                                } else {
+                                    progressDialog.dismiss();
+                                    Log.e(TAG, "onError: " + response.errorBody().string());
+                                    Snackbar snackbar = Snackbar.make(view, getString(R.string.error_correo_contraseña_incorrectos), Snackbar.LENGTH_LONG);// Snackbar message
+                                    snackbar.setActionTextColor(getResources().getColor(R.color.white));
+                                    View snaView1 = snackbar.getView();
+                                    snaView1.setBackgroundColor(getResources().getColor(R.color.bgsnack2));
+                                    snackbar.show();
+                                    //throw new Exception();
+                                }
+
+                            } catch (Throwable t) {
                                 try {
-                                    int statusCode = response.code();
-                                    Log.d(TAG, "HTTP status code: " + statusCode);
-                                    if (response.isSuccessful()) {
-                                        ResponseMessage responseMessage = response.body();
-                                        Log.d(TAG, "responseMessage: " + responseMessage);
-                                        Toast.makeText(LoginActivity.this, responseMessage.getMessage(), Toast.LENGTH_LONG).show();
-                                        // Save to SharedPreferences
-                                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                                        boolean success = editor
-                                                .putString("email", email)
-                                                .putBoolean("islogged", true)
-                                                .commit();
-                                        // Go to Dashboard
-                                        progressDialog.dismiss();
-                                        goDashboard();
-                                    } else {
-                                        progressDialog.dismiss();
-                                        Log.e(TAG, "onError: " + response.errorBody().string());
-                                        Snackbar snackbar = Snackbar.make(view, getString(R.string.error_correo_contraseña_incorrectos), Snackbar.LENGTH_LONG);// Snackbar message
-                                        snackbar.setActionTextColor(getResources().getColor(R.color.white));
-                                        View snaView1 = snackbar.getView();
-                                        snaView1.setBackgroundColor(getResources().getColor(R.color.bgsnack2));
-                                        snackbar.show();
-                                        //throw new Exception();
-                                    }
-
-                                } catch (Throwable t) {
-                                    try {
-                                        Log.e(TAG, "onThrowable: " + t.toString(), t);
-                                        Toast.makeText(LoginActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
-                                    } catch (Throwable x) {
-                                    }
+                                    Log.e(TAG, "onThrowable: " + t.toString(), t);
+                                    Toast.makeText(LoginActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
+                                } catch (Throwable x) {
                                 }
                             }
+                        }
 
-                            @Override
-                            public void onFailure(Call<ResponseMessage> call, Throwable t) {
-                                Log.e(TAG, "onFailure: " + t.toString());
-                                Toast.makeText(LoginActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
-                            }
+                        @Override
+                        public void onFailure(Call<ResponseMessage> call, Throwable t) {
+                            Log.e(TAG, "onFailure: " + t.toString());
+                            Toast.makeText(LoginActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
+                        }
 
-                        });
-                    }else{
-                        Snackbar snackbar = Snackbar.make(view, getString(R.string.error_ingresar_correo_valido), Snackbar.LENGTH_LONG);// Snackbar message
-                        snackbar.setActionTextColor(getResources().getColor(R.color.white));
-                        View snaView1 = snackbar.getView();
-                        snaView1.setBackgroundColor(getResources().getColor(R.color.bgsnack2));
-                        snackbar.show();
-                    }
+                    });
+
                 }
 
             }

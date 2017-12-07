@@ -1,5 +1,8 @@
 package com.linder.find_bank.respository;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -36,7 +39,7 @@ public class AgenteAdapter extends RecyclerView.Adapter<AgenteAdapter.ViewHolder
     private static final String TAG = AgenteAdapter.class.getSimpleName();
 
     private List<Agente> agentes;
-
+    private SharedPreferences sharedPreferences;
 
     public AgenteAdapter(FavoriteActivity favoriteActivity) {
         this.agentes = new ArrayList<>();
@@ -73,6 +76,8 @@ public class AgenteAdapter extends RecyclerView.Adapter<AgenteAdapter.ViewHolder
 
         final Agente agente = this.agentes.get(position);
 
+        //SharedPreferences sharedPreferences1 = context.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+
         if (agente.getSistema().equals("1")) {
             holder.sistema.setText(R.string.si_tiene_sistema);
         } else {
@@ -92,12 +97,16 @@ public class AgenteAdapter extends RecyclerView.Adapter<AgenteAdapter.ViewHolder
             @Override
             public void unLiked(final LikeButton likeButton) {
 
+                //SharedPreferences sharedPreferences1 = LikeButton.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+                sharedPreferences = PreferenceManager.getDefaultSharedPreferences(likeButton.getContext());
+
+                final int user_id = sharedPreferences.getInt("user_id", 35);
+                Log.d(TAG, "user_id: " + user_id);
+
                 ApiService service = ApiServiceGenerator.createService(ApiService.class);
                 Call<ResponseMessage> call;
 
                 int agente_id = agente.getId();
-
-                int user_id= 25;
 
                 call = service.eliminarFavorito(user_id, agente_id);
                 call.enqueue(new Callback<ResponseMessage>() {
