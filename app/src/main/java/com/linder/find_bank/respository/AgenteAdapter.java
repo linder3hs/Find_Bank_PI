@@ -1,6 +1,8 @@
 package com.linder.find_bank.respository;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
@@ -18,6 +20,7 @@ import com.like.OnLikeListener;
 import com.linder.find_bank.R;
 import com.linder.find_bank.activities.AgenteAllActivity;
 import com.linder.find_bank.activities.HomeActivity;
+import com.linder.find_bank.activities.ShowAgenteActivity;
 import com.linder.find_bank.model.Agente;
 import com.linder.find_bank.activities.FavoriteActivity;
 import com.linder.find_bank.network.ApiService;
@@ -40,10 +43,12 @@ public class AgenteAdapter extends RecyclerView.Adapter<AgenteAdapter.ViewHolder
     private static final String TAG = AgenteAdapter.class.getSimpleName();
 
     private List<Agente> agentes;
+    private Activity activity2;
     private SharedPreferences sharedPreferences;
 
     public AgenteAdapter(FavoriteActivity favoriteActivity) {
         this.agentes = new ArrayList<>();
+        this.activity2 = favoriteActivity;
     }
 
     public void setAgentes(List<Agente> agentes) {
@@ -149,6 +154,15 @@ public class AgenteAdapter extends RecyclerView.Adapter<AgenteAdapter.ViewHolder
                 }) ;
             }
 
+        });
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(activity2, ShowAgenteActivity.class);
+                intent.putExtra("ID", agente.getId());
+                activity2.startActivity(intent);
+            }
         });
     }
 

@@ -102,13 +102,15 @@
                 android:resource="@xml/widget_info" />
         </receiver>
         <!-- Widget service -->
-        <service android:name="com.linder.find_bank.widgetproviders.WidgetService"
+        <service
+            android:name=".widgetproviders.WidgetService"
             android:permission="android.permission.BIND_REMOTEVIEWS" />
 
         <activity
             android:name=".activities.ShowAgenteActivity"
             android:label="Detalle de Agente"
             android:parentActivityName=".activities.AgenteAllActivity" />
+        <activity android:name=".activities.ShowFavoriteActivity"></activity>
     </application>
 
 </manifest>

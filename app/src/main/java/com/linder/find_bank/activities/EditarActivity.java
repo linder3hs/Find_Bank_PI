@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.linder.find_bank.R;
@@ -27,6 +28,7 @@ public class EditarActivity extends AppCompatActivity {
     private int id;
     private String email, nombre, password;
     private EditText nombreText, emailText, passwordText, passWordTextRepeat;
+    private TextView emailText2;
     private Button btnUpdate;
 
     @Override
@@ -37,14 +39,15 @@ public class EditarActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         nombreText = (EditText) findViewById(R.id.nombreNew);
-        emailText = (EditText) findViewById(R.id.emailNew);
+        emailText2 = (TextView) findViewById(R.id.emailNew);
+
         id = getIntent().getIntExtra("idSend",0);
         nombre = getIntent().getStringExtra("nombreSend");
         email = getIntent().getStringExtra("emailSend");
         password = getIntent().getStringExtra("passwordSend");
 
         nombreText.setText(nombre);
-        emailText.setText(email);
+        emailText2.setText(email);
         Log.d("Usuario","Id: "+ id);
         Log.d("Usuario","Nombre: "+ nombre);
         Log.d("Usuario","E-mail: "+ email);
@@ -53,11 +56,11 @@ public class EditarActivity extends AppCompatActivity {
     private void initialize(){
 
         final String nombreNew = nombreText.getText().toString();
-        final String emailNew = emailText.getText().toString();
+        //final String emailNew = emailText.getText().toString();
 
         ApiService service = ApiServiceGenerator.createService(ApiService.class);
         Call<ResponseMessage> call;
-        call = service.updateUsuario(id, nombreNew, emailNew);
+        call = service.updateUsuario(id, nombreNew, email);
 
         call.enqueue(new Callback<ResponseMessage>() {
             @Override
@@ -93,14 +96,14 @@ public class EditarActivity extends AppCompatActivity {
         });
     }
 
-    public void update(View view){
-        initialize();
-        goPerfil();
-    }
-
     public void goPerfil(){
         Intent intent = new Intent(EditarActivity.this, PerfilActivity.class);
         startActivity(intent);
+    }
+
+    public void update(View view){
+        initialize();
+        goPerfil();
     }
 
 }
