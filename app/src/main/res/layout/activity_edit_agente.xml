@@ -11,7 +11,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Seguridad"
+        android:text="Nivel de Seguridad"
         android:gravity="center"
         android:textSize="20sp"
         android:layout_margin="12dp"
@@ -32,7 +32,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Estado"
+        android:text="Sistema del Agente"
         android:gravity="center"
         android:textSize="20sp"
         android:layout_margin="12dp"

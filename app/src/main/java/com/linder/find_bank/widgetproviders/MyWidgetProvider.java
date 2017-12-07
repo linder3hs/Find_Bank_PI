@@ -26,7 +26,7 @@ public class MyWidgetProvider extends AppWidgetProvider {
         if (intent.getAction().equals(ACTION_TOAST)) {
             String item = intent.getExtras().getString(EXTRA_STRING);
             int id = intent.getExtras().getInt(ID);
-            Intent i = new Intent(context, ShowAgenteActivity.class);
+            Intent i = new Intent(context, AgenteAllActivity.class);
             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             i.putExtra(ID, id);
             context.startActivity(i);
