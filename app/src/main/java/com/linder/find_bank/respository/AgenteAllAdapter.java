@@ -3,21 +3,31 @@ package com.linder.find_bank.respository;
 import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.linder.find_bank.R;
 import com.linder.find_bank.activities.ShowAgenteActivity;
 import com.linder.find_bank.activities.AgenteAllActivity;
 import com.linder.find_bank.model.Agente;
+import com.linder.find_bank.network.ApiService;
+import com.linder.find_bank.network.ResponseMessage;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by linderhassinger on 11/26/17.
@@ -25,7 +35,10 @@ import java.util.List;
 
 public class AgenteAllAdapter  extends RecyclerView.Adapter<AgenteAllAdapter.ViewHolder> {
 
+    private static final String TAG = AgenteAdapter.class.getSimpleName();
+
     private List<Agente> agentes;
+
     private Activity activity2;
 
     public AgenteAllAdapter(AgenteAllActivity agenteAllActivity) {
@@ -42,17 +55,14 @@ public class AgenteAllAdapter  extends RecyclerView.Adapter<AgenteAllAdapter.Vie
     public class ViewHolder extends RecyclerView.ViewHolder {
         public ImageView fotoimage;
         public TextView nombreAgente, direccion, sistema;
-        public CardView agenteCard;
 
         public ViewHolder(View itemView) {
             super(itemView);
 
-            //fotoimage = (ImageView) itemView.findViewById(R.id.foto_image);
+            fotoimage = (ImageView) itemView.findViewById(R.id.foto_imageall);
             nombreAgente = (TextView) itemView.findViewById(R.id.nombre_textall);
             direccion = (TextView) itemView.findViewById(R.id.direccionFavoall);
             sistema = (TextView) itemView.findViewById(R.id.sistemaFavorall);
-            agenteCard = (CardView) itemView.findViewById(R.id.agenteCard);
-
 
         }
     }
@@ -64,24 +74,27 @@ public class AgenteAllAdapter  extends RecyclerView.Adapter<AgenteAllAdapter.Vie
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(AgenteAllAdapter.ViewHolder holder, final int position) {
+
         final Agente agente = this.agentes.get(position);
-        String siste;
+
         if (agente.getSistema().equals("1")) {
-            siste = "Si tiene sistema";
+            holder.sistema.setText(R.string.si_tiene_sistema);
         } else {
-            siste = "No tienes sistema";
+            holder.sistema.setText(R.string.no_tiene_sistema);
         }
+
         holder.nombreAgente.setText(agente.getNombre());
         holder.direccion.setText(agente.getDireccion());
-        holder.sistema.setText(siste);
-        final int id = agente.getId();
+
+        String url = ApiService.API_BASE_URL + "/images/" + agente.getImagen();
+        Picasso.with(holder.itemView.getContext()).load(url).into(holder.fotoimage);
+
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d("ID",String.valueOf(id));
                 Intent intent = new Intent(activity2, ShowAgenteActivity.class);
-                intent.putExtra("ID", id);
+                intent.putExtra("ID", agente.getId());
                 activity2.startActivity(intent);
             }
         });
@@ -92,6 +105,5 @@ public class AgenteAllAdapter  extends RecyclerView.Adapter<AgenteAllAdapter.Vie
     public int getItemCount() {
         return this.agentes.size();
     }
-
 
 }

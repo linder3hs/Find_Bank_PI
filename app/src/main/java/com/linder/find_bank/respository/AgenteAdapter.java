@@ -23,6 +23,7 @@ import com.linder.find_bank.activities.FavoriteActivity;
 import com.linder.find_bank.network.ApiService;
 import com.linder.find_bank.network.ApiServiceGenerator;
 import com.linder.find_bank.network.ResponseMessage;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,7 +58,7 @@ public class AgenteAdapter extends RecyclerView.Adapter<AgenteAdapter.ViewHolder
         public ViewHolder(View itemView) {
             super(itemView);
 
-            //fotoimage = (ImageView) itemView.findViewById(R.id.foto_image);
+            fotoimage = (ImageView) itemView.findViewById(R.id.foto_image);
             nombreAgente = (TextView) itemView.findViewById(R.id.nombre_text);
             direccion = (TextView) itemView.findViewById(R.id.direccionFavo);
             sistema = (TextView) itemView.findViewById(R.id.sistemaFavor);
@@ -76,8 +77,6 @@ public class AgenteAdapter extends RecyclerView.Adapter<AgenteAdapter.ViewHolder
 
         final Agente agente = this.agentes.get(position);
 
-        //SharedPreferences sharedPreferences1 = context.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
-
         if (agente.getSistema().equals("1")) {
             holder.sistema.setText(R.string.si_tiene_sistema);
         } else {
@@ -86,6 +85,10 @@ public class AgenteAdapter extends RecyclerView.Adapter<AgenteAdapter.ViewHolder
 
         holder.nombreAgente.setText(agente.getNombre());
         holder.direccion.setText(agente.getDireccion());
+
+        String url = ApiService.API_BASE_URL + "/images/" + agente.getImagen();
+        Picasso.with(holder.itemView.getContext()).load(url).into(holder.fotoimage);
+
         holder.favorito.setLiked(true);
 
         holder.favorito.setOnLikeListener(new OnLikeListener(){

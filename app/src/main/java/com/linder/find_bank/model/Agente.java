@@ -12,13 +12,12 @@ public class Agente {
     private float lat;
     private float lng;
     private String tipo;
-    private String hora_ini;
-    private String hora_fin;
-
     private String sistema;
     private int seguridad;
-    private String horario;
+    private String hora_ini;
+    private String hora_fin;
     private String descripcion;
+    private String imagen;
 
     public int getId() {
         return id;
@@ -26,30 +25,6 @@ public class Agente {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public String getHora_ini() {
-        return hora_ini;
-    }
-
-    public void setHora_ini(String hora_ini) {
-        this.hora_ini = hora_ini;
-    }
-
-    public String getHora_fin() {
-        return hora_fin;
-    }
-
-    public void setHora_fin(String hora_fin) {
-        this.hora_fin = hora_fin;
-    }
-
-    public String getSistema() {
-        return sistema;
-    }
-
-    public void setSistema(String sistema) {
-        this.sistema = sistema;
     }
 
     public String getNombre() {
@@ -92,6 +67,14 @@ public class Agente {
         this.tipo = tipo;
     }
 
+    public String getSistema() {
+        return sistema;
+    }
+
+    public void setSistema(String sistema) {
+        this.sistema = sistema;
+    }
+
     public int getSeguridad() {
         return seguridad;
     }
@@ -100,12 +83,20 @@ public class Agente {
         this.seguridad = seguridad;
     }
 
-    public String getHorario() {
-        return horario;
+    public String getHora_ini() {
+        return hora_ini;
     }
 
-    public void setHorario(String horario) {
-        this.horario = horario;
+    public void setHora_ini(String hora_ini) {
+        this.hora_ini = hora_ini;
+    }
+
+    public String getHora_fin() {
+        return hora_fin;
+    }
+
+    public void setHora_fin(String hora_fin) {
+        this.hora_fin = hora_fin;
     }
 
     public String getDescripcion() {
@@ -114,6 +105,14 @@ public class Agente {
 
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
+    }
+
+    public String getImagen() {
+        return imagen;
+    }
+
+    public void setImagen(String imagen) {
+        this.imagen = imagen;
     }
 
     @Override
@@ -125,13 +124,12 @@ public class Agente {
                 ", lat=" + lat +
                 ", lng=" + lng +
                 ", tipo='" + tipo + '\'' +
-                ", hora_ini='" + hora_ini + '\'' +
-                ", hora_fin='" + hora_fin + '\'' +
                 ", sistema='" + sistema + '\'' +
                 ", seguridad=" + seguridad +
-                ", horario='" + horario + '\'' +
+                ", hora_ini='" + hora_ini + '\'' +
+                ", hora_fin='" + hora_fin + '\'' +
                 ", descripcion='" + descripcion + '\'' +
+                ", imagen='" + imagen + '\'' +
                 '}';
     }
-
 }
