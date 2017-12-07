@@ -415,9 +415,9 @@ public class HomeActivity extends AppCompatActivity implements
 
                                         TextView hora = dialogs.findViewById(R.id.horaA);
                                         String hi = agente.getHora_ini();
-                                        String hif = hi.substring(11);
+                                        String hif = hi.substring(5,11);
                                         String hf = agente.getHora_fin();
-                                        String hff = hf.substring(11);
+                                        String hff = hf.substring(5,11);
 
                                         hora.setText(hif + " am" + "-" + hff + "pm");
 
