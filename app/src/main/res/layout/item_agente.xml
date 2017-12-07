@@ -65,6 +65,7 @@
             android:layout_centerVertical="true"
             android:backgroundTint="#fff"
             app:icon_size="25dp"
+            android:onClick="favoApdterF"
             app:icon_type="heart" />
 
     </RelativeLayout>

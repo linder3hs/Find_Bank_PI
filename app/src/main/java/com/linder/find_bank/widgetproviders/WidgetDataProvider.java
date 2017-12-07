@@ -7,6 +7,7 @@ import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
+import com.linder.find_bank.activities.FavoriteActivity;
 import com.linder.find_bank.model.Agente;
 import com.linder.find_bank.network.ApiService;
 import com.linder.find_bank.network.ApiServiceGenerator;

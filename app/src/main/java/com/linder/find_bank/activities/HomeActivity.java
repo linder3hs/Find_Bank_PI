@@ -58,6 +58,7 @@ import com.linder.find_bank.model.User;
 import com.linder.find_bank.network.ApiService;
 import com.linder.find_bank.network.ApiServiceGenerator;
 import com.linder.find_bank.network.ResponseMessage;
+import com.linder.find_bank.respository.AgenteAdapter;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -413,7 +414,12 @@ public class HomeActivity extends AppCompatActivity implements
                                         tipo.setText(agente.getTipo());
 
                                         TextView hora = dialogs.findViewById(R.id.horaA);
-                                        hora.setText(agente.getHora_ini()+" am" + "-" + agente.getHora_fin()+ "pm");
+                                        String hi = agente.getHora_ini();
+                                        String hif = hi.substring(11);
+                                        String hf = agente.getHora_fin();
+                                        String hff = hf.substring(11);
+
+                                        hora.setText(hif + " am" + "-" + hff + "pm");
 
                                         TextView direccion = dialogs.findViewById(R.id.direccionAgente);
                                         TextView nombre = dialogs.findViewById(R.id.nombreAgente);
@@ -494,6 +500,7 @@ public class HomeActivity extends AppCompatActivity implements
         intent.putExtra("user_id",user_id);
         startActivity(intent);
     }
+
 
     public void agregarFavorito(){
         ApiService service = ApiServiceGenerator.createService(ApiService.class);

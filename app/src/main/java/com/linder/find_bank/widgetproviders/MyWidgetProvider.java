@@ -11,20 +11,24 @@ import android.os.Build;
 import android.support.annotation.NonNull;
 import android.widget.RemoteViews;
 import android.widget.Toast;
-
 import com.linder.find_bank.R;
 import com.linder.find_bank.activities.AgenteAllActivity;
+import com.linder.find_bank.activities.DetalleBancoActivity;
+import com.linder.find_bank.activities.ShowAgenteActivity;
 
 public class MyWidgetProvider extends AppWidgetProvider {
     public static final String ACTION_TOAST = "com.linder.find_bank.ACTION_TOAST";
     public static final String EXTRA_STRING = "com.linder.find_bank.EXTRA_STRING";
+    public static final String ID = "ID";
 
     @Override
     public void onReceive(Context context, Intent intent) {
         if (intent.getAction().equals(ACTION_TOAST)) {
             String item = intent.getExtras().getString(EXTRA_STRING);
-            Intent i = new Intent(context, AgenteAllActivity.class);
+            int id = intent.getExtras().getInt(ID);
+            Intent i = new Intent(context, ShowAgenteActivity.class);
             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            i.putExtra(ID, id);
             context.startActivity(i);
         }
         super.onReceive(context, intent);

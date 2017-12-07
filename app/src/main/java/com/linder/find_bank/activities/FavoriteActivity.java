@@ -1,5 +1,6 @@
 package com.linder.find_bank.activities;
 
+import android.content.Intent;
 import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -7,6 +8,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import com.linder.find_bank.R;
@@ -113,6 +115,11 @@ public class FavoriteActivity extends AppCompatActivity implements SwipeRefreshL
 
             }
         }, 2000);
+    }
+
+    public void favoApdterF(View view) {
+        Intent intent = new Intent(this, AgenteAdapter.class);
+        intent.putExtra("user_id",user_id);
     }
 
 }
